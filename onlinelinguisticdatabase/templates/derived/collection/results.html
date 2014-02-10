@@ -1,0 +1,108 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/collectionViews.html" name="collectionViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="heading()">
+    % if hasattr(c, 'browsing'):
+    <h1 class="heading">Collections (${c.collectionCount})</h1>
+    % elif c.paginator.item_count == 1:
+    <h1 class="heading">Collection Results: ${c.paginator.item_count} match</h1>
+    % else:
+    <h1 class="heading">Collection Results: ${c.paginator.item_count} matches</h1>
+    % endif
+</%def>
+
+
+% if hasattr(c, 'browsing'):
+ <p>Collections are documents that can represent stories and records of
+ elicitations, among other things.  In the body of a Collection, you can refer
+ to a Form and thereby embed a representation of it.</p>
+ 
+ <ul>
+  % for cType in app_globals.collectionTypes:
+   <li>
+    <a id="${cType}Link" href="#${cType}Header">
+     ${app_globals.collectionTypesPlurals[cType].capitalize()}
+    </a>
+   </li>
+  % endfor
+ </ul>
+% endif
+
+
+% if hasattr(c, 'paginator') and len(c.paginator):
+<p id="paginatorPager">${ c.paginator.pager('$link_first $link_previous $first_item to $last_item of $item_count $link_next $link_last') }</p>
+% endif
+
+% if not hasattr(c, 'browsing'):
+ ${javascriptDefs.toggleLabelsJavaScript('fileTableRowLabel')}
+ <a class="buttonLink" id="toggleRowLabelsButton" title="hide labels">-</a>
+% endif
+
+
+<div class="tableSpacerDivHalf"></div>
+
+
+% if hasattr(c, 'browsing'):
+% for cType in app_globals.collectionTypes:
+<h1>
+ <a id="${cType}Header" href="#${cType}Link">
+ ${app_globals.collectionTypesPlurals[cType].capitalize()} (${len(c.collections[cType])})
+ </a>
+</h1>
+<table class="clearTable">
+% for collection in c.collections[cType]:
+  <tr>
+   <td><a class="buttonLink" style="font-size: 75%;" id="button${collection.id}"
+     title="show additional information about this Collection"
+     onclick="addRemoveElement('${collection.id}', 'button${collection.id}', 'additional information about this Collection');">
+     +</a>
+   </td>
+   <td><a href="${url(controller='collection', action='view', id=collection.id)}">
+    <span>${collection.title}</span></a>
+    <div id=${collection.id} style="margin-left: 2em; display: none;">
+     <table class="smallTable">
+      <tr><td class="label">description</td><td>${collection.description}</td></tr>
+      <tr><td class="label">type</td><td>${collection.type}</td></tr>
+      <tr><td class="label">ID</td><td>${collection.id}</td></tr>
+      % if collection.speaker:
+      <tr><td class="label">speaker</td>
+       <td>${collection.speaker.firstName} ${collection.speaker.lastName}</td>
+      </tr>
+      % endif
+      % if collection.elicitor:
+      <tr><td class="label">elicitor</td>
+       <td>${collection.elicitor.firstName} ${collection.elicitor.lastName}</td>
+      </tr>
+      % endif
+      <tr>
+       <td class="label">enterer</td>
+       <td>${collection.enterer.firstName} ${collection.enterer.lastName}</td>
+      </tr>
+      <tr>
+       <td class="label">time entered</td>
+       <td>${h.pretty_date(collection.datetimeEntered)}</td>
+      </tr>
+      <tr>
+       <td class="label">last updated</td>
+       <td>${h.pretty_date(collection.datetimeModified)}</td>
+      </tr>
+     </table>
+    </div>
+   </td>
+  </tr>
+% endfor
+</table>
+<div class="tableSpacerDivHalf"></div>
+% endfor
+% else:
+ % for collection in c.paginator:
+    ${collectionViews.collectionViewShort(collection)}
+ % endfor
+% endif
+
+
+% if hasattr(c, 'paginator'):
+<p>${ c.paginator.pager('~2~') }</p>
+% endif

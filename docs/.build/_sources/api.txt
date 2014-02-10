@@ -1,0 +1,35 @@
+API Documentation
+=================
+
+This page contains some basic documentation for the Online Linguistic Database project.
+
+The :mod:`onlinelinguisticdatabase` Module
+------------------------------------------
+
+.. module:: onlinelinguisticdatabase
+
+Contains all the controllers, model and templates as sub-modules.
+
+The :mod:`controllers` Module
+-----------------------------
+
+.. module:: onlinelinguisticdatabase.controllers
+
+Contains all the controllers. The three most important of which are
+:class:`FormController`, :class:`FileController` and :class:`CollectionController`.
+
+The :mod:`form` Module
+-----------------------------
+
+.. automodule:: onlinelinguisticdatabase.controllers.form
+   :members:
+
+The :mod:`helpers` Module
+-------------------------
+
+.. automodule:: onlinelinguisticdatabase.lib.helpers
+
+The :mod:`queryBuilder` Module
+------------------------------
+
+.. automodule:: onlinelinguisticdatabase.lib.queryBuilder

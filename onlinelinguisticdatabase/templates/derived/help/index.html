@@ -1,0 +1,12 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Help</h1>
+</%def>
+
+<p>Welcome to the help page of the OLD</p>
+
+<a href="${url(controller='help', action='old_user_guide')}" class="buttonLink"\ 
+   title="View the general OLD help page}">OLD User Guide</a>
+
+${h.literal(c.userGuideHTML)}

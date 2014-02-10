@@ -1,0 +1,13 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/pageEditFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Edit the OLD Home Page</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='home', action='save')}" \
+      method="post">
+    ${fields.pageEditField('home')}
+    <input type="hidden" name="ID" id="ID" />
+    <div>${h.submit(value="Save Changes", name='submit', tabindex='4')}</div>
+</form>

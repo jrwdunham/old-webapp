@@ -1,0 +1,737 @@
+<%def name="markdownHelp()">
+ <%
+  message = '<h1>Basic Markdown Syntax</h1><br /># Headers with hashes<br />\
+            ### The more hashes<br />###### The smaller the header<br /><br />\
+            * asterisks<br />* make<br />* unordered<br />* lists<br /><br />1.\
+            numbers<br />2. followed by periods<br />3. make<br />4. ordered \
+            lists<br /><br />A [link](http://www.google.com/) is made by \
+            surrounding a word with square brackets and writing a URL in \
+            parentheses.<br /><br />For more info, see the \
+            <a href="http://daringfireball.net/projects/markdown/syntax">\
+            Markdown syntax web page</a>.'
+  title = 'Help with Markdown syntax.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="reStructuredTextHelp()">
+ <%
+  message = '<h1>reStructuredText Syntax</h1><p>&lsquo;reStructuredText is a \
+            lightweight markup language intended to be highly readable in \
+            source  format&rsquo; \
+            (<a href="http://en.wikipedia.org/wiki/ReStructuredText">Wikipedia</a>). \
+            Check out the <a \
+            href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">\
+            Quick reStructuredText page</a> to learn how to use \
+            reStructuredText.</p>'
+  title = 'Help with reStructuredText syntax.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="formEmbeddingHelp()">
+ <%
+  message = '<h1>Embedding Forms</h1><p>Enter "form[X]" to embed the Form with \
+            ID X in your Collection&rsquo;s content and simultaneously \
+            associate that Form with your Collection.</p><p>Embedded Forms are \
+            automatically numbered when displayed.  You can reference the Form \
+            with ID X by entering "ref[X]".</p>'
+  title = 'Help with embedding Forms.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="entityLinkingHelp()">
+ <%
+  message = '<h1>Linking to OLD Entities</h1><p>Create a link to the Form, \
+            File, Collection, Speaker or User with ID X by using the following \
+            syntax:</p><ul><li>"form(X)"</li><li>"file(X)"</li><li>\
+            "collection(X)"</li><li>"speaker(X)"</li><li>"user(X)"</li></ul><p>\
+            where "X" is the id of the entity to which you want to link.</p>'
+  title = 'Help with linking to OLD Entities.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="embeddingFileHelp()">
+ <%
+  message = '<h1>Embedding OLD Files</h1><p>Embed a representation of an OLD \
+            File with an expression of the form:</p><ul><li>"file[X]"</li></ul>\
+            <p>where "X" is the id of the File to be embedded.</p><p>The way\
+            that the File is embedded will depend on the type of its media. \
+            For example, an image File will be represented by embedding the \
+            image.</p>'
+  title = 'Help with embedding to OLD Files.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="embeddingFormHelp()">
+ <%
+  message = '<h1>Embedding OLD Forms</h1><p>Embed a representation of an OLD \
+            Form with an expression of the form:</p><ul><li>"form[X]"</li></ul>\
+            <p>where "X" is the id of the Form to be embedded.</p>'
+  title = 'Help with embedding to OLD Forms.  (Opens a window in the current page.)'
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="OLOrthographySpecifyingHelp()">
+ <%
+  message = u"""<h1>Orthography</h1>\
+   \
+   <p>Enter a comma-separated list of the graphemes (characters or character \
+   sequences) representing the letters of the orthography of the object \
+   language. (Whitespace and newlines will be ignored.)</p> \
+   \
+   <p>The system will expect users to use these graphemes when entering Form \
+   transcriptions, Form morpheme breaks (or any other object language strings) \
+   and when searching the object language fields of the database.</p> \
+   \
+   <p>The ordering of the graphemes will determine how words are sorted in \
+   the dictionary interface to the database. If two or more graphemes have the \
+   same rank, enclose them in square brackets and separate them with commas. \
+   Graphemes that have the same rank are usually accented variants of one \
+   another.  If this is the case, list the unaccented grapheme before the \
+   accented ones.</p> \
+   \
+   <p>Do not list uppercase variants of lowercase graphemes.  If the orthography \
+   uses uppercase variants, deselect the &#147;only lowercase&#148; option \
+   below; this will cause the system to guess the uppercase variants of the \
+   graphemes you have  entered</p> \
+   \
+   <p>Example. A small orthography where "á" and "a" have the same rank:</p> \
+   \
+   <p>"[a, á], b, c, d".</p> \
+   """
+   
+  title = u"""Help with specifying the object language orthography of your \
+application.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="MLOrthographySpecifyingHelp()">
+ <%
+  message = u"""<h1>Orthography</h1>\
+   \
+   <p>Enter a comma-separated list of the graphemes (characters or character \
+   sequences) as the orthography of the metalanguage. \
+   (Whitespace and newlines will be ignored.)</p>\
+   \
+   <p>The system will expect these graphemes to be used when entering Form \
+   glosses.</p>\
+   \
+   <p>The ordering of the characters will determine how words are sorted in\
+   the dictionary interface to the database. If two or more characters\
+   are unordered relative to one another, enclose them in square brackets and \
+   separate them with commas.</p>\
+   \
+   <p>Below is an example of a small orthography where &#147;á&#148; and \
+   &#147;a&#148; have the same rank:</p>\
+   \
+   <p>&#147;[a, á], b, c, d&#148;.</p>\
+   """
+
+  title = u"Help with specifying the metalanguage orthography of your \
+application.  (Opens a window in the current page.)"
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+<%def name="ISO_639Help()">
+ <%
+  message = u"""<h1>ISO 639-3 Code</h1>\
+   \
+   <p>An &#147;ISO 639-3 Code&#148; is a unique three-letter identifier for a \
+   language. If you do not know the code for the language, try entering the \
+   name of the language in the &#147;Name&#148; field above and the OLD will \
+   search for a match.  If you find a match and click on it, the ISO 639-3 \
+   Code field will be automatically populated.</p>\
+   \
+   <p>From the ISO 639-3 <a href=http://www.sil.org/iso639-3 target=_blank>web page</a>: \
+   &#147;ISO 639-3 attempts to provide as complete an enumeration of languages \
+   as possible, including living, extinct, ancient, and constructed languages, \
+   whether major or minor, written or unwritten.&#148;</p>\
+   """
+
+  title = u"""What is an ISO 639-3 Code? (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="orthographiesHelp()">
+ <%
+  message = u"""<h1>Orthography</h1>\
+   <p>Here you can specify up to five orthographies for your object language.\
+   Specifying multiple object language orthographies makes it possible to store, \
+   view and enter orthographic object language data in different \
+   orthographies.</p> \
+   \
+   <p>Orthographic object language data is that which is entered into the \
+   orthographic transcription field as well as any text contained within \
+   &lt;orth&gt;&lt;/orth&gt; tags in the general or speaker comments. The \
+   morpheme break is, by default, not considered orthographic, though it can be \
+   specified as such –– see the Morpheme Break is Orthographic option.\
+   \
+   <p>If you want users to enter, view and search object \
+   language data all in the same orthography (recommended), then simply \
+   choose the same orthography as your storage, default input and default \
+   output orthographies.</p>\
+   """
+
+  title = u"""Help with specifying orthographies.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="objectLanguageNameHelp()">
+ <%
+  message = u"""<h1>Object Language Name</h1>\
+   \
+   <p>Enter the name of the language that is being documented via this OLD \
+   application. This name will be used throughout the application and will \
+   appear in the header at the top of every page.</p>\
+   \
+   <p>As you type, the OLD will search the \
+   <a href="http://www.sil.org/iso639-3" target=_blank>ISO 639-3</a> database \
+   for a match. If no match is found, this is probably because the \
+   &#147;Reference Name&#148; given to your language by the ISO 639-3 standard \
+   happens to be different from the name you prefer to use.  Use whatever name \
+   you want, but enter the appropriate ISO 639-3 Code (if one exists!) in the \
+   following field so that users of your application can unambiguously \
+   identify your language.</p>\
+   """
+
+  title = u"""Help with entering a name for your object language. (Opens a \
+window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="storageOrthographyHelp()">
+ <%
+  message = u"""<h1>Storage Orthography</h1>\
+   \
+   <p>Choose one object language orthography as the storage orthography. \
+   All orthographic object language strings in the database will be stored in this \
+   orthography.  Choose a storage orthography when the application \
+   is initially set up and do not alter it afterwards.</p> \
+   """
+
+  title = u"""Help with choosing a storage orthography. (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="defaultInputOrthographyHelp()">
+ <%
+  message = u"""<h1>Input Orthography (default)</h1>\
+   \
+   <p>Choose one orthography as the default for input. \
+   By default, this is the orthography that users will use \
+   when entering and searching for orthographic object language data.  When entering \
+   such data (or searching it), the system will automatically \
+   translate the input into the storage orthography.</p> \
+   """
+
+  title = u"""Help with choosing a default input orthography.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="defaultOutputOrthographyHelp()">
+ <%
+  message = u"""<h1>Default Output Orthography</h1>\
+   \
+   <p>Choose one orthography as the default for output. \
+   By default, this is the orthography that will be used to \
+   display orthographic object language data.</p> \
+   """
+
+  title = u"""Help with choosing a default output orthography.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="orthographyNameHelp()">
+ <%
+  message = u"""<h1>Orthography Name</h1>\
+   \
+   <p>Provide a name to identify your object language orthography.<\p>\
+   """
+
+  title = u"Help with output orthography names.  (Opens a window in the current page.)"
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="OLOrthographyHelp()">
+ <%
+  message = u"""<h1>Object Language Orthography</h1>\
+   \
+   <p>An object language orthography is an ordered list of graphemes (or \
+   polygraphs) that can be used to write orthographic object \
+   language data.  Graphemes must be separated by commas.</p>\
+   \
+   <p>The order of graphemes is important for collation purposes.  Graphemes \
+   that are not ordered relative to one another (e.g, a vowel and its accented \
+   counterpart) are grouped together in square brackets.</p>\
+   \
+   <p>Do not list uppercase counterparts of lowercase graphemes.  If the \
+   orthography uses uppercase variants, deselect the Only Lowercase option \
+   below and the system will guess uppercase variants for the \
+   graphemes you have entered</p> \
+   \
+   <p>In order for the system to define mappings (and convert strings) between \
+   object language orthographies, all orthographies \
+   must have the exact same structure, i.e., the same number of graphemes and the \
+   same number of bracket groupings in the same order.<p>\
+   \
+   <p>For example, orthographies (2) and (1) have the same structure but \
+   orthographies (3) and (4) have unique structures.</p>\
+   \
+   <p>1. &#147;[_a, _á], b, c, d&#148;</p>\
+   <p>2. &#147;[ae, áé], b, c, d&#148;</p>\
+   <p>3. &#147;ae, áé, b, c, d&#148;</p>\
+   <p>4. &#147;[ae, áé, àè], b, c, d&#148;</p>\
+   """
+
+  title = u"""Help with entering an object language output orthography.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="orthographyLowerCaseGraphsHelp()">
+ <%
+  message = u"""<h1>Only Lowercase</h1>\
+   If selected, the system will assume that only lowercase graphemes are used in \
+   this orthography. Selected is the default.  If deselected, the OLD will try \
+   to guess uppercase alternants for the graphemes in this orthography.\
+   """
+
+  title = u"""Help with the only lowercase option.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="wordInitialGlottalStopsHelp()">
+ <%
+  message = u"""<h1>Word-initial Glottal Stops</h1>\
+   If selected, the system will assume that glottal stops are written \
+   (overtly) at the beginning of a word.  Selected is the default. \
+   If deselected, the OLD will remove initial glottal stops when translating \
+   strings into this orthography.\
+   """
+
+  title = u"""Help with the word-initial glottal stops option.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="morphemeBreakIsOrthographicHelp()">
+ <%
+  message = u"""<h1>Morpheme Break is Orthographic</h1>\
+   If "yes" is selected, the system will assume that data entered into the \
+   morpheme break field is orthographic and should therefore be converted to the \
+   storage orthography for storage and to the output orthography for display. \
+   The default is "no".\
+   """
+
+  title = u"""Help with the morpheme break is orthographic option.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="unrestrictedUsersHelp()">
+ <%
+  message = u"""<h1>Unrestricted Users</h1>\
+   <p>Unrestricted users are able to access restricted forms.  Restricted forms \
+   are those associated to the &lsquo;restricted&rsquo; keyword.  Administrators \
+   are always able to access restricted forms while contributors and viewers \
+   are not.</p>\
+   \
+   <p>In order to give contributors and viewers access to restricted forms, \
+   select them as unrestricted users in the interface provided.</p>\
+   """
+
+  title = u"""Help with the unrestricted users option.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="CSSColorsHelp()">
+ <%
+  message = u"""<h1>CSS Colors</h1>\
+   <p>Choose a CSS file to set the color scheme for this OLD application.</p>\
+   """
+
+  title = u"""Help with the CSS colors option.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+
+<%def name="metaLanguageNameHelp()">
+ <%
+  message = u"""<h1>Metalanguage Name</h1>\
+   \
+   <p>Enter the name of the language that users will use when glossing, \
+   describing and analyzing the object language.</p>\
+   \
+   <p>As you type, the OLD will search the \
+   <a href="http://www.sil.org/iso639-3" target=_blank>ISO 639-3</a> database \
+   for a match. If no match is found, this is probably because the \
+   &#147;Reference Name&#148; given to your metalanguage by the ISO 639-3 \
+   standard happens to be different from the name you prefer to use.  Use \
+   whatever name you want, but enter the appropriate ISO 639-3 Code \
+   (if one exists!) in the following field so that users of your application \
+   can unambiguously identify your metalanguage.</p>\
+   """
+
+  title = u"""Help with entering a name for your metalanguage.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="headerImageHelp()">
+ <%
+  message = u"""<h1>Header Image Name</h1>\
+   \
+   <p>Enter the name (including extension) of an OLD image File that you have \
+   already uploaded.  This image will then be used as the background image for \
+   the banner/header at the top of each page.  Ideally, the image should be \
+   950px wide.  Make sure the image File is not too big (>500 KB) or it may \
+   slow down the application.\
+   </p>\
+   """
+
+  title = u"""Help with entering a header image name.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="orthographicValidationHelp()">
+ <%
+  message = u"""<h1>Orthography Validation</h1>\
+   \
+   <p>Choose an option for validation of data entered into orthographic fields, \
+   i.e., the orthographic transcription and possibly the morpheme break fields. \
+   After converting user input to the storage orthography (if applicable), the \
+   system will test whether the input string is constructable using only the \
+   graphemes of the <i>storage</i> orthography (possibly including capitalized \
+   graphemes if Only Lowercase is unchecked) and punctuation characters.  If the \
+   string is not so constructable, the system can do nothing (option: None), \
+   warn the user but nevertheless allow the data to be entered (option: Warning) \
+   or generate a validation error and prevent the data from being entered \
+   (option: Error).</p>\
+   """
+
+  title = u"""Help with orthography validation.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="narrPhonInventoryHelp()">
+ <%
+  message = u"""<h1>Narrow Phonetic Transcription Inventory</h1>\
+   \
+   <p>Enter a comma-separated list of characters (or multi-character strings) \
+   that users are expected to use when entering data into the narrow phonetic \
+   transcription field.</p>\
+   \
+   <p>Given the nature of narrow phonetic transcription, it may not make sense \
+   to impose input validation for this field.</p>\
+   """
+
+  title = u"""Help with entering a narrow phonetic transcription inventory.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="narrPhonValidationHelp()">
+ <%
+  message = u"""<h1>Narrow Phonetic Transcription Validation</h1>\
+   \
+   <p>Choose an option for validation of data entered into the narrow phonetic \
+   transcription field.  The system will test whether the user input to this \
+   field is constructable using only the characters/graphemes specified in the \
+   narrow phonetic transcription inventory.  If the input string is not so \
+   constructable, the system can do nothing (option: None), warn the user but \
+   nevertheless allow the data to be entered (option: Warning) or generate a \
+   validation error and prevent the data from being entered (option: Error).</p>\
+   \
+   <p>Given the nature of narrow phonetic transcription, it may not make sense \
+   to impose input validation for this field.</p>\
+   """
+
+  title = u"""Help with narrow phonetic transcription validation.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+
+<%def name="broadPhonInventoryHelp()">
+ <%
+  message = u"""<h1>Broad Phonetic Transcription Inventory</h1>\
+   \
+   <p>Enter a comma-separated list of characters (or multi-character strings) \
+   that users are expected to use when entering data into the broad phonetic \
+   transcription field.</p>\
+   """
+
+  title = u"""Help with entering a broad phonetic transcription inventory.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="broadPhonValidationHelp()">
+ <%
+  message = u"""<h1>Broad Phonetic Transcription Validation</h1>\
+   \
+   <p>Choose an option for validation of data entered into the broad phonetic \
+   transcription field.  The system will test whether the user input to this \
+   field is constructable using only the characters/graphemes specified in the \
+   broad phonetic transcription inventory.  If the input string is not so \
+   constructable, the system can do nothing (option: None), warn the user but \
+   nevertheless allow the data to be entered (option: Warning) or generate a \
+   validation error and prevent the data from being entered (option: Error).</p>\
+   """
+
+  title = u"""Help with broad phonetic transcription validation.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="morphPhonInventoryHelp()">
+ <%
+  message = u"""<h1>Morphophonemic Segmentation</h1>\
+   \
+   <p>Enter a comma-separated list of characters (or multi-character strings) \
+   that users are expected to use when entering data into the morpheme break \
+   field.  This is the phonemic inventory of the object language.</p>\
+   \
+   <p>Note that this phonemic inventory will not be used for validation if the \
+   Morpheme Break is Orthographic option is set to Yes.</p>\
+   """
+
+  title = u"""Help with entering a morphophonemic segmentation inventory.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="morphDelimitersHelp()">
+ <%
+  message = u"""<h1>Morpheme Delimiters</h1>\
+   \
+   <p>Enter a comma-separated list of morpheme delimiters, i.e., characters that \
+   are entered into the morpheme break field to indicate morpheme boundaries.\
+   The list may contain just one character, for example "-", or several, for \
+   example "-, =, +".</p>\
+   """
+
+  title = u"""Help with entering morpheme delimiters.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="morphPhonValidationHelp()">
+ <%
+  message = u"""<h1>Morphophonemic Validation</h1>\
+   \
+   <p>Choose an option for validation of data entered into the morpheme break \
+   field.  The system will test whether the user input to this \
+   field is constructable using only the characters/graphemes specified in the \
+   morphophonemic segmentation (i.e., phonemic) inventory and the specified \
+   morpheme delimiters. If the input string is not so constructable, the system \
+   can do nothing (option: None), warn the user but nevertheless allow the data \
+   to be entered (option: Warning) or generate a validation error and prevent \
+   the data from being entered (option: Error).</p>\
+   """
+
+  title = u"""Help with morphophonemic validation.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="punctuationHelp()">
+ <%
+  message = u"""<h1>Punctuation</h1>\
+   \
+   <p>Enter a list of punctuation characters.  The characters can be immediately \
+   adjacent or separated by whitespace.  Do not separate by commas.  The system \
+   will use these characters to validate user input to the orthographic \
+   transcription field.</p>\
+   """
+
+  title = u"""Help with entering punctuation.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+<%def name="grammaticalitiesHelp()">
+ <%
+  message = u"""<h1>Grammaticalities</h1>\
+   \
+   <p>Enter a comma-separated list of grammaticality values, \
+   e.g., "*, #, ?, **".  These values will determine the options presented at \
+   the grammaticality and gloss grammaticality fields.</p>\
+   """
+
+  title = u"""Help with entering grammaticalities.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+
+<%def name="userSpecificInputOrthographyHelp(userName, defInputOrth)">
+ <%
+  message = u"""<h1>User-specific Input Orthography</h1>\
+   \
+   <p>The selected orthography is that which %s will use when entering \
+   and searching for orthographic object language data.  If nothing is selected, \
+   the system-wide default input orthography (%s) will be used.</p>\
+   """ % (userName, defInputOrth.replace("'", "&#39;"))
+
+  title = u"""Help with the user-specific input orthography.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="userSpecificOutputOrthographyHelp(userName, defOutputOrth)">
+ <%
+  message = u"""<h1>User-specific Input Orthography</h1>\
+   \
+   <p>The selected orthography is that which will be used to display \
+   orthographic object language data to %s.  If nothing is selected, \
+   the system-wide default output orthography (%s) will be used.</p>\
+   """ % (userName, defOutputOrth.replace("'", "&#39;"))
+
+  title = u"""Help with the user-specific output orthography.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="rememberMetadataPrevFormHelp(userName)">
+ <%
+  message = u"""<h1>Remember Metadata form Previous Form</h1>\
+   \
+   <p>If set to true, then, when adding a new Form, default values for \
+   category, speaker, elicitor, verifier, source and date elicited will be \
+   taken from the form previously entered by %s.</p>\
+   """ % userName
+
+  title = u"""Help with remembering metadata from previous form.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="defaultFormViewHelp()">
+ <%
+  message = u"""<h1>Default Form View</h1>\
+   \
+   <p>If set to &#39;IGT&#39;, then forms will be displayed in interlinear \
+   gloss text format.  If set to &#39;tabular&#39;, then Forms will be \
+   displayed as rows in a table.</p>\
+   """
+
+  title = u"""Help with the default form view.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="guessMorphAnalHelp()">
+ <%
+  message = u"""<h1>Guess Morphological Analysis</h1>\
+   \
+   <p>If set to True, then, when entering forms, the system will attempt to \
+   guess the morpheme break and morpheme gloss fields in real time from the \
+   user-entered transcription.  At present the results are based on searching \
+   the database for words matching the words in the transcription.  In the \
+   future, an FST morphological parser may be implemented.</p>\
+   """
+
+  title = u"""Help with morphological analysis guessing.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+<%def name="dateFormatHelp()">
+ <%
+  message = u"""<h1>Date Format</h1>\
+   \
+   <p>Choose MM/DD/YYYY or DD/MM/YYYY as your preferred format when entering \
+   dates.</p>\
+   """
+
+  title = u"""Help with date format.  (Opens a window in the current page.)"""
+ %>
+ ${self.helperButton(message, title)}
+</%def>
+
+
+
+
+
+<%def name="helperButton(message, title)">
+ <a class="buttonLink helper" onclick="fillHelpDiv('${message}')" \
+  title="${title}">?</a>
+</%def>

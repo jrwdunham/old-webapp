@@ -1,0 +1,12 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Syntactic Category: ${c.category.name}</h1>
+</%def>
+
+% if c.category.description:
+    <div>${c.category.description}</div>
+% endif
+
+<a href="${url(controller='category', action='edit', id=c.category.id)}" class="buttonLink">Edit</a>
+<a href="${url(controller='category', action='delete', id=c.category.id)}" class="buttonLink" onclick="return confirmDelete('Syntactic Category', '${c.category.name}')">Delete</a>

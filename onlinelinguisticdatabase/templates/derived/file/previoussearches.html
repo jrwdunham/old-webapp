@@ -1,0 +1,58 @@
+<%inherit file="/base/index.html"/>
+
+<%def name="title()">Previous Searches</%def>
+<%def name="heading()"><h1 class="heading">Your ${len(c.previousSearches)} Previous Searches (max ${c.maxNoPreviousSearches})</h1></%def>
+
+% if c.previousSearches:
+
+<!-- The following formats the previous search terms in human-readable English prose ... more or less-->
+% for i in range(len(c.previousSearches)):
+<% searchDict = c.previousSearches[i]['result'] %>
+<a href="${url(controller='form', action='searchprevious', id=i)}">
+<h2>${searchDict['timeSearched'].strftime('%b %d, %Y at %I:%M %p')}</h2>
+<ul>
+    <% content = 0 %>
+    % if searchDict['searchTerm1']:
+        % if searchDict['searchType1'] in ['as a phrase', 'as a reg exp', 'exactly']:
+        <li>search expression 1: <span class="emphasize"> &lsquo;${searchDict['searchTerm1']}&rsquo; ${searchDict['searchType1']} in ${searchDict['searchLocation1']}</span></li>
+        % else:
+        <% typeToBoolean = {'any of these': "' or '", 'all of these': "' and '"} %>        
+        <li>search expression 1: <span class="emphasize"> ${searchDict['searchType1']} in ${searchDict['searchLocation1']}: &lsquo;${typeToBoolean[searchDict['searchType1']].join(searchDict['searchTerm1'].split(' '))}&rsquo;</span></li>
+        % endif
+        <% content += 1 %>
+    % endif
+    % if searchDict['searchTerm2']:
+        <% booleanTranslator = {'not_':'and not', 'and_': 'and', 'or_': 'or'} %>
+        % if searchDict['searchType2'] in ['as a phrase', 'as a reg exp', 'exactly']:
+        <li>search expression 2: <span class="emphasize"> ${booleanTranslator[searchDict['andOrNot']]} &lsquo;${searchDict['searchTerm2']}&rsquo; ${searchDict['searchType2']} in ${searchDict['searchLocation2']}</span></li>
+        % else:
+        <% typeToBoolean = {'any of these': "' or '", 'all of these': "' and '"} %>
+        <li>search expression 2: <span class="emphasize"> ${booleanTranslator[searchDict['andOrNot']]} ${searchDict['searchType2']} in ${searchDict['searchLocation2']}: &lsquo;${typeToBoolean[searchDict['searchType2']].join(searchDict['searchTerm2'].split(' '))}&rsquo;</span></li>
+        % endif
+        <% content += 1 %>
+    % endif
+    <% restrictors = [restrictor for restrictor in searchDict['restrictors'] if restrictor['options']] %>
+    % if restrictors:
+        % for restrictor in restrictors:
+            <li>restrictor: <span class="emphasize">${restrictor['location']} ID ${restrictor['containsNot']} ${restrictor['allAnyOf']} ${', '.join([restrictor or 'empty' for restrictor in restrictor['options']])}</span></li>
+        % endfor
+        <% content += 1 %>
+    % endif
+    <% dateRestrictors = [restrictor for restrictor in searchDict['dateRestrictors'] if restrictor['date']] %>
+    % if dateRestrictors:
+        <% relationTranslator = {'not_': 'not', 'earlier_than': 'earlier than', 'later_than': 'later than', '': ''} %>
+        <% locationTranslator = {'dateElicited': 'date elicited', 'datetimeModified': 'date modified', 'datetimeEntered': 'date entered'} %>
+        % for restrictor in dateRestrictors:
+            <li>date restrictor: <span class="emphasize">${locationTranslator[restrictor['location']]} is ${relationTranslator[restrictor['relation']]} ${restrictor['date'].strftime('%b %d, %Y')}</span></li>
+        % endfor
+        <% content += 1 %>
+    % endif
+    % if content is 0:
+        <li>Empty Search</li>
+    % endif
+</ul>
+</a>
+<div class="tableSpacerDivHalf"></div>
+% endfor
+
+% endif

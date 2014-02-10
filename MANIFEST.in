@@ -1,0 +1,4 @@
+include onlinelinguisticdatabase/config/deployment.ini_tmpl
+recursive-include onlinelinguisticdatabase/public *
+recursive-include onlinelinguisticdatabase/templates *
+recursive-include onlinelinguisticdatabase/docs *

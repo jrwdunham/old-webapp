@@ -1,0 +1,31 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+<%namespace file="/base/searchFields.html" name="searchFields" import="*"/>
+
+<%def name="heading()"></%def>
+
+<form class="formTable" id="dictionarySearchForm" action="${url(controller='dictionary', action='query')}" method="post">
+    ${searchFields.dictionarySearch()}    
+    <div>${h.submit(value="Search", name='submit', tabindex=30)}</div>
+</form>
+
+% if hasattr(c, 'exactMatchList') and c.exactMatchList:
+  <div>
+   <h1>Exact Matches</h1>
+    % for form in c.exactMatchList:
+        ${formViews.dictionaryView(form, c.languageToSortBy)}
+    % endfor
+  </div>
+% endif
+
+% if hasattr(c, 'fuzzyMatchList') and c.fuzzyMatchList:
+  <div>
+   <h1>Partial Matches</h1>
+    % for form in c.fuzzyMatchList:
+     % if form not in c.exactMatchList:
+        ${formViews.dictionaryView(form, c.languageToSortBy)}
+     % endif
+    % endfor
+  </div>
+% endif

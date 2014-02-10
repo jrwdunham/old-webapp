@@ -1,0 +1,20 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">${c.heading}</h1>
+</%def>
+
+<% 
+    c.content = capture(markup.linkToOLDEntitites, c.content)  
+    c.content = capture(markup.linkToOLDImageFiles, c.content)
+    c.content = capture(markup.linkToOLDFiles, c.content)
+%>
+ 
+${h.literal(c.content)}
+
+<br />
+% if 'user_role' in session and session['user_role'] == 'administrator':
+<a href="${url(controller='help', action='edit')}" class="buttonLink" \
+   title="Edit the help page of this OLD application">edit</a>
+% endif

@@ -1,0 +1,19 @@
+<%inherit file="/base/index.html" />
+<%namespace file="fields.html" name="fields" import="*"/>
+
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" \
+import="graphToInputScript"/>
+
+<%def name="writeJavascriptToHead()">
+    ${graphToInputScript()}
+</%def>
+
+<%def name="heading()">
+    <h1 class="heading">Add a Form</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='form', action='create')}" method="post">
+    ${fields.body()}    
+    <div>${h.submit(value="Add Form", name='submit', tabindex=30)}</div>
+</form>
+

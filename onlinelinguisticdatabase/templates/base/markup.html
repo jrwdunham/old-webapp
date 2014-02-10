@@ -1,0 +1,65 @@
+<%! import re %>
+
+<%doc>
+    markup template provides the defs that transform user-generated lexical items into links and other functional items
+</%doc>
+
+
+<%def name="linkToOLDEntitites(input)">
+    <%
+        patt = re.compile('((form|file|collection|speaker|user)\(([0-9]+)\))')
+        matches = patt.findall(input)
+        for match in matches:
+            id = match[2]
+            controller = match[1]
+            if controller == 'user':
+                controller = 'researcher'
+            URL = url(controller=controller, action='view', id=id)
+            title = 'Click to view %s %s' % (controller.capitalize(), str(id))
+            anchor = "<a href='%s' title='%s'>%s %s</a>" % (URL, title, controller.capitalize(), str(id))
+            input = input.replace(match[0], anchor)
+    %>
+    ${h.literal(input)}
+</%def>
+
+
+<%def name="embedCollectionContent(input)">
+    <%
+        patt = re.compile('(collection\[([0-9]+)\])')
+        matches = patt.findall(input)
+    %>
+</%def>
+
+
+<%def name="linkToOLDImageFiles(input)">
+    <%
+        patt = re.compile('(image\(([0-9a-zA-Z_ -]+.[a-zA-Z0-9]+)\))')
+        matches = patt.findall(input)
+        for match in matches:
+            controller = 'file'
+            action = 'retrieve'
+            path = match[1] 
+            URL = url(controller=controller, action=action, path=path)
+            img = "<img class='userEmbeddedImage' src='%s' />" % URL
+            input = input.replace(match[0], img)
+    %>
+    ${h.literal(input)}
+</%def>
+
+
+<%def name="linkToOLDFiles(input)">
+    <%
+        patt = re.compile('(\[(.+)\]link\(([0-9a-zA-Z_ -]+.[a-zA-Z0-9]+)\))')
+        matches = patt.findall(input)
+        for match in matches:
+            controller = 'file'
+            action = 'retrieve'
+            linkText = match[1]
+            path = match[2] 
+            URL = url(controller=controller, action=action, path=path)
+            title = "Link to %s" % path
+            a = "<a href='%s' title='%s' />%s</a>" % (URL, title, linkText)
+            input = input.replace(match[0], a)
+    %>
+    ${h.literal(input)}
+</%def>

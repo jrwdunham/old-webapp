@@ -1,0 +1,39 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">History of Form ${c.form.id}</h1>
+</%def>
+
+<div class="tableSpacerDivHalf"></div>
+<h2>Current Version</h2>
+<div class="tableSpacerDivHalf"></div>
+
+
+##${h.literal(c.form.getIGTHTMLTable(True))}
+${h.literal(c.form.getHTMLRepresentation())}
+
+<div class="tableSpacerDivHalf"></div>
+
+<h2>Previous Versions</h2>
+
+<div class="tableSpacerDivHalf"></div>
+
+
+
+% for formBackup in c.formBackups:
+
+    <% formBackup.fromJSON() %>
+    
+    <span class="datetimeHeader">
+      Change made ${h.pretty_date(formBackup.datetimeModified)}
+      (${formBackup.datetimeModified.strftime('%b %d, %Y at %I:%M %p UTC')})
+      by ${formBackup.backuper.firstName} ${formBackup.backuper.lastName}
+    </span>
+
+    <div class="historyDiv">
+    ${h.literal(formBackup.getHTMLRepresentation(formBackup=True))}
+    </div>
+
+% endfor

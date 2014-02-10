@@ -1,0 +1,22 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Login</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='login', action='authenticate')}" method="post">
+ <fieldset>
+ <legend>Authenticate</legend>
+ <ol>
+  <li>
+   <label for="username">Username:</label>
+   <input id="username" maxlength="255" name="username" tabindex="1" type="text" />
+  </li>
+  <li>
+   <label for="password">Password</label>
+   <input id="password" maxlength="255" name="password" tabindex="2" type="password" />
+  </li>
+  </fieldset>
+  <div>${h.submit(value="Login", name='submit', tabindex='3')}</div>
+</form>
+

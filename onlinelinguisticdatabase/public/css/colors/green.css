@@ -1,0 +1,181 @@
+body
+{
+    /*background-color: #70713d; Old green: 929B70*/
+    background: #70713d url('/images/maze.jpg') top left;
+    /*background-color: black;*/
+}
+
+#doc
+{
+    /*background-color: #fff;*/
+    /*original: 4a525a, green: 4a5a4a, gold: 736a42*, J. S. Mill Red: 6a3614, Blood red: 3d1004*/
+}
+
+#hd
+{
+    background: #fff url('/images/leaf_scaled_darker.jpg') no-repeat bottom left;
+    border-bottom: solid 1px #39470D;
+    color: White;
+}
+
+#topMenu li a.selected,
+#topMenu li a.selected:hover,
+#topMenuUL li a:active,
+#topMenu li a:hover,
+#topTopMenu li a.selected,
+#topTopMenu li a.selected:hover,
+#topTopMenuUL li a:active,
+#topTopMenu li a:hover,
+#sideMenu li a.selected,
+#sideMenu li a.selected:hover,
+#sideMenu li a:hover,
+#sideMenu p a:hover,
+#sideMenu p a.selected,
+#sideMenu p a.selected:hover,
+.buttonLink:hover,
+.key:hover,
+.longButtonLink:hover,
+li.radioLI:hover,
+a.link:hover,
+.checklist label:hover,
+.checklistBig label:hover,
+a.selected,
+li.suggestionList:hover
+{
+    background-color: #39470D; /* DARK RED */
+    /*background-color: #7e6d63; BROWNISH GREY */
+}
+
+input:focus,
+textarea:focus, 
+select:focus,
+checkbox:focus,
+.button:focus
+{
+    background-color: #ADB58D;
+}
+
+input, 
+textarea, 
+select,
+#sideMenu,
+div.associatedEntitiesDiv,
+.highlightDiv,
+th
+{
+    background-color: #dee1d3;    
+       /*background-color: #fde3c1;  CREAM */
+}
+
+#topMenu li a,
+#topMenu li a:link,
+#topMenu ul,
+#topTopMenu li a,
+#topTopMenu li a:link,
+#topTopMenu ul,
+.buttonLink,
+.key,
+.longButtonLink,
+#sideMenu,
+form.formTable fieldset,
+.checklist,
+.checklistBig,
+div.associatedEntitiesDiv
+{
+    border-color: #39470D;
+    /*border-color: #7e6d63; BROWNISH GREY */
+}
+
+body,
+a,
+a:link,
+#topMenu li a,
+#topMenu li a:link,
+#topTopMenu li a,
+#topTopMenu li a:link,
+#sideMenu,
+#sideMenu a,
+#sideMenu a:link,
+form.formTable legend
+{
+    color: #38460c;
+}
+
+a,
+a:link
+{
+    color: #627A15;
+}
+
+#topMenu li a.selected,
+#topMenu li a.selected:hover, 
+#topMenu li a:hover,
+#topTopMenu li a.selected,
+#topTopMenu li a.selected:hover, 
+#topTopMenu li a:hover,
+#sideMenu li a.selected,
+#sideMenu li a.selected:hover,
+#sideMenu li a:hover,
+#sideMenu p a:hover,
+#sideMenu p a.selected,
+#sideMenu p a.selected:hover,
+.checklist label:hover,
+.checklistBig label:hover,
+li.radioLI:hover,
+a.link:hover,
+a.buttonLink:hover,
+a.key:hover,
+a.longButtonLink:hover,
+a.selected,
+li.suggestionList:hover
+{
+    color: #eee;
+}
+
+.error-message, 
+.required, 
+#flash,
+.datetimeHeader
+{
+    color: red;
+}
+
+a:hover
+{
+    color: #46360C;
+}
+
+checkbox:focus
+{
+    background-color: #7e6d63;
+}
+
+#loginInfo a
+{
+    color: #fff;
+}
+
+a.match,
+.document a.match
+{
+    color: blue;
+    text-decoration: none;
+}
+
+a.nonmatch,
+.document a.nonmatch
+{
+    color: green;
+    text-decoration: none;
+}
+
+div.document h1,
+.heading
+{
+    /*background-color: #d0dcaa;*/
+}
+
+#acronym
+{
+    color: #8f9d64;
+}

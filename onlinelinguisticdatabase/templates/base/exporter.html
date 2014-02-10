@@ -1,0 +1,96 @@
+${self.exportByType(c.exportType)}
+
+<%def name="exportByType(exportType)">
+<pre>\
+% for form in c.forms:
+% if exportType == 't_g':
+${self.t_g(form)}            
+% elif exportType == 't_mb_mg_g':
+${self.t_mb_mg_g(form)}
+% elif exportType == 't':
+${self.t(form)}
+% elif exportType == 'all':
+${self.all(form)}
+% endif
+% endfor
+</pre>\
+</%def>
+
+
+<%def name="t_g(form)">
+${form.grammaticality}${form.transcription}
+% for gloss in form.glosses:
+${gloss.glossGrammaticality}${gloss.gloss}
+% endfor
+</%def>
+
+
+<%def name="t_mb_mg_g(form)">
+${form.grammaticality}${form.transcription}
+% if form.morphemeBreak:
+${form.morphemeBreak}
+% endif
+% if form.morphemeGloss:
+${form.morphemeGloss}
+% endif
+% for gloss in form.glosses:
+${gloss.glossGrammaticality}${gloss.gloss}
+% endfor
+</%def>
+
+
+<%def name="t(form)">
+${form.grammaticality}${form.transcription}
+</%def>
+
+
+<%def name="all(form)">
+${form.grammaticality}${form.transcription}
+% if form.morphemeBreak:
+${form.morphemeBreak}
+% endif
+% if form.morphemeGloss:
+${form.morphemeGloss}
+% endif
+% for gloss in form.glosses:
+${gloss.glossGrammaticality}${gloss.gloss}
+% endfor
+
+ID: ${form.id}
+% if form.comments:
+comments: ${form.comments.replace('\n', '')}
+% endif
+% if form.speakerComments:
+speaker comments: ${form.speakerComments.replace('\n', '')}
+% endif
+% if form.speaker:
+speaker: ${form.speaker.firstName} ${form.speaker.lastName}
+% endif
+% if form.elicitor:
+elicitor: ${form.elicitor.firstName} ${form.elicitor.lastName}
+% endif
+% if form.verifier:
+verifier: ${form.verifier.firstName} ${form.verifier.lastName}
+% endif
+% if form.enterer:
+enterer: ${form.enterer.firstName} ${form.enterer.lastName}
+% endif
+% if form.source:
+source: ${form.source.authorLastName} (${form.source.year})
+% endif
+% if form.dateElicited:
+date elicited: ${form.dateElicited.strftime('%b %d, %Y')}
+% endif
+date entered: ${form.datetimeEntered.strftime('%b %d, %Y at %I:%M %p')}
+date updated: ${form.datetimeModified.strftime('%b %d, %Y at %I:%M %p')}
+% if form.elicitationMethod:
+elicitation method: ${form.elicitationMethod.name}
+% endif
+% if form.syntacticCategory:
+syntactic category: ${form.syntacticCategory.name}
+% endif
+% if form.keywords:
+keywords: ${', '.join([keyword.name for keyword in form.keywords])}
+% endif
+</%def>
+

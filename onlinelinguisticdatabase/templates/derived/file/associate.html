@@ -1,0 +1,13 @@
+<%inherit file="/base/index.html" />
+<%namespace file="associateForm.html" name="af"/>
+
+<%def name="heading()">
+    <h1 class="heading">Associate File ${c.file.id} to a Form</h1>
+</%def>
+
+<br />
+${c.file.getHTMLRepresentation()}
+
+<div class="tableSpacerDivHalf"></div>
+
+${h.literal(c.associateForm)}

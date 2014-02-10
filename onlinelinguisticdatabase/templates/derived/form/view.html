@@ -1,0 +1,13 @@
+<%inherit file="/base/index.html"/>
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="title()">OLD: Form ${c.form.id}</%def>
+<%def name="heading()"><h1 class="heading">View Form ${c.form.id}</h1></%def>
+
+${javascriptDefs.toggleLabelsJavaScript()}
+<a class="buttonLink" id="toggleRowLabelsButton" onclick="toggleRowLabels" title="hide labels">-</a>
+<div class="tableSpacerDivHalf"></div>
+
+${formViews.formViewLong(c.form)}

@@ -1,0 +1,11 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Export Complete</h1>
+</%def>
+
+<p>The button below links to your export file.</p>
+
+<a class='buttonLink' href="${url('retrieve', path=c.fileRetrieveName)}">
+    Export File (${c.filename})
+</a>

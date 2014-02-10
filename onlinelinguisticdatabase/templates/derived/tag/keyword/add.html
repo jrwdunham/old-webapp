@@ -1,0 +1,11 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/derived/tag/inputFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Add a new Keyword</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='key', action='create')}" method="post">
+    ${fields.displayTagFields('keyword')}    
+    <div>${h.submit(value="Add Keyword", name='submit', tabindex='5')}</div>
+</form>

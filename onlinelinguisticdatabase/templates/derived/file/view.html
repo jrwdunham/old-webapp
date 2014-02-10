@@ -1,0 +1,10 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/fileViews.html" name="fileViews" import="*" />
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*" />
+
+<%def name="title()">OLD: File ${c.file.id}</%def>
+<%def name="heading()"><h1 class="heading">View File ${c.file.id}</h1></%def>
+
+##${fileViews.fileView(c.file)}
+${c.file.getHTMLRepresentation()}

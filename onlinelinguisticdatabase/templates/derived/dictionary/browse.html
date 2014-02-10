@@ -1,0 +1,47 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="heading()"></%def>
+  
+<%
+    allByOLURL = url(controller='dictionary', action='browse', id='1000000_ol', anchor='hl')
+    allByMLURL = url(controller='dictionary', action='browse', id='1000000_ml', anchor='hl')    
+%>
+            
+<div class="centerHeading">
+    <a href="${allByOLURL}" title="${'view all entries; %s-to-%s' % (app_globals.objectLanguageName, app_globals.metaLanguageName)}">${app_globals.objectLanguageName}</a>
+</div>
+
+% if c.OLOrthographyTable:
+    ${c.OLOrthographyTable}
+% else:
+    Please specify an orthography in the application settings
+% endif
+    
+<div class="centerHeading">
+    <a href="${allByMLURL}" title="${'view all entries; %s-to-%s' % (app_globals.metaLanguageName, app_globals.objectLanguageName)}">${app_globals.metaLanguageName}</a>
+</div>
+
+% if c.MLOrthographyTable:
+    ${c.MLOrthographyTable}
+% else:
+    Please specify an orthography in the application settings
+% endif
+
+
+% if hasattr(c, 'headChar'):
+    % if c.headChar:
+        <div id="headCharDiv"><a name='hl'></a>${h.storageToOutputTranslate(c.headChar[0])}</div>
+    % else:
+        <div id="headCharDiv"><a name='hl'></a></div>
+    % endif
+% endif
+
+
+% if hasattr(c, 'wordList'):
+    % for form in c.wordList:
+        ${formViews.dictionaryView(form, languageToSortBy)}
+    % endfor
+% endif

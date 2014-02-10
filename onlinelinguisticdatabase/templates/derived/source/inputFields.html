@@ -1,0 +1,37 @@
+<%def name="addEditForm(addEdit)">
+<fieldset>
+<legend>Source Info</legend>
+<ol>
+ <li>
+  <label for="authorFirstName">author first name *</label>
+  <input id="authorFirstName" maxlength="255" name="authorFirstName" tabindex="1" type="text" />
+ </li>
+ <li>
+  <label for="authorLastName">author last name *</label>
+  <input id="authorLastName" maxlength="255" name="authorLastName" tabindex="2" type="text" />
+ </li>
+ <li>
+  <label for="year">year (YYYY) *</label>
+  <input id="year" maxlength="255" name="year" tabindex="3" type="text" />
+ </li>
+ <li>
+  <label for="title">title *</label>
+  <input id="title" maxlength="255" name="title" tabindex="4" type="text" />
+ </li>
+ <li>
+  <label for="fullReference">full reference</label>
+  <textarea id="fullReference" cols="40" rows="15" name="fullReference" tabindex="5"></textarea>
+ </li>
+</ol>
+</fieldset>
+
+<fieldset>
+<legend>Source File</legend>
+<ol>
+ <li>
+  <label for="file_id">file <span class="emphasize">(enter the ID of a text File of this Source)</span></label>
+  <input id="file_id" maxlength="255" name="file_id" tabindex="6" type="text" />
+ </li>
+</ol>
+</fieldset>
+</%def>

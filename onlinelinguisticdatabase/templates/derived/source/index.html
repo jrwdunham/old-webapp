@@ -1,0 +1,32 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Sources</h1>
+</%def>
+
+<p class="descriptiveP">Sources are books or papers that can be referenced in the OLD.  A source may be associated to a File which is an electronic copy of the source.  Alterations to the list of sources will immediately affect the searching and adding of Forms and Collections.</p>
+
+<a href="${url(controller='source', action='add')}" class="buttonLink" title="Add a new source">Add</a>
+
+<div class="containerDiv">
+% if c.sources:
+<table class="clearTable">
+ <thead>
+  <tr>
+   <td>Author</td>
+   <td>Year</td>
+   <td>Title</td>
+   <td>ID</td>
+  </tr>
+ </thead>
+% for source in c.sources:
+  <tr>
+   <td><a href="${url(controller='source', action='view', id=source.id)}" class="link">${source.authorLastName}, ${source.authorFirstName}</a></td>
+   <td>${source.year}</td>
+   <td><span class='emphasize'>${source.title}</span></td>
+   <td class="clearTable">${source.id}</td>
+  </tr>
+% endfor
+</table>
+% endif
+</div>

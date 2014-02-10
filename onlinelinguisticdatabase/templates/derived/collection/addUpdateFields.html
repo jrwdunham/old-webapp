@@ -1,0 +1,114 @@
+<%namespace file="/base/helper.html" name="helper" import="markdownHelp, formEmbeddingHelp, entityLinkingHelp, reStructuredTextHelp, embeddingFileHelp"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="getMemoryContentsScript"/>
+
+<%def name="add()">
+ ${primaryData()}
+ ${whoAndWhen()}
+</%def>
+
+
+<%def name="update()">
+ ${primaryData()}
+ ${whoAndWhen()}
+</%def>
+
+
+<%def name="primaryData()">
+ <% 
+    sUrl = url(controller='collection', action='getmemory') 
+    getMemoryContentsScript()
+ %>
+ 
+ <fieldset>
+ <legend>Primary Data</legend>
+ <ol>
+  <li>
+   <label for="title">Title *</label>
+   <input id="title" maxlength="255" name="title" tabindex="1" type="text" />
+  </li>
+  <li>
+   <label for="url">URL</label>
+   <input id="url" maxlength="255" name="url" tabindex="1" type="text" />
+  </li>
+  <li>
+   <label for="collectionType">Type</label>
+   ${h.select(name=u'type', selected_values=u"", options=app_globals.collectionTypes, tabindex=2)}
+  </li> 
+  <li>
+   <label for="description">Description</label>
+   <textarea id="description" name="description" rows="2" cols="10" tabindex="3"></textarea>
+  </li>
+  <li>
+   <label for="collectionContent">Content</label>
+   <textarea id="collectionContent" class="monospace" name="contents" rows="20"
+           cols="10" tabindex="4"></textarea>
+
+   <a class="buttonLink" name="getmemory" href='#'
+    onclick="getMemoryContents('${sUrl}'); return false;"
+    title="Insert Form IDs from Memory into this Collection's content">
+    insert contents of memory</a>
+
+   <p class="fullyjustified">Enter some content for this collection in the text
+   box above.</p>
+   
+   <p class="fullyjustified">To embed the Form with ID=X, use the syntax 'form[X]'
+   ${formEmbeddingHelp()}.  (Each embedded Form will be associated to this
+   Collection, making it possible (for example) to search within the set of
+   Forms Y that are associated to the set of Collections Z.)</p>
+ 
+   <p class="fullyjustified">Use the reStructuredText markup language
+   ${reStructuredTextHelp()} to add formatting and structure.</p>
+   
+   <p class="fullyjustified">Embed a representation of an OLD File
+   ${embeddingFileHelp()} using an expression of the form 'file[X]'.</p>
+
+   <p class="fullyjustified">Embed the contents of another OLD Collection with
+   expressions of the form 'collection[X]'.  By embedding the contents of
+   multiple Collections, one can create a Collection whose contents is built up
+   from those of others.</p>
+   
+   <p class="fullyjustified">Create HTML links to OLD entities using
+   expressions of the form 'form(a)', 'collection(b)', etc., where 'a' and 'b'
+   are IDs ${entityLinkingHelp()}.</p>
+  
+  </li>
+ </ol>
+ </fieldset>
+</%def>
+
+
+<%def name="whoAndWhen()">
+<fieldset>
+<legend>Who and When</legend>
+<ol>
+ <li>
+  <label for="speaker">Speaker</label>
+  <% speakers = [('', '')] + [(speaker.id, speaker.firstName + ' ' + speaker.lastName) for speaker in app_globals.speakers] %>
+  ${h.select(name='speaker', selected_values="", options=speakers, tabindex=5)}
+ </li>
+ <li>
+  <label for="elicitor">Elicitor</label>
+  <% users = [('', '')] + [(user.id, user.firstName + ' ' + user.lastName) for user in app_globals.users if user.role != u'viewer'] %>
+  ${h.select(name='elicitor', selected_values="", options=users, tabindex=6)}
+ </li>
+ <li>
+  <label for="source">Source</label>
+  <% sources = [('', '')] + [(source.id, source.authorLastName + ', ' +
+                    source.authorFirstName[0].upper() + '.  ' +
+                    unicode(source.year) + '.  ' +
+                    source.title[:10] + '...')
+                    for source in app_globals.sources] %>
+  ${h.select(name='source', selected_values="", options=sources, tabindex=7)}
+ </li>
+<%
+dateFormat = session.get('userSettings').get('dateFormat')
+if not dateFormat:
+    dateFormat = 'MM/DD/YYYY'
+%>
+ <li>
+  <label for="dateElicited">Date Elicited (${dateFormat})</label>
+  <input id="dateElicited" maxlength="10" name="dateElicited" tabindex="8" type="text" />
+ </li>
+</ol>
+</fieldset>
+</%def>

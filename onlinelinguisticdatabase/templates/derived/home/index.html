@@ -1,0 +1,26 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">${c.heading}</h1>
+</%def>
+
+<div id="formcountdiv">
+ <div id="formcountdivinner">
+  <div class="big">${h.commatizeNumberString(c.formCount)}</div>
+  % if c.formCount == '1':
+   Form
+  % else:
+   Forms
+  % endif
+ </div>
+</div>
+
+${h.literal(c.content)}
+
+<br />
+
+% if 'user_role' in session and session['user_role'] == 'administrator':
+<a href="${url(controller='home', action='edit')}" class="buttonLink" \
+   title="Edit the home page of this OLD application">edit</a>
+% endif

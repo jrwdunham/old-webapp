@@ -1,0 +1,93 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <a name='speakers'></a>
+    <h1 class="heading">Speakers</h1>
+</%def>
+
+<p class="descriptiveP">View information about current speakers.  Alterations
+to the list of speakers will immediately affect the searching and adding of
+Forms, Files and Collections.</p>
+
+% if 'user_role' in session:
+<a href="${url(controller='speaker', action='add')}" class="buttonLink">Add</a>
+% endif
+
+% if c.speakers:
+<div class="containerDiv">
+<table class="clearTable">
+ <thead>
+  <tr>
+   <td>Name</td>
+   <td>Dialect</td>
+   <td>ID</td>
+  </tr>
+ </thead>
+% for speaker in c.speakers:
+  <tr>
+   <td><a href="${url(controller='speaker', action='view', id=speaker.id)}"
+          class="link"
+          title="View this speaker's personal page; edit or delete this speaker
+          (authorization required)">${speaker.lastName}, ${speaker.firstName}</a>
+   </td>
+   <td>${speaker.dialect}</td>
+   <td class="clearTable">${speaker.id}</td>
+  </tr>
+% endfor
+</table>
+</div>
+% endif
+
+<div class="tableSpacerDivHalf"></div>
+
+
+
+
+<a name='users'></a>
+<h1 class="heading">Users</h1>
+
+<p class="descriptiveP">View information about current users.  Click on the
+user's name to see their personal page.  Click on your own name to view and edit
+your personal page.</p>
+
+<p class="descriptiveP">Users with the role 'administrator' or 'contributor' can
+view and alter data.  Users with the role 'viewer' can only view data.</p>
+
+% if 'user_role' in session and session['user_role'] == 'administrator':
+ <a href="${url(controller='researcher', action='add')}" class="buttonLink">Add</a>
+% endif
+
+${self.displayUsers(c.users)}
+
+
+<%def name="displayUsers(users)">
+<div class="containerDiv">
+<table class="clearTable">
+ <thead>
+  <tr>
+   <td class="userNameCell">Name</td>
+   <td class="userAffiliationCell">Affiliation</td>
+   <td class="userIDCell">ID</td>
+   <td class="userRoleCell">Role</td>
+  </tr>
+ </thead>
+ <tbody>
+% for user in users:
+  <tr>
+   <td><a href="${url(controller='researcher', action='view', id=user.id)}"
+          class="link"
+          title="View this user's personal page; edit or delete this user
+          (authorization required)">${user.lastName}, ${user.firstName}
+% if 'user_id' in session and user.id == session['user_id']:
+ (me)
+% endif
+   </a></td>
+   <td>${user.affiliation}</td>
+   <td>${user.id}</td>
+   <td>${user.role}</td>
+  </tr>
+% endfor
+ </tbody>
+</table>
+</div>
+</%def>

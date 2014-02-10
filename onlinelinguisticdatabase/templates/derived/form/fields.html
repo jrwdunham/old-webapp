@@ -1,0 +1,318 @@
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" \
+import="checkForDuplicateTranscriptionScript, guessMorphologyScript"/>
+
+
+<div style="position: relative">
+  <div id="addUpdateFormMenuDivID"
+     style="max-width: 2em; position: absolute; left: -50px; top: -48px">
+  </div>
+</div>
+
+
+<fieldset>
+<legend>Primary Data</legend>
+<ol>
+
+<%
+    narrPhonVis = 'visible' if c.displayNarrowPhoneticTranscriptionField else 'hidden'
+    narrPhonDisp = 'block' if c.displayNarrowPhoneticTranscriptionField else 'none'
+    broadPhonVis = 'visible' if c.displayBroadPhoneticTranscriptionField else 'hidden'
+    broadPhonDisp = 'block' if c.displayBroadPhoneticTranscriptionField else 'none'
+%>
+
+ <li>
+  <label for="transcription">Orthographic Transcription *
+    <a style="font-size: 9px;" class="keyboard_show">keyboard</a>
+  </label>
+  <br />
+  ${h.select(name='grammaticality', selected_values="",
+    options=app_globals.grammaticalities, tabindex=1)}
+
+  % if session.get('guessMorphology'):
+  <span class="warning-message-2"></span>
+  <textarea id="transcription" maxlength="255" name="transcription" tabindex="1"
+         class="textareaTextInput"
+         onblur="checkForDuplicateTranscription(); guessMorphology('force');"
+         onkeyup="guessMorphology();"></textarea>
+  % else:
+  <span class="warning-message-2"></span>
+  <textarea id="transcription" maxlength="255" name="transcription" tabindex="1"
+         class="textareaTextInput"
+         onblur="checkForDuplicateTranscription();"></textarea>  
+  % endif
+
+  <div id='duplicateWarningDiv' class='invisiDiv'></div>
+
+  <div class='keyboard'>
+  </div>
+ </li>
+
+ <li id="narrowPhoneticTranscriptionLI"
+     style="visibility: ${narrPhonVis}; display: ${narrPhonDisp}">
+  <label for="narrowPhoneticTranscription">Narrow Phonetic Transcription
+    <a style="font-size: 9px;" class="keyboard_show">keyboard</a>
+  </label>
+  <br />
+  <span class="warning-message-2"></span>
+  <textarea id="narrowPhoneticTranscription" maxlength="255"
+         name="narrowPhoneticTranscription" class="textareaTextInput" tabindex="1" ></textarea>
+  <div class='keyboard'>
+  </div>
+ </li>
+
+ <li id="phoneticTranscriptionLI"
+     style="visibility: ${broadPhonVis}; display: ${broadPhonDisp}">
+  <label for="phoneticTranscription">Broad Phonetic Transcription
+    <a style="font-size: 9px;" class="keyboard_show">keyboard</a>
+  </label>
+  <br />
+  <span class="warning-message-2"></span>
+  <textarea id="phoneticTranscription" maxlength="255"
+         name="phoneticTranscription" class="textareaTextInput" tabindex="1" ></textarea>
+  <div class='keyboard'>
+  </div>
+ </li>
+
+ <li>
+  <label for="morphemeBreak">Morpheme Break
+    <a style="font-size: 9px;" class="keyboard_show">keyboard</a>
+  </label><br />
+  <span class="warning-message-2"></span>
+  <textarea id="morphemeBreak" maxlength="255" name="morphemeBreak" tabindex="2"
+         onfocus="mbFocus=document.getElementById('morphemeBreak').value;"
+         onkeyup="mbKeyUp=document.getElementById('morphemeBreak').value;"
+         class="textareaTextInput"></textarea>
+  <div id='morphemeBreakSuggestionDiv' class='invisiDiv'></div>
+  <div class='keyboard'>${c.morphemeBreakKeyboardTable}</div>
+ </li>
+
+ <li>
+  <label for="morphemeGloss">Morpheme Gloss</label><br />
+  <textarea id="morphemeGloss" maxlength="255" name="morphemeGloss" tabindex="3"
+         onfocus="mgFocus=document.getElementById('morphemeGloss').value;"
+         onkeyup="mgKeyUp=document.getElementById('morphemeGloss').value;"
+         class="textareaTextInput"></textarea>
+  <div id='morphemeGlossSuggestionDiv' class='invisiDiv'></div>
+ </li>
+
+ <li>
+  <label for="glosses-0">Gloss *</label><br />
+  ${h.select(name='glosses-0.grammaticality', selected_values="", options=app_globals.grammaticalities, tabindex=4)}
+  <input class="gloss" id="glosses-0.gloss" maxlength="255" name="glosses-0.gloss" tabindex="4" type="text" />
+  <input type="hidden" id="glosses-0.ID" name="glosses-0.ID" />
+% if hasattr(c, 'viewExtraGlossesFields') and c.viewExtraGlossesFields:
+  <a class="buttonLink" id="addRemoveGloss1Button" tabindex=4 onclick="addRemoveElement('extraGlosses','addRemoveGloss1Button', 'extra gloss fields')" title="hide extra gloss fields">-</a>
+ </li>
+ <div id="extraGlosses" style="display:block;visibility:visible;">
+% else:
+  <a class="buttonLink" id="addRemoveGloss1Button" tabindex=4 onclick="addRemoveElement('extraGlosses','addRemoveGloss1Button', 'extra gloss fields')" title="show extra gloss fields">+</a>
+ </li>
+ <div id="extraGlosses">
+% endif
+
+ <li id="gloss1ListItem">
+  <label for="glosses-1">Gloss</label><br />
+  ${h.select(name='glosses-1.grammaticality', selected_values="", options=app_globals.grammaticalities, tabindex=5)}
+  <input class="gloss" id="glosses-1.gloss" maxlength="255" name="glosses-1.gloss" tabindex="5" type="text" />
+  <input type="hidden" id="glosses-1.ID" name="glosses-1.ID" />
+ </li>
+
+ <li id="gloss2ListItem">
+  <label for="glosses-2">Gloss</label><br />
+  ${h.select(name='glosses-2.grammaticality', selected_values="", options=app_globals.grammaticalities, tabindex=5)}
+  <input class="gloss" id="glosses-2.gloss" maxlength="255" name="glosses-2.gloss" tabindex="5" type="text" />
+  <input type="hidden" id="glosses-2.ID" name="glosses-2.ID" />
+ </li>
+
+ <li id="gloss3ListItem">
+  <label for="glosses-3">Gloss</label><br />
+  ${h.select(name='glosses-3.grammaticality', selected_values="", options=app_globals.grammaticalities, tabindex=5)}
+  <input class="gloss" id="glosses-3.gloss" maxlength="255" name="glosses-3.gloss" tabindex="5" type="text" />
+  <input type="hidden" id="glosses-3.ID" name="glosses-3.ID" />
+ </li>
+ </div>
+</ol> 
+</fieldset>
+
+<fieldset>
+<legend>Secondary Data</legend>
+<ol>
+
+ <li>
+  <label for="comments">General Comments</label><br />
+  <textarea id="comments" name="comments" rows="2" cols="10" tabindex="5"></textarea>
+ </li>
+
+ <li>
+  <label for="speakerComments">Speaker Comments</label><br />
+  <textarea id="speakerComments" name="speakerComments" rows="2" cols="10" tabindex="6"></textarea>
+ </li>
+
+ <li>
+  <label for="elicitationMethod">Elicitation Method</label>
+  <% elicitationMethods = [('', '')] + [(elicitationMethod.id, elicitationMethod.name)
+                           for elicitationMethod in app_globals.elicitationMethods]
+  %>
+  ${h.select(name='elicitationMethod', selected_values="", options=elicitationMethods, tabindex=7)}
+ </li>
+ <li>
+  <label for="keywords_list">Keywords</label>
+  <ul id="keywords_list" class="checklist">
+% for i in range(len(app_globals.keywords)): 
+   <li>
+    <label for='${"keywords-%s.keyword"%(app_globals.keywords[i].id)}'>
+     <input id='${"keywords-%s.keyword"%(app_globals.keywords[i].id)}'
+            name='${"keywords-%s.keyword"%(app_globals.keywords[i].id)}'
+            type="checkbox" value="${app_globals.keywords[i].id}" />
+            ${app_globals.keywords[i].name}</label>
+   </li>
+% endfor
+  </ul>
+ </li>
+ <li>
+  <label for="syntacticCategory">Category</label>
+  <% syncats = [('', '')] + [(syncat.id, syncat.name) for syncat in app_globals.syncats] %>
+  ${h.select(name='syntacticCategory', selected_values="", options=syncats, tabindex=9)}
+ </li>
+</ol>
+</fieldset>
+<fieldset>
+<legend>Who and When</legend>
+<ol>
+ <li>
+  <label for="speaker">Speaker</label>
+  <% speakers = [('', '')] + [(speaker.id, speaker.firstName + ' ' + speaker.lastName) for speaker in app_globals.speakers] %>
+  ${h.select(name='speaker', selected_values="", options=speakers, tabindex=10)}
+ </li>
+ <li>
+  <label for="elicitor">Elicitor</label>
+  <% users = [('', '')] + [(user.id, user.firstName + ' ' + user.lastName) for user in app_globals.users if user.role != u'viewer'] %>
+  ${h.select(name='elicitor', selected_values="", options=users, tabindex=11)}
+ </li>
+ <li>
+  <label for="verifier">Verifier</label>
+  ${h.select(name='verifier', selected_values="", options=users, tabindex=12)}
+ </li>
+ <li>
+  <label for="source">Source</label>
+  <% sources = [('', '')] + [(source.id, source.authorLastName + ', ' +
+                    source.authorFirstName[0].upper() + '.  ' +
+                    unicode(source.year) + '.  ' +
+                    source.title[:10] + '...')
+                    for source in app_globals.sources] %>
+  ${h.select(name='source', selected_values="", options=sources, tabindex=13)}
+ </li>
+<%
+dateFormat = session.get('userSettings').get('dateFormat')
+if not dateFormat:
+    dateFormat = 'MM/DD/YYYY'
+%>
+ <li>
+  <label for="dateElicited">Date Elicited (${dateFormat})</label>
+  <input id="dateElicited" maxlength="10" name="dateElicited" tabindex="14" type="text" />
+ </li>
+</ol>
+</fieldset>
+
+<script type="text/javascript">
+  createFormAddActionButton();
+
+    // Return the HTML for a keyboard table, given a list of graphemes
+    var getKeyboard = function (graphList, width) {
+        if (width === undefined) {
+            width = 10;
+        }
+        var numExtraCells = width - (graphList.length % width);
+        var td = "<td>";
+        var extraCells = Array(numExtraCells + 1).join(td + "</td>");
+        var kb = '<table class="keyboardTable">';
+        $.each(graphList, function (i, e) {
+            if (i % 10 === 0) {
+                kb += '<tr>';
+            }
+            kb += td + e + '</td>';
+            if (i % 10 === 9) {
+                kb += '</tr>';
+            }
+            if (i === graphList.length - 1) {
+                kb += extraCells + '</tr>';
+            }
+        });
+        return kb;
+    };
+
+    // insertGraphemeAtCaretInTextarea inserts graph into the textarea at the
+    //  position of the caret (uses jquery-caret).
+    var insertGraphemeAtCaretInTextarea = function (grapheme, textarea) {
+        var val = textarea.val();
+        var start = textarea.caret().start;
+        var end = textarea.caret().end;
+        if (start !== undefined && end !== undefined) {
+            textarea.val(val.substring(0, start) + grapheme + val.substring(end));
+            var newPos = start + grapheme.length;
+            textarea.caret(newPos, newPos);
+        } else {
+            textarea.val(val + grapheme);
+        }
+    };
+
+  $(function () {
+
+    // Hide the keyboard
+    $('.keyboard').hide();
+
+    // When 'keyboard' is clicked, show the kb and ajax-get its data or hide it
+    $('.keyboard_show').toggle(
+        function () {
+            var fieldName = $(this).closest('label').attr('for');
+            var kbDiv = $($(this).closest('li').find('.keyboard'));
+            $.get('/form/get_keyboard_grapheme_list', {fieldName: fieldName},
+                function (r){
+                    kbDiv.html(getKeyboard(r)).show('slow')
+                        .find('td').click(function () {
+                            var textarea = $(this).closest('li').find('textarea');
+                            var grapheme = $(this).text();
+                            insertGraphemeAtCaretInTextarea(grapheme, textarea);
+                        }).css('cursor', 'pointer');
+                }, 'json');
+        },
+        function () {
+            $($(this).closest('li').find('.keyboard')).hide('slow');
+        }
+    ).css('cursor', 'pointer');
+
+    // Blur event on transcription, broad phon, narr phon and morph break
+    //  triggers asynchronous validation warnings.
+    // validate_transcription
+    //$('#transcription')
+    $('#transcription, #morphemeBreak, #phoneticTranscription, #narrowPhoneticTranscription')
+        .bind('blur', function () {
+            var field = $(this);
+            field.siblings('.error-message').remove();
+            var fieldName = field.attr('id');
+            var fieldValue = field.val();
+            var values = {};
+            $.each($(this).closest('form').serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+            values['fieldName'] = fieldName;
+            if (fieldValue.trim()) {
+                $.post('/form/validate_transcription', values, function (r) {
+                    if (!r.valid) {
+                        field.siblings('.warning-message-2')
+                            .text(r.errors);
+                    } else {
+                        field.siblings('.warning-message-2').text('');
+                    }
+                    
+                }, 'json');
+            } else {
+                field.siblings('.warning-message-2').text('');
+            }
+        });
+  });
+</script>
+
+${checkForDuplicateTranscriptionScript()}
+
+${guessMorphologyScript()}

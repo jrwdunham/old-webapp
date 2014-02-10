@@ -1,0 +1,30 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/fileViews.html" name="fileViews" import="displayFile"/>
+
+<%def name="heading()">
+    <h1 class="heading">${c.source.authorLastName}, ${c.source.authorFirstName} (${c.source.year})</h1>
+</%def>
+
+ <h2><span class="emphasize">${c.source.title}</span></h2>
+
+% if c.source.fullReference:
+ <p>${c.source.fullReference}</p>
+% endif
+
+% if c.source.file:
+    <% file = c.source.file %>
+    % if app_globals.allowedFileTypes[file.MIMEtype]:
+      <% fileType = app_globals.allowedFileTypes[file.MIMEtype] %>
+    % else: 
+      <% fileType = file.MIMEtype.split('/')[0] %>
+    % endif
+    <div class="associatedEntitiesDiv">
+     Associated File ${file.id}: <span class="emphasize">${file.name}</span> (${h.pretty_filesize(file.size)})
+      <a href="${url(controller='file', action='view', id=file.id)}" class="buttonLink" title="${'Click to view more info about File %s' % file.id}">view</a>
+      ${displayFile(file, fileType)}
+    </div>
+    <br />
+% endif
+
+<a href="${url(controller='source', action='edit', id=c.source.id)}" class="buttonLink" title="Edit this source">Edit</a>
+<a href="${url(controller='source', action='delete', id=c.source.id)}" class="buttonLink" onclick="return confirmDelete('Source', '${c.source.authorLastName} (${c.source.year})')" title="Delete this source; confirmation will be required">Delete</a>

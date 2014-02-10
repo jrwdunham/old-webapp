@@ -1,0 +1,10 @@
+<%inherit file="/base/index.html"/>
+
+<%def name="heading()"><h1 class="heading">Debug Config Dict</h1></%def>
+
+<dl>
+% for key in c.root:
+ <dt>${key}</dt>
+ <dd>${c.config[key]}</dd>
+% endfor
+</dl>

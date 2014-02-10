@@ -1,0 +1,25 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+
+
+<%def name="heading()">
+    <h1 class="heading">${c.researcher.firstName} ${c.researcher.lastName}</h1>
+</%def>
+
+<p>Email: ${c.researcher.email}</p>
+
+% if c.researcher.affiliation:
+ <p>Affiliation: ${c.researcher.affiliation}</p>
+% endif
+
+% if c.personalPageContent:
+ <div id="userPageContent">
+ ${h.literal(c.personalPageContent)}
+ </div>
+% endif
+
+% if 'user_username' in session and (session['user_username'] == c.researcher.username or session['user_role'] == 'administrator'): 
+<a href="${url(controller='researcher', action='edit', id=c.researcher.id)}" class="buttonLink" title="Edit this user's information">Edit</a>
+<a href="${url(controller='researcher', action='delete', id=c.researcher.id)}" class="buttonLink" onclick="return confirmDelete('User', '${c.researcher.firstName} ${c.researcher.lastName}')" title="Delete this user; confirmation will be required">Delete</a>
+<a href="${url(controller='researcher', action='settings', id=c.researcher.id)}" class="buttonLink" title="View this user's settings">Settings</a>
+% endif

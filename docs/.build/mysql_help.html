@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title> &mdash; OnlineLinguisticDatabase v0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.1.0',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="OnlineLinguisticDatabase v0.1.0 documentation" href="index.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">OnlineLinguisticDatabase v0.1.0 documentation</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <ol class="arabic">
+<li><dl class="first docutils">
+<dt>Install MySQL if you can!</dt>
+<dd><ul class="first last simple">
+<li>Ubuntu: painless with Synaptic Pachage Manager</li>
+<li>Mac OS X 10.5 (powerpc iBook): <strong>* UNABLE TO INSTALL!!!??? *</strong></li>
+<li>Windows XP: haven&#8217;t tried</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Start MySQL as root (you need a root password to do this):</p>
+<blockquote>
+<p>a. Enter:</p>
+<blockquote>
+<p>&gt;mysql -u root -p</p>
+</blockquote>
+<p>b. Enter your password, then &lt;RETURN&gt;</p>
+</blockquote>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p class="first">Create OLD database called &#8216;old&#8217;:</p>
+<blockquote>
+<p>&gt;create database old;</p>
+</blockquote>
+</li>
+</ol>
+<ol class="arabic" start="3">
+<li><p class="first">Add user to Mysql named &#8216;old&#8217; with password &#8216;old&#8217;:</p>
+<blockquote>
+<p>b. While logged into MySQL as root, enter:</p>
+<blockquote>
+<p>&gt;CREATE USER <a class="reference external" href="mailto:'old'&#37;&#52;&#48;'localhost">'old'<span>&#64;</span>'localhost</a>&#8216; IDENTIFIED BY &#8216;old&#8217;;</p>
+</blockquote>
+</blockquote>
+</li>
+<li><p class="first">Give &#8216;old&#8217; user permission to work with &#8216;old&#8217; database:</p>
+<blockquote>
+<p>&gt;GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON old.* TO <a class="reference external" href="mailto:'old'&#37;&#52;&#48;'localhost">'old'<span>&#64;</span>'localhost</a>&#8216;;</p>
+</blockquote>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p class="first">Exit MySQL:</p>
+<blockquote>
+<p>&gt;quit;</p>
+</blockquote>
+</li>
+<li><p class="first">Make sure &#8216;old&#8217; user works:</p>
+<blockquote>
+<p>a. Enter:</p>
+<blockquote>
+<p>&gt;mysql -u old -p</p>
+</blockquote>
+<p>b. Enter &#8216;old&#8217; as password, then &lt;RETURN&gt;</p>
+<p>c. View databases:</p>
+<blockquote>
+<p>&gt;show databases;</p>
+</blockquote>
+<p>d. After the above command, you should see a table of databases (probably just two will be in there) and one will be called &#8216;old&#8217;</p>
+</blockquote>
+</li>
+</ol>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/mysql_help.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">OnlineLinguisticDatabase v0.1.0 documentation</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joel Dunham.
+      Last updated on Mar 03, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

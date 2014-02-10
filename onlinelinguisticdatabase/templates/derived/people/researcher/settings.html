@@ -1,0 +1,146 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+
+
+<%def name="heading()">
+    <h1 class="heading">
+     Settings for ${c.researcher.firstName} ${c.researcher.lastName}
+    </h1>
+</%def>
+
+<p>This page lists the settings specific to user ${c.researcher.firstName} \
+${c.researcher.lastName}.</p>
+
+% if ('user_username' in session and session['user_username'] == \
+    c.researcher.username) or ('user_role' in session and session['user_role'] \
+    == 'administrator'):
+<a href="${url(controller='researcher', action='editsettings', \
+   id=c.researcher.id)}" class="buttonLink" title="Edit \
+   ${c.researcher.firstName} ${c.researcher.lastName}'s settings">edit</a>
+% endif
+
+
+
+
+<table class="infoTable">
+
+ <tr>
+  <td>
+   <a class="term">Input Orthography</a>
+   <p class='explanation'>The orthography that ${c.researcher.firstName}
+   ${c.researcher.lastName} will use to enter and search for orthographic object
+   language data.  Note: if unspecified, system's default input orthography
+   will be used.</p>
+  </td>
+  <td>
+   % if 'inputOrthography' in c.researcherSettings and \
+     c.researcherSettings['inputOrthography'] in app_globals.OLOrthographies:
+       ${app_globals.OLOrthographies[c.researcherSettings['inputOrthography']][0]}
+   % else:
+       unspecified (system default is ${app_globals.defaultInputOrthography[0]})
+   % endif
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <a class="term">Output Orthography</a>
+   <p class='explanation'>The orthography that will be used to display
+   orthographic object language data to ${c.researcher.firstName}
+   ${c.researcher.lastName}.  Note: if unspecified, the system's default output
+   orthography will be used.</p>
+  </td>
+  <td>
+   % if 'outputOrthography' in c.researcherSettings and \
+     c.researcherSettings['outputOrthography'] in app_globals.OLOrthographies:
+       ${app_globals.OLOrthographies[c.researcherSettings['outputOrthography']][0]}
+   % else:
+       unspecified (system default is ${app_globals.defaultOutputOrthography[0]})
+   % endif
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <a class="term">Remember Metadata from Previous Form</a>
+   <p class='explanation'>If set to True, then when adding a new Form default
+   values for category, speaker, elicitor, verifier, source and date elicited
+   will be taken from the Form previously entered by ${c.researcher.firstName}
+   ${c.researcher.lastName}.</p>
+  </td>
+  <td>
+   % if 'defaultMetadataFromPreviousForm' in c.researcherSettings:
+       ${c.researcherSettings['defaultMetadataFromPreviousForm']}
+   % else:
+       False (default)
+   % endif
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <a class="term">Default Form View</a>
+   <p class='explanation'>If set to 'IGT', Form results will be displayed in
+   interlinear gloss format.  If set to 'tabular', Form results will be
+   displayed as a table.</p>
+  </td>
+  <td>
+   % if 'defaultFormView' in c.researcherSettings:
+       ${c.researcherSettings['defaultFormView']}
+   % else:
+       IGT (default)
+   % endif
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <a class="term">Guess Morphological Analysis</a>
+   <p class='explanation'>If set to True, then when entering data the system
+   will try to guess the morpheme break and morpheme gloss fields in real time.
+   At present, this is simple word lookup.  In the future, a system-configurable
+   FST morphological analyzer will be implemented.</p>
+  </td>
+  <td>
+   % if 'guessMorphology' in c.researcherSettings:
+       ${c.researcherSettings['guessMorphology']}
+   % else:
+       False (default)
+   % endif
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <a class="term">Date Format</a>
+   <p class='explanation'>The date format you wish to use when entering dates.
+   Choose one of 'MM/DD/YYYY' or 'DD/MM/YYYY'.</p>
+  </td>
+  <td>
+   % if 'dateFormat' in c.researcherSettings:
+       ${c.researcherSettings['dateFormat']}
+   % else:
+       'MM/DD/YYYY' (default)
+   % endif
+  </td>
+ </tr>
+
+</table>
+
+% if ('user_username' in session and \
+     session['user_username'] == c.researcher.username) or \
+     ('user_role' in session and session['user_role'] == 'administrator'):
+       <a href="${url(controller='researcher', action='editsettings',
+       id=c.researcher.id)}" class="buttonLink" title="Edit
+       ${c.researcher.firstName} ${c.researcher.lastName}'s settings">edit</a>
+% endif
+
+
+<script type="text/javascript">
+$(function () {
+    // Hide all explanation <p>s and bind term click events to explanation toggles
+    $(".term").css('cursor', 'pointer');
+    hideAllExplanations();
+    bindTermClickToExplanationToggle();
+});
+</script>

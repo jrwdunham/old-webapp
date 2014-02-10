@@ -1,0 +1,36 @@
+<%namespace file="/base/helper.html" name="helper" import="entityLinkingHelp, embeddingFileHelp, embeddingFormHelp, reStructuredTextHelp"/>
+
+<%def name="pageEditField(option=None)">
+
+<fieldset>
+ <ol>
+  <li>
+   <label for="name">Name</label>
+% if option in ['home', 'help']:
+   <input id="name" maxlength="255" name="name" tabindex="1" type="text" readonly />
+% else:
+   <input id="name" maxlength="255" name="name" tabindex="1" type="text" />
+% endif
+  </li>
+  
+  <li>
+   <label for="heading">Heading</label>
+   <input id="heading" maxlength="255" name="heading" tabindex="2" type="text" />
+  </li>
+
+  <li>
+   <label for="content">Content</label>
+   <textarea id="content" name="content" rows="30" cols="70" tabindex="4" class="monospace"></textarea>
+   <p class='fullyjustified'>To give formatting and structure to the content,
+   use the reStructuredText ${reStructuredTextHelp()} markup language.
+   Create HTML links to OLD entities ${entityLinkingHelp()} using the syntax
+   'form(a)', 'collection(b)', etc., where 'a' and 'b' are IDs.
+   Embed representations of OLD Files ${embeddingFileHelp()} or Forms
+   ${embeddingFormHelp()} with 'file[x]' and 'form[y]' respectively</p>
+  </li>
+
+ </ol>
+
+</fieldset>
+
+</%def>

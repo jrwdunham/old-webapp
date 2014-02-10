@@ -1,0 +1,35 @@
+<%namespace file="/base/helper.html" name="helper" import="reStructuredTextHelp, entityLinkingHelp, embeddingFileHelp, embeddingFormHelp"/>
+
+<fieldset>
+<legend>Speaker Info</legend>
+<ol>
+ <li>
+  <label for="firstName">first name *</label>
+  <input id="firstName" maxlength="255" name="firstName" tabindex="1" type="text" />
+ </li>
+ <li>
+  <label for="lastName">last name *</label>
+  <input id="lastName" maxlength="255" name="lastName" tabindex="2" type="text" />
+ </li>
+ <li>
+  <label for="dialect">dialect</label>
+  <input id="dialect" maxlength="255" name="dialect" tabindex="3" type="text" />
+ </li>
+</ol>
+</fieldset>
+
+<fieldset>
+<legend>Speaker Page Content</legend>
+<ol>
+ <li>
+  <textarea class="monospace" id="speakerPageContent" cols="40" rows="15"
+            name="speakerPageContent" tabindex="4"></textarea>
+  <p class='fullyjustified'>To give formatting and structure to the content,
+  use the reStructuredText ${reStructuredTextHelp()} markup language.
+  Create HTML links to OLD entities ${entityLinkingHelp()} using the syntax
+  'form(a)', 'collection(b)', etc., where 'a' and 'b' are IDs.
+  Embed representations of OLD Files ${embeddingFileHelp()} or Forms
+  ${embeddingFormHelp()} with 'file[x]' and 'form[y]' respectively</p>
+ </li>
+</ol>
+</fieldset>

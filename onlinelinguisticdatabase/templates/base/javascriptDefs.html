@@ -1,0 +1,991 @@
+<%doc>
+    toggleLabelsJavascript creates a JS function which uses the Yahoo! UI library
+    to get all elements with 'fileTableRowLabel' as class name.  All such items are then
+    either hidden or revealed.
+</%doc>
+<%def name="toggleLabelsJavaScript(targetClass='formTableRowLabel')">
+<script type="text/javascript">
+(function() {
+    var targetClass = '${targetClass}';
+    var toggleRowLabels = function(e) {
+        var buttonID = 'toggleRowLabelsButton';
+        var plusOrMinus = document.getElementById(buttonID).innerHTML;
+        var labels = YAHOO.util.Dom.getElementsByClassName(targetClass);
+        if(plusOrMinus=='+')
+        {
+            document.getElementById(buttonID).innerHTML = '-';
+            document.getElementById(buttonID).title = "hide labels"
+            for (i=0;i<labels.length;i++)
+            {
+                labels[i].style.display="block";
+                labels[i].style.display="visible";
+            } 
+        }
+        else
+        {
+            document.getElementById(buttonID).innerHTML = '+';
+            document.getElementById(buttonID).title = "show labels"
+            for (i=0;i<labels.length;i++)
+            {
+                labels[i].style.display="none";
+            } 
+        }
+    };
+
+    YAHOO.util.Event.on('toggleRowLabelsButton', 'click', toggleRowLabels);
+
+})();
+</script>
+</%def>
+
+
+<%def name="labelsHidden(targetClass='formTableRowLabel')">
+<script type="text/javascript">
+(function() {
+    var targetClass = '${targetClass}';
+    var hide = function(e) {
+        var labels = YAHOO.util.Dom.getElementsByClassName(targetClass);
+        for (i=0;i<labels.length;i++)
+        {
+            labels[i].style.display="none";
+        } 
+    };
+    window.onload = hide;
+})();
+</script>
+</%def>
+
+
+<%def name="closeHelpDivScript()">
+<script type="text/javascript">
+ function closeHelpDiv()
+ {
+  helpDiv = document.getElementById('helpDiv');
+  helpDiv.style.display="none";
+ }
+</script>
+</%def>
+
+
+<%def name="fillHelpDivScript()">
+<script type="text/javascript">
+ function fillHelpDiv(helpContent)
+ {
+  helpDiv = document.getElementById('helpDiv');
+  helpDiv.style.display="block";
+  helpDiv.style.visibility="visible";
+  helpDivInner = document.getElementById('helpDivInner');
+  helpDivInner.innerHTML = helpContent;
+ }
+</script>
+</%def>
+
+
+<%def name="getMemoryContentsScript()">
+ <%doc>
+    Inserts JavaScript which, when called,
+    uses Ajax to insert references to the Forms
+    stored in Memory into the contents textarea
+    of the Collection
+ </%doc>
+<script type="text/javascript">
+ function getMemoryContents(sUrl)
+ {
+    var responseSuccess = function(o) {
+        content = document.getElementById('collectionContent');
+        content.value += o.responseText;
+    };
+ 
+    var responseFailure = function(o) {
+        alert('failure');
+    };
+ 
+    var callback = {
+      success:responseSuccess,
+      failure:responseFailure
+    };
+ 
+    var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+ }
+</script>
+</%def>
+
+
+<%def name="getMatchingLanguagesScript2()">
+<script type="text/javascript">
+ function getMatchingLanguages(sUrl, sourceID, targetID)
+ {
+    alert(sUrl);
+ }
+</script>
+</%def>
+
+
+<%def name="getMatchingLanguagesScript()">
+ <%doc>
+    Inserts JavaScript which, when called,
+    uses Ajax to get a list of languages
+    that match the string entered by the user
+ </%doc>
+ <script type="text/javascript">
+
+ function getMatchingLanguages(sUrl, activeInputID, mode)
+ {
+    var counterpartInputID = getLanguageCounterpartID(activeInputID);
+    var suggestionInputID = activeInputID + 'Suggestion';
+    
+    var source = document.getElementById(activeInputID);
+    var counterpart = document.getElementById(counterpartInputID);
+    var target = document.getElementById(suggestionInputID);
+    
+    if ((mode=='Id' && source.value.length > 0) || source.value.length > 1)
+    {
+        YAHOO.util.Connect.abort();
+        var responseSuccess = function(o) {
+            xml = o.responseXML;
+            languages = xml.getElementsByTagName('language');
+            msg = formatLanguagesAsOL(languages, activeInputID, counterpartInputID, mode);
+            target.innerHTML = msg; 
+        };
+ 
+        var responseFailure = function(o) {
+            target.innerHTML = 'nothing';
+        };
+ 
+        var callback = {
+          success:responseSuccess,
+          failure:responseFailure,
+          argument: activeInputID
+        };       
+        var uInput = escape(uni2ent(source.value));
+        sUrl = sUrl + '?input=' + uInput + '&sourceID=' + activeInputID + '&mode=' + mode;
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ }
+ 
+ 
+ function copyToTarget(targetID, msg)
+ {
+    target = document.getElementById(targetID);
+    target.value = msg;
+ }
+ 
+ 
+ function uni2ent(srcTxt) 
+ {
+    var entTxt = '';
+    var c, hi, lo;
+    var len = 0;
+    for (var i=0, code; code=srcTxt.charCodeAt(i); i++) {
+      var rawChar = srcTxt.charAt(i);
+      // needs to be an HTML entity
+      if (code > 255) {
+        // normally we encounter the High surrogate first
+        if (0xD800 <= code && code <= 0xDBFF) {
+          hi  = code;
+          lo = srcTxt.charCodeAt(i+1);
+          // the next line will bend your mind a bit
+          code = ((hi - 0xD800) * 0x400) + (lo - 0xDC00) + 0x10000;
+          i++; // we already got low surrogate, so don't grab it again
+        }
+        // what happens if we get the low surrogate first?
+        else if (0xDC00 <= code && code <= 0xDFFF) {
+          hi  = srcTxt.charCodeAt(i-1);
+          lo = code;
+          code = ((hi - 0xD800) * 0x400) + (lo - 0xDC00) + 0x10000;
+        }
+        // wrap it up as Hex entity
+        c = "&#x" + code.toString(16).toUpperCase() + ";";
+      }
+      else {
+        c = rawChar;
+      }
+      entTxt += c;
+      len++;
+    }
+    return entTxt;
+  } 
+
+  function getLanguageCounterpartID(inputID){
+      if (inputID.slice(2) == 'Name'){
+          return inputID.slice(0,2) + 'Id';
+      }
+      else {
+          return inputID.slice(0,2) + 'Name';
+      }
+  }
+    
+  function formatLanguagesAsOL(languages, sourceID, counterpartID, mode)
+  {
+    var msg = '<ol>';
+    for (i=0;i<languages.length;i++)
+    {
+        var Id = languages[i].getElementsByTagName('id')[0].childNodes[0].nodeValue;
+        var Ref_Name = languages[i].getElementsByTagName('name')[0].childNodes[0].nodeValue;
+        if (mode == 'Id'){
+            var contentVisible = Id + ' (' + Ref_Name + ')';
+            var sourceFiller = Id;
+            var counterpartFiller = Ref_Name;
+        }
+        else {
+            var contentVisible = Ref_Name + ' (' + Id + ')';
+            var sourceFiller = Ref_Name;
+            var counterpartFiller = Id;
+        }
+        msg += '<li class="suggestionList" onclick="copyToTarget(\'' + sourceID + '\', \'' + sourceFiller + '\'); copyToTarget(\'' + counterpartID + '\', \'' + counterpartFiller + '\'); divOff(\'' + sourceID + 'Suggestion\');">' + contentVisible + '</li>'
+    }
+    msg += '</ol>';
+    return msg;
+  }
+  
+ </script>
+</%def>
+
+
+<%def name="getToggleDivByTextInputScripts()">
+ <%doc>
+    Writes JavaScript functions that allow a div to be
+    turned on or off by an focus or blur event
+    (respectively).
+ </%doc>
+ <script type="text/javascript">
+    function applyFuncToAll(func, divIDs)
+    {
+        for (i=0;i<divIDs.length;i++)
+        {
+            func(divIDs[i]);
+        } 
+    }
+    
+    function divOn(divID)
+    {
+        div = document.getElementById(divID);
+        div.style.visibility='visible';
+        div.style.display='block';        
+    }
+    
+    function divOff(divID)
+    {
+        div = document.getElementById(divID);
+        div.style.display='none';
+    }
+ </script>
+</%def>
+
+
+<%def name="getCharCodeScript()">
+ <%doc>
+    Writes JavaScript function that puts the character codes entered into a
+    text input into a specified div
+ </%doc>
+ <script type="text/javascript">
+    function pad(number, length)
+    {
+        while (number.length < length)
+        {
+            number = '0' + number;
+        }
+        return number;
+    }
+
+    function getCharCode(inputID, divID, compareID)
+    {
+        input = document.getElementById(inputID);
+        output = document.getElementById(divID);
+        compare = document.getElementById(compareID);
+        if (input.value != '')
+        {
+            var result = ''
+            for(i=0; i<input.value.length; i++)
+            {
+                var char = input.value.charCodeAt(i).toString(16).toUpperCase();
+                char = pad(char, 4);
+                result += 'U+' + char + ' ';
+            }
+            result = result.trim();
+            if (compare.innerHTML.trim() == result)
+            {
+                var assess = '&#x2713;';
+                output.style.color = 'green';
+            }
+            else
+            {
+                var assess = '&#x2717;';
+                output.style.color = 'red';
+            }
+            output.innerHTML = assess + ' ' + result;
+        }
+        else
+        {
+            output.innerHTML = ''
+        }
+    }
+ </script>
+</%def>
+
+
+<%def name="translateOrthographyScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    translate a string in one orthography into another.  This function is used
+    in the settings/orthography page.
+ </%doc>
+ <script type="text/javascript">
+    function translateOrthography()
+    {
+        var inputOrthography = document.getElementById('inputOrthography').value;
+        var outputOrthography = document.getElementById('outputOrthography').value;
+        var input = document.getElementById('input').value;
+        var outputorthographydiv = document.getElementById('outputorthographydiv');
+        if (inputOrthography == outputOrthography)
+        {
+            outputorthographydiv.innerHTML = input;
+        }
+        else
+        {
+            getTranslation(input, inputOrthography, outputOrthography, outputorthographydiv);
+        }
+    }
+
+    function getTranslation(input, inputOrthography, outputOrthography, outputorthographydiv)
+    {
+       var responseSuccess = function(o) {
+           outputorthographydiv.innerHTML = o.responseText;
+       };
+    
+       var responseFailure = function(o) {
+           alert('failure');
+       };
+    
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+       var sUrl = '/settings/translate' + '?input=' + input + '&inputOrthography=' + inputOrthography + '&outputOrthography=' + outputOrthography;
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+<%def name="graphToInputScript()">
+ <%doc>
+ </%doc>
+ <script type="text/javascript">
+    function graphToInput(graph, inputId)
+    {
+        input = document.getElementById(inputId);
+        input.value += graph;
+        input.focus();
+    }
+ </script>
+</%def>
+
+
+<%def name="checkForDuplicateTranscriptionScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    check whether the Form transcription just entered is already in the db.
+ </%doc>
+ <script type="text/javascript">
+
+    tInitialValue = document.getElementById('transcription').value;
+
+    function checkForDuplicateTranscription()
+    {
+       var duplicateWarningDiv = document.getElementById('duplicateWarningDiv');
+       var responseSuccess = function(o) {
+           duplicateWarningDiv.style.display="block";
+           duplicateWarningDiv.style.visibility="visible";
+           duplicateWarningDiv.innerHTML = o.responseText;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var transcription = document.getElementById('transcription').value;
+       if (transcription && (transcription !== tInitialValue))
+       {
+           var sUrl = '/form/findduplicate/' + transcription;
+           var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+       }
+    }
+ </script>
+</%def>
+
+
+<%def name="guessMorphologyScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    guess a morphological analysis for the string in the transcription field.
+ </%doc>
+ <script type="text/javascript">
+
+    // Global variables to remember state across calls to guessMorphology
+    var lt = ''; // last transcription
+    var mbInitialValue = document.getElementById('morphemeBreak').value;
+    var mgInitialValue = document.getElementById('morphemeGloss').value;
+    var userHasAlteredMB = false;
+    var userHasAlteredMG = false;
+
+    // The guessMorphology function is called by the onkeyup and onblur events
+    //  of the transcription input field of the form/add and form/update pages
+    function guessMorphology(force)
+    {
+        //console.log('userHasAlteredMB: ' + userHasAlteredMB);
+
+        // force defaults to false; if true, Ajax request will occur unconditionally
+        force = typeof(force) != 'undefined' ? force : false;
+
+        // Get the relevant input/div objects
+        var transcriptionInput = document.getElementById('transcription');
+        var morphemeBreakInput = document.getElementById('morphemeBreak');
+        var morphemeGlossInput = document.getElementById('morphemeGloss');
+        var morphemeBreakSuggest = document.getElementById('morphemeBreakSuggestionDiv');
+        var morphemeGlossSuggest = document.getElementById('morphemeGlossSuggestionDiv');
+        var transcription = transcriptionInput.value;
+
+        // Check whether the user has updated the mb/mg fields;
+        // mb/gFocus and mb/gBlur are updated whenever the mb/mg line is
+        //  activated by the user, see templates/derived/form/field.html
+        if ((typeof mbFocus !== "undefined") && (typeof mbKeyUp !== "undefined")){
+            if (mbFocus !== mbKeyUp){
+                userHasAlteredMB = true;
+            };
+        }
+        if ((typeof mgFocus !== "undefined") && (typeof mgKeyUp !== "undefined")){
+            if (mgFocus !== mgKeyUp){
+                userHasAlteredMG = true;
+            };
+        }
+
+        // Returns true if the transcription just entered is sufficiently novel
+        //  as compared to the previously analyzed transcription
+        function transcriptionIsNovel(transcription)
+        {
+            if (transcription.split(' ').length != lt.split(' ').length){
+                return true;
+            }
+            else if (Math.abs(transcription.length - lt.length) > 6){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        // A successful response causes the best guess to be inserted into either
+        //  the mb/mg input fields or their suggest divs.  The suggest divs
+        //  will contain anchor tags containing the suggestion that, when clicked,
+        //  will copy the suggestion to the appropriate input field.
+        var responseSuccess = function(o) {
+            var response = eval("(" + o.responseText + ")")
+            if (userHasAlteredMB || userHasAlteredMG || mbInitialValue){
+
+                var onClickMBSuggestionAction =
+                    "document.getElementById('morphemeBreak').value='" +
+                    response[0] + "';";
+                onClickMBAction = '"' + onClickMBSuggestionAction + '"';
+                var mbSuggestionActionTitle =
+                    "Click to copy this suggestion to the morpheme break input field";
+                morphemeBreakSuggest.style.display="block";
+                morphemeBreakSuggest.style.visibility="visible";
+                var dog = "dog";
+                morphemeBreakSuggest.innerHTML = "<span \
+                    class='warning-message'>Suggestion:</span> <a onclick=" +
+                    onClickMBAction + " title='" + mbSuggestionActionTitle +
+                    "' >" + response[0] + "</a>";
+
+                var onClickMGAction =
+                    "document.getElementById('morphemeGloss').value='" +
+                    response[1] + "';";
+                onClickMGAction = '"' + onClickMGAction + '"';
+                var mgSuggestionActionTitle =
+                    "Click to copy this suggestion to the morpheme gloss input field";
+                morphemeGlossSuggest.style.display="block";
+                morphemeGlossSuggest.style.visibility="visible";
+                morphemeGlossSuggest.innerHTML = "<span \
+                    class='warning-message'>Suggestion:</span> <a onclick=" +
+                    onClickMGAction + " title='" + mgSuggestionActionTitle +
+                    "' >" + response[1] + "</a>";
+            }
+            else {
+                morphemeBreakInput.value = response[0];
+                morphemeGlossInput.value = response[1];
+            }
+        };
+
+        var responseFailure = function(o) {
+        };
+
+        var callback = {
+            success:responseSuccess,
+            failure:responseFailure
+        };
+
+        // If there is a novel transcription or if force is true, make a new guess
+        if (transcription && (transcriptionIsNovel(transcription) || force))
+        {
+            // Update the global "last transcription" variable
+            lt = transcription;
+            // Make the Ajax request
+            var sUrl = '/form/guessmorphology/' + transcription;
+            var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+        }
+    }
+ </script>
+</%def>
+
+
+<%def name="getSVGTreeScript(ptbTreeID, displayDivID)">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    request an SVG tree given a tree in PTB parenthesis notation.
+ </%doc>
+ <script type="text/javascript">
+
+    var ptbTreeID = '${ptbTreeID}';
+    var displayDivID = '${displayDivID}'
+    var ptbTreeInput = document.getElementById(ptbTreeID);
+
+    // The function that makes the Ajax request
+    function getSVGTree(ptbTreeID, displayDivID)
+    {
+       var ptbTree = ptbTreeInput.value;
+       var displayDiv = document.getElementById(displayDivID);
+
+       var responseSuccess = function(o) {
+           var r = o.responseText;
+           if (r === 'Invalid Tree'){
+              //displayDiv.innerHTML = r;
+              var tree = new TreeDrawer(
+                 displayDiv,
+                 {children: [{label: "invalid"}, {label: "tree"}], label: "error"}
+              );
+              tree.draw();
+           }
+           else {
+              treeJSON = eval( "(" + o.responseText + ")" );
+              var tree = new TreeDrawer(
+                 displayDiv,
+                 treeJSON
+              );
+              tree.draw();
+           }
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       if (ptbTree)
+       {
+           var url = '/administer/getSVGTree/' + ptbTree;
+           var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+       }
+    }
+
+    var getSVGTreeAnonymous = function(){
+        getSVGTree(ptbTreeID, displayDivID);
+    }
+
+    // Use YUI's KeyListener object to bind the Enter key on the 
+    var getSVGTreeListener = new YAHOO.util.KeyListener('ptbTree', {ctrl: true, keys: 13},
+              {fn: getSVGTreeAnonymous, correctScope: true});
+    getSVGTreeListener.enable();
+
+ </script>
+</%def>
+
+<%def name="getMorphologicalParseScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    morphologically parse a word.
+ </%doc>
+ <script type="text/javascript">
+    function getMorphologicalParse()
+    {
+       var wordInput = document.getElementById('word');
+       var parseButton = document.getElementById('parseButton');
+       var parseDisplayDiv = document.getElementById('parseDisplayDiv');
+       var word = wordInput.value;
+       parseDisplayDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            parsing " + word;
+
+       var responseSuccess = function(o) {
+           parseDisplayDiv.style.display="block";
+           parseDisplayDiv.style.visibility="visible";
+           var response = eval("(" + o.responseText + ")");
+           var result = '<ol>';
+           for (var i=0; i<response.length; i++){
+              var x = response[i];
+              result += '<li>' + x[0] + '<br />' + x[1] + '</li>';
+           }
+           result += '</ol>';
+           parseDisplayDiv.innerHTML = result;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       if (word)
+       {
+           var sUrl = '/morphparser/getparse';
+           var transaction = YAHOO.util.Connect.asyncRequest('POST', sUrl, callback, word);
+       }
+    }
+ </script>
+</%def>
+
+<%def name="savePhonologyScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    save the foma FST phonology entered by the user.
+ </%doc>
+ <script type="text/javascript">
+    function savePhonology()
+    {
+       var phonologyInput = document.getElementById('phonologyInput');
+       var savePhonologyButton = document.getElementById('savePhonologyButton');
+       var savePhonologyResponseDiv = document.getElementById(
+                                                    'savePhonologyResponseDiv');
+       var phonologyPresentIndicator = document.getElementById(
+                                                    'phonologyPresentIndicator');
+       
+       var responseSuccess = function(o) {
+           savePhonologyResponseDiv.style.display="block";
+           savePhonologyResponseDiv.style.visibility="visible";
+           var response = '<span style="color:green;font-weight:bold;">' + \
+                          o.responseText + '</span>';
+           savePhonologyResponseDiv.innerHTML = response;
+           phonologyPresentIndicator.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+           savePhonologyResponseDiv.style.display="block";
+           savePhonologyResponseDiv.style.visibility="visible";
+           savePhonologyResponseDiv.innerHTML =
+                '<span class="warning-message">Warning: unable to save \
+                             phonology</span>';
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var phonology = phonologyInput.value;
+       var sUrl = '/morphparser/savephonology';
+       var transaction = YAHOO.util.Connect.asyncRequest(
+                                            'POST', sUrl, callback, phonology);
+    }
+ </script>
+</%def>
+
+
+<%def name="generateMorphotacticsScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    generate the morphotactics FST file.
+ </%doc>
+ <script type="text/javascript">
+
+    function generateMorphotactics()
+    {
+       var responseDiv = document.getElementById(
+                                        'generateMorphotacticsResponseDiv');
+       var morphotacticsPresentIndicator = document.getElementById(
+                                        'morphotacticsPresentIndicator');
+       responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Generating Morphotactics";
+
+
+       var responseSuccess = function(o) {
+           responseDiv.style.display="block";
+           responseDiv.style.visibility="visible";
+           var response = "<span style='color:green;font-weight:bold;'>" + \
+                                   o.responseText + "</span>";
+           morphotacticsPresentIndicator.innerHTML = response;
+           responseDiv.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var sUrl = '/morphparser/generatemorphotactics';
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+
+<%def name="generateMorphophonologyScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    generate the morphophonology FST file.
+ </%doc>
+ <script type="text/javascript">
+
+    function generateMorphophonology()
+    {
+       var responseDiv = document.getElementById(
+                                        'generateMorphophonologyResponseDiv');
+       var morphophonologyPresentIndicator = document.getElementById(
+                                        'morphophonologyPresentIndicator');
+       responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Generating Morphophonology";
+
+
+       var responseSuccess = function(o) {
+           responseDiv.style.display="block";
+           responseDiv.style.visibility="visible";
+           var response = o.responseText;
+           morphophonologyPresentIndicator.innerHTML = response;
+           responseDiv.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var sUrl = '/morphparser/generatemorphophonology';
+       var transaction = YAHOO.util.Connect.asyncRequest(
+                                            'GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+<%def name="generateProbabilityCalculatorScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    generate the probability calculator.
+ </%doc>
+ <script type="text/javascript">
+
+    function generateProbabilityCalculator()
+    {
+       var responseDiv = document.getElementById(
+                                    'generateProbabilityCalculatorResponseDiv');
+       var probabilityCalculatorPresentIndicator = document.getElementById(
+                                    'probabilityCalculatorPresentIndicator');
+       responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Generating Probability Calculator";
+
+
+       var responseSuccess = function(o) {
+           responseDiv.style.display="block";
+           responseDiv.style.visibility="visible";
+           var response = o.responseText;
+           probabilityCalculatorPresentIndicator.innerHTML = response;
+           responseDiv.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var sUrl = '/morphparser/generateprobabilitycalculator';
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+<%def name="compilePhonologyScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    compile the phonology FST file.
+ </%doc>
+ <script type="text/javascript">
+
+    function compilePhonology()
+    {
+       var responseDiv = document.getElementById(
+                                        'compilePhonologyResponseDiv');
+       responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Compiling Phonology";
+
+
+       var responseSuccess = function(o) {
+           responseDiv.style.display="block";
+           responseDiv.style.visibility="visible";
+           var response = o.responseText;
+           responseDiv.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var sUrl = '/morphparser/compilephonology';
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+<%def name="evaluateParserScript()">
+ <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    evaluate the parser (return an F-score).
+ </%doc>
+ <script type="text/javascript">
+
+    function evaluateParser()
+    {
+       var responseDiv = document.getElementById('evaluateParserResponseDiv');
+       responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Evaluating Parser";
+
+
+       var responseSuccess = function(o) {
+           responseDiv.style.display="block";
+           responseDiv.style.visibility="visible";
+           var response = o.responseText;
+           responseDiv.innerHTML = response;
+       };
+
+       var responseFailure = function(o) {
+       };
+
+       var callback = {
+         success:responseSuccess,
+         failure:responseFailure
+       };
+
+       var sUrl = '/morphparser/evaluateparser';
+       var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+    }
+ </script>
+</%def>
+
+
+<%def name="applyPhonologyScript()">
+  <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    apply the phonology to an input provided by the user.
+  </%doc>
+  <script type="text/javascript">
+    function applyPhonology()
+    {
+        var responseDiv = document.getElementById('applyPhonologyResponseDiv');
+        responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Applying Phonology";
+        var input = document.getElementById('applyPhonologyInput').value;
+
+        var responseSuccess = function(o) {
+            responseDiv.style.display="block";
+            responseDiv.style.visibility="visible";
+            var response = o.responseText;
+            responseDiv.innerHTML = response;
+        };
+
+        var responseFailure = function(o) {
+        };
+
+        var callback = {
+            success:responseSuccess,
+            failure:responseFailure
+        };
+
+        var sUrl = '/morphparser/applyphonology/' + input;
+        var transaction = YAHOO.util.Connect.asyncRequest(
+                                                'GET', sUrl, callback, null);
+    }
+  </script>
+</%def>
+
+
+<%def name="applyPhonologyToDBScript()">
+  <%doc>
+    Writes the JavaScript function that makes and handles the AJAX call to
+    apply the phonology to a subset of the Forms in the database as specified
+    by the user.
+  </%doc>
+  <script type="text/javascript">
+    function getFormSearchValuesInJSON()
+    {
+        var searchValuesJSON = {};
+        var elements = document.getElementById('searchTable').elements;
+        for(var i = 0; i < elements.length; i++)
+        {
+            var element = elements[i];
+            if (['INPUT', 'SELECT'].indexOf(element.tagName) != -1) {
+                if (element.type == 'checkbox') {
+                    if (element.checked) {
+                        searchValuesJSON[element.name] = element.value;
+                    }
+                } else {
+                    searchValuesJSON[element.name] = element.value;
+                }
+            }
+        }
+        //searchValuesJSON = YAHOO.lang.JSON.stringify(searchValuesJSON);
+        searchValuesJSON = JSON.stringify(searchValuesJSON);
+        //document.getElementById('applyPhonologyToDBResponseDiv').innerHTML = searchValuesJSON;
+        return searchValuesJSON;
+    }
+    function applyPhonologyToDB()
+    {
+        var responseDiv = document.getElementById(
+                                            'applyPhonologyToDBResponseDiv');
+        responseDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+            Applying Phonology to the set of Forms";
+        var formSearchValues = getFormSearchValuesInJSON();
+
+        var responseSuccess = function(o) {
+            responseDiv.style.height = "500px";
+            responseDiv.style.overflow = "scroll";
+            responseDiv.innerHTML = o.responseText;
+        };
+
+        var responseFailure = function(o) {
+            responseDiv.innerHTML =
+                '<span class="warning-message">Warning: unable to save \
+                             phonology</span>';
+        };
+
+        var callback = {
+            success:responseSuccess,
+            failure:responseFailure
+        };
+
+        var sUrl = '/morphparser/applyphonologytodb';
+        var transaction = YAHOO.util.Connect.asyncRequest(
+                                    'POST', sUrl, callback, formSearchValues);
+    }
+  </script>
+</%def>

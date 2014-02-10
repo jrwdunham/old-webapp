@@ -1,0 +1,24 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Export Options</h1>
+</%def>
+
+<p>Choose one of the following export options.</p>
+
+<ol>
+    % for triple in c.goodExporters:
+        <li style='margin-bottom: 4em;'>
+            <h2>${triple[2].name}
+             <span class="emphasize">
+              (.${triple[2].extension})
+             </span>
+            </h2>
+            <p>${triple[2].description}</p>
+            <a class='buttonLink' href="${url('export_create', \
+                     input=triple[1], option='option%s' % str(triple[0]))}">
+                Export with this option
+            </a>
+        </li>
+    % endfor
+</ol>

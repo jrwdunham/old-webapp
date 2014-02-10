@@ -1,0 +1,22 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/exporter.html" name="exporter" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Export All File Search Results</h1>
+</%def>
+
+<p>The button below links to an archived folder containing your Files.</p>
+
+<% fileReference = url(controller='file', action='retrieve_temp', path=c.zfileName) %>
+
+<a href="${fileReference}" class="buttonLink" title="right-click to download this .zip file">${c.zfileName} (${h.pretty_filesize(c.zfileSize)})</a>   
+
+<p>Contents:</p>
+
+<div class="indentedDiv">
+<table>
+% for fileName in c.fileNames:
+ <tr><td>${fileName[0]}</td><td>${h.pretty_filesize(fileName[1])}</td></tr>
+% endfor
+</table>
+</div>

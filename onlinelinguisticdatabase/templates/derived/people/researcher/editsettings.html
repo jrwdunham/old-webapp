@@ -1,0 +1,18 @@
+<%inherit file="/base/index.html" />
+<%namespace file="inputFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Edit ${c.researcher.firstName} \
+    ${c.researcher.lastName}'s Settings</h1>
+</%def>
+
+
+<p>This page permits editing of ${c.researcher.firstName}
+${c.researcher.lastName}'s settings.</p>
+
+
+<form class="formTable" action="${url(controller='researcher', \
+action='savesettings', id=c.researcher.id)}" method="post">
+    ${fields.settings()}
+    <div>${h.submit(value="Save Settings", name='submit', tabindex='9')}</div>
+</form>

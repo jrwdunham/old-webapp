@@ -1,0 +1,13 @@
+<%inherit file="/base/index.html" />
+<%namespace file="addUpdateFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Updating Collection ${c.collection.id}</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='collection', action='save')}" method="post">
+    ${fields.update()}
+    <input type="hidden" name="ID" id="ID" />    
+    <div>${h.submit(value="Save Changes", name='submit', tabindex=30)}</div>
+</form>
+

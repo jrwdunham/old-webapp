@@ -1,0 +1,163 @@
+================================================================================
+= Git Help
+================================================================================
+
+
+First-time setup
+================================================================================
+
+Tell git who you are:
+
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.c
+
+and what editor you want to use:
+
+$ git config --global core.editor nano
+
+Review your settings:
+
+$ git config --list
+
+
+Initialize a repository
+================================================================================
+
+cd to the repository and run:
+
+$ git init
+
+Write your local .gitignore file, write and config your global gitignore file
+and alter the .git/info/exclude file (if necessary, see below) 
+
+
+Workflow
+================================================================================
+
+Check status:
+
+$ git status
+
+Have git begin tracking <file> and stage changes to it:
+
+$ git add <file>
+
+Have git begin tracking all files and stage changes to them:
+
+$ git add .
+
+Commit the files in the staging area. (This will cause git to open the default
+editor for you to enter a commit message.):
+
+$ git commit
+
+Commit the files with an inline commit message:
+
+$ git commit -m '<message>'
+
+Stage all files and commit them all in one line:
+
+$ git commit -a -m '<message>'
+
+View your previous commits:
+
+$ git log
+
+View the changes in your repo:
+
+$ git diff
+
+
+Configure and use a remote
+================================================================================
+
+Add a remote named origin (using https or git protocols):
+
+$ git remote add origin https://github.com/<github_username>/<repo_name>.git
+$ git@github.com:<github_username>/<repo_name>.git
+
+View your remotes:
+
+$ git remote
+
+Remove a remote:
+
+$ git remote rm <remote_name>
+
+View your branches:
+
+$ git branch
+
+Push your branch (e.g., master) to a remote (e.g., origin):
+
+$ git push origin master
+
+
+Branching & Merging
+================================================================================
+
+Create a new branch:
+
+$ git branch branchName
+
+Switch to a branch:
+
+$ git checkout branchName
+
+Create a new branch and switch to it in one command:
+
+$ git checkout -b branchName
+
+Merge a branch back into the master:
+
+$ git checkout master
+$ git merge branchName
+
+Delete a branch:
+
+$ git branch -d branchName
+
+For more complicated branchings and mergings, see:
+
+- http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging
+
+
+Gitignore
+================================================================================
+
+Basically, you tell git to ignore files in 3 ways:
+
+1. .gitignore file in the root directory of the repo (and subdirectories?).
+Use this as the catch-all ignore file.
+
+2. .gitignore_global file that you have tell git to acknowledge by running
+
+$ git config --global core.excludesfile <path/to/globa/gitignore/file>
+
+This is useful for things that git should ignore for any repo.
+
+3. Add ignore patterns to the repo exclude file in .git/info/exclude.
+This is good for files that you don't expect others to generate in the repo,
+e.g., .komodoproject files.
+
+More info:
+
+- https://help.github.com/articles/ignoring-files
+- http://www.kernel.org/pub/software/scm/git/docs/gitignore.html
+- http://git-scm.com/book/en/Getting-Started-First-Time-Git-Setup
+
+
+Submodules
+================================================================================
+
+- http://git-scm.com/book/en/Git-Tools-Submodules
+
+
+
+Remove from Staging Area
+================================================================================
+
+- See the second answer at http://stackoverflow.com/questions/348170/undo-git-add-before-commit
+
+
+

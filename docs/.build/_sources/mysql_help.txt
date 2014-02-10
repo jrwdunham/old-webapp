@@ -1,0 +1,50 @@
+1. Install MySQL if you can! 
+    - Ubuntu: painless with Synaptic Pachage Manager
+    - Mac OS X 10.5 (powerpc iBook): *** UNABLE TO INSTALL!!!??? ***
+    - Windows XP: haven't tried
+
+
+2. Start MySQL as root (you need a root password to do this):
+    
+    a. Enter:
+
+        >mysql -u root -p
+
+    b. Enter your password, then <RETURN>
+
+
+4. Create OLD database called 'old':
+
+    >create database old;
+
+
+3. Add user to Mysql named 'old' with password 'old':
+
+    b. While logged into MySQL as root, enter:
+
+        >CREATE USER 'old'@'localhost' IDENTIFIED BY 'old';
+
+
+4. Give 'old' user permission to work with 'old' database:
+
+    >GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON old.* TO 'old'@'localhost';
+
+
+4. Exit MySQL:
+
+    >quit;
+
+
+5. Make sure 'old' user works:
+
+    a. Enter:
+
+        >mysql -u old -p
+
+    b. Enter 'old' as password, then <RETURN>
+
+    c. View databases:
+
+        >show databases;
+
+    d. After the above command, you should see a table of databases (probably just two will be in there) and one will be called 'old'

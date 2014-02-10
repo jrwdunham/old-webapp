@@ -1,0 +1,359 @@
+<%def name="formSearchFields()">
+ ${self.searchExpressions('form')}
+ ${self.orderBy(app_globals.searchLocations['form'])}
+ ${self.limit()}
+ ${self.additionalFormSearchFilters()}
+</%def>
+
+
+<%def name="fileSearchFields()">
+ ${self.searchExpressions('file')}
+ ${self.orderBy(app_globals.searchLocations['file'])}
+ ${self.additionalFileSearchFilters()}
+</%def>
+
+
+<%def name="collectionSearchFields()">
+ ${self.searchExpressions('collection')}
+ ${self.orderBy(app_globals.searchLocations['collection'])}
+ ${self.additionalCollectionSearchFilters()}
+</%def>
+
+
+<!--Search Expressons def-->
+<!--used for searching Forms, Files and Collections-->
+<%def name="searchExpressions(entity)">
+<fieldset>
+<legend>Search Expression 1</legend>
+<ol>
+ <li>
+  ${h.text(name='searchTerm1', tabindex=1)}
+  ${h.select(name='searchType1', selected_values="",
+      options=app_globals.searchTypes, tabindex=2)}
+  ${h.select(name='searchLocation1', selected_values="transcription",
+      options=app_globals.searchLocations[entity], tabindex=3)}
+ </li>
+</ol>
+</fieldset>
+<div id="andOrNotOL">
+  ${h.select(name='andOrNot', selected_values="and",
+      options=app_globals.andOrNot, tabindex=4)}
+</div>
+<fieldset>
+<legend>Search Expression 2</legend>
+<ol>
+ <li>
+  ${h.text(name='searchTerm2', tabindex=5)}
+  ${h.select(name='searchType2', selected_values="",
+      options=app_globals.searchTypes, tabindex=6)}
+  ${h.select(name='searchLocation2', selected_values="gloss",
+      options=app_globals.searchLocations[entity], tabindex=7)}
+ </li>
+</ol>
+</fieldset>
+</%def>
+
+
+<%def name="additionalFormSearchFilters()">
+ <%doc>
+    Additional Form Search Filters (ASF).  Use the searchFilter(),
+    searchDateFilter() and searchIntegerFiler() defs to add more ASFs if
+    desired.
+ </%doc>
+
+ <!--HEADER-->
+ ${self.searchFiltersHeader()}
+ <% grammaticalities = [(x, x) for x in app_globals.grammaticalities if x] %>
+
+ <!--FILTERS-->
+ ${self.searchFilter(['speaker'], ['is', 'is not'], ['any of'],
+     [(speaker.id, speaker.firstName + ' ' + speaker.lastName)
+     for speaker in app_globals.speakers], 1)}
+ ${self.searchFilter(['elicitor', 'enterer', 'verifier'], ['is', 'is not'],
+     ['any of'], [(user.id, user.firstName + ' ' + user.lastName) for user in
+     app_globals.users if user.role != u'viewer'], 2)}
+ ${self.searchFilter(['source'], ['is', 'is not'], ['any of'],
+        [(source.id, source.authorLastName + ', ' +
+            source.authorFirstName[0].upper() + '.  ' + unicode(source.year) +
+            '.  ' + source.title[:10] + '...') for source in app_globals.sources]
+        , 3)}
+ ${self.searchFilter([('grammaticality', 'grammaticality')], ['is', 'is not'],
+     ['any of'], grammaticalities, 4)}
+ ${self.searchFilter([('glossGrammaticality', 'gloss grammaticality')],
+     ['contains', 'does not contain'], ['all of', 'any of'],
+     grammaticalities, 5)}
+ ${self.searchFilter([('elicitationMethod', 'elicitation method')],
+     ['is', 'is not'], ['any of'],
+     [(elicitationMethod.id, elicitationMethod.name) for elicitationMethod in
+     app_globals.elicitationMethods], 6)}
+ ${self.searchFilter([('syntacticCategory', 'syntactic category')],
+     ['is', 'is not'], ['any of'], [(syncat.id, syncat.name) for syncat in
+     app_globals.syncats], 7)}
+ ${self.searchFilter(['keywords'], ['contains', 'does not contain'],
+     ['all of', 'any of'], [(keyword.id, keyword.name) for keyword in
+     app_globals.keywords], 8)}
+
+ <!--DATE FILTERS-->
+ ${self.searchDateFilter(0)}
+ ${self.searchDateFilter(1)}
+ ${self.searchDateFilter(2)}
+ ${self.searchDateFilter(3)}
+
+ <!--INTEGER FILTERS-->
+ ${self.searchIntegerFilter('form', 0)}
+
+ <!--EMPTY FILTERS-->
+ ${searchEmptyFilter(['speaker', 'elicitor', 'enterer', 'verifier', 'elicitationMethod', 'syntacticCategory', 'source'],
+    ['', 'is null', 'is not null'], 0)}
+ ${searchEmptyFilter(['elicitor', 'enterer', 'speaker', 'verifier', 'elicitationMethod', 'syntacticCategory', 'source'],
+    ['', 'is null', 'is not null'], 1)}
+ ${searchEmptyFilter(['enterer', 'elicitor', 'speaker', 'verifier', 'elicitationMethod', 'syntacticCategory', 'source'],
+    ['', 'is null', 'is not null'], 2)}
+ ${searchEmptyFilter(['transcription', 'morphemeBreak', 'morphemeGloss',
+    'comments', 'speakerComments', 'grammaticality', 'phoneticTranscription',
+    'syntacticCategoryString', 'morphemeBreakIDs', 'morphemeGlossIDs', ],
+    ['', 'is an empty string', 'is not an empty string'], 3)}
+ ${searchEmptyFilter(['morphemeBreak', 'transcription', 'morphemeGloss',
+    'comments', 'speakerComments', 'grammaticality', 'syntacticCategoryString',
+    'phoneticTranscription', 'morphemeBreakIDs', 'morphemeGlossIDs', ],
+    ['', 'is an empty string', 'is not an empty string'], 4)}
+ ${searchEmptyFilter(['morphemeGloss', 'transcription', 'phoneticTranscription',
+    'morphemeBreak', 'comments', 'speakerComments', 'grammaticality',
+    'syntacticCategoryString', 'morphemeBreakIDs', 'morphemeGlossIDs', ],
+    ['', 'is an empty string', 'is not an empty string'], 5)}
+
+
+ <!--FOOTER-->
+ ${self.searchFiltersFooter()}
+
+</%def>
+
+
+
+<%def name="additionalFileSearchFilters()">
+ <%doc>
+    Additional File Search Filters (ASF).  Use the searchFilter() and
+    searchDateFilter() defs to add more ASFs if desired.
+ </%doc>
+
+ <!--HEADER-->
+ ${self.searchFiltersHeader()}
+
+ <!--FILTERS-->
+ ${self.searchFilter([('MIMEtype', 'MIME type')], ['is', 'is not'], ['any of'],
+    [(key, key) for key in
+    sorted(app_globals.allowedFileTypes.keys())], 1)}
+ ${self.searchFilter(['elicitor', 'enterer'], ['is', 'is not'], ['any of'],
+    [(user.id, user.firstName + ' ' + user.lastName) for user in
+     app_globals.users if user.role != u'viewer'], 2)}
+ ${self.searchFilter(['speaker'], ['is', 'is not'], ['any of'],
+    [(speaker.id, speaker.firstName + ' ' + speaker.lastName)
+     for speaker in app_globals.speakers], 3)}
+ ${self.searchFilter([('utteranceType', 'utterance type')], ['is', 'is not'],
+    ['any of'], [('Object Language Utterance', 'Object Language Utterance'),
+    ('Metalanguage Utterance', 'Metalanguage Utterance'),
+    ('Mixed Utterance', 'Mixed Utterance')], 4)}
+
+ <!--DATE FILTERS-->
+ ${self.searchDateFilter(0)}
+ ${self.searchDateFilter(1)}
+ ${self.searchDateFilter(2)}
+ ${self.searchDateFilter(3)}
+
+ <!--INTEGER FILTERS-->
+ ${self.searchIntegerFilter('file', 0, ['', 'bytes', 'KB', 'MB', 'GB'])}
+
+ <!--FOOTER-->
+ ${self.searchFiltersFooter()}
+
+</%def>
+
+
+<%def name="additionalCollectionSearchFilters()">
+ <%doc>
+    Additional Collection Search Filters (ASF).  Use the searchFilter() and
+    searchDateFilter() defs to add more ASFs if desired.
+ </%doc>
+
+ <!--HEADER-->
+ ${self.searchFiltersHeader()}
+
+ <!--FILTERS-->
+ ${self.searchFilter(['elicitor', 'enterer'], ['is', 'is not'], ['any of'],
+    [(user.id, user.firstName + ' ' + user.lastName) for user in
+     app_globals.users if user.role != u'viewer'], 0)}
+ ${self.searchFilter(['speaker'], ['is', 'is not'], ['any of'],
+    [(speaker.id, speaker.firstName + ' ' + speaker.lastName)
+     for speaker in app_globals.speakers], 1)}
+ ${self.searchFilter(['source'], ['is', 'is not'], ['any of'],
+    [(source.id, source.authorLastName + ', ' +
+        source.authorFirstName[0].upper() + '.  ' + unicode(source.year) +
+        '.  ' + source.title[:10] + '...') for source in app_globals.sources],
+    2)}
+
+ <!--DATE FILTERS-->
+ ${self.searchDateFilter(0)}
+ ${self.searchDateFilter(1)}
+ ${self.searchDateFilter(2)}
+ ${self.searchDateFilter(3)}
+
+ <!--INTEGER FILTERS-->
+ ${self.searchIntegerFilter('collection', 0)}
+
+ <!--FOOTER-->
+ ${self.searchFiltersFooter()}
+
+</%def>
+
+
+<%def name="searchFiltersHeader()">
+ <fieldset>
+ <!--By default the additional filters are hidden; but they may be visible
+ if we are re-searching a previous search, in which case c.viewRestrictors
+ will be True-->
+ % if hasattr(c, 'viewRestrictors') and c.viewRestrictors:
+ <legend>Additional Search Filters <a class="buttonLink" id="addRemoveASF"
+    tabindex=8
+    onclick="addRemoveElement('additionalSearchFilters','addRemoveASF')">-</a>
+ </legend> 
+ <ol id="additionalSearchFilters" class="additionalSearchFilters"
+     style="display:block;visibility:visible;">
+ % else:
+ <legend>Additional Search Filters <a class="buttonLink" id="addRemoveASF"
+    tabindex=8
+    onclick="addRemoveElement('additionalSearchFilters','addRemoveASF')">+</a>
+ </legend>
+ <ol id="additionalSearchFilters" class="additionalSearchFilters">
+ % endif
+</%def>
+
+
+<%def name="searchFiltersFooter()">
+ </ol>
+ </fieldset>
+</%def>
+
+
+<!--searchFilter() def-->
+<!--This def will create filters on speaker, source, etc.--> 
+<%def name="searchFilter(locations, containsNots, allAnyOfs, options, index)">
+<li>
+  ${h.select(name='restrictors-%s.location'%(index), selected_values='',
+      options=locations, tabindex=8)}
+  ${h.select(name='restrictors-%s.containsNot'%(index), selected_values='',
+      options=containsNots, tabindex=8)}
+  ${h.select(name='restrictors-%s.allAnyOf'%(index), selected_values='',
+      options=allAnyOfs, tabindex=8)}
+  <ul id="keywords_list" class="checklistBig">
+   % for i in range(len(options)): 
+   <li>
+    <label for='${"restrictors-%s.options-%s"%(index,i)}'>
+     <input id='${"restrictors-%s.options-%s"%(index,i)}'
+            name='${"restrictors-%s.options-%s"%(index,i)}'
+            type="checkbox" value="${options[i][0]}" tabindex=8 />
+            ${options[i][1]}
+    </label>
+   </li>
+   % endfor
+  </ul>
+</li>
+</%def>
+
+<!--searchDateFilter() def-->
+<!--This def will create filters on dateElicited, datetimeModified,
+datetimeEntered, etc.--> 
+<%def name="searchDateFilter(index)">
+<li>
+  ${h.select(name='dateRestrictors-%s.location'%(index), selected_values='',
+      options=[('dateElicited', 'date elicited'),
+               ('datetimeEntered', 'date entered'),
+               ('datetimeModified', 'date modified')], tabindex=8)}
+  ${h.select(name='dateRestrictors-%s.relation'%(index), selected_values='',
+      options=[('', 'is'), ('not_', 'is not'),
+               ('earlier_than', 'is earlier than'),
+               ('later_than', 'is later than')], tabindex=8)}
+  ${h.text(name='dateRestrictors-%s.date'%(index), size='10', maxlength='10',
+      tabindex=8)}
+  (mm/dd/yyyy)
+</li>
+</%def>
+
+
+<!--searchIntegerFilter() def-->
+<!--This def will create filters on integer fields like file.size, file.id,
+form.id, etc.--> 
+<%def name="searchIntegerFilter(entity, index, units=None)">
+<li>
+  ${h.select(name='integerRestrictors-%s.location'%(index), selected_values='',
+       options=app_globals.searchIntegerFilterLocations[entity], tabindex=8)}
+  ${h.select(name='integerRestrictors-%s.relation'%(index), selected_values='',
+       options=[('==', 'is'), ('!=', 'is not'), ('lt', 'is less than'),
+                ('gt', 'is greater than')], tabindex=8)}
+  ${h.text(name='integerRestrictors-%s.integer'%(index), size='10',
+       maxlength='10', tabindex=8)}
+  % if units:
+    ${h.select(name='integerRestrictors-%s.unit'%(index), selected_values='',
+         options=units, tabindex=8)}
+  % endif
+</li>
+</%def>
+
+
+<!--searchEmptyFilter() def-->
+<!--This def will create filters to check whether a field is empty or not -->
+<%def name="searchEmptyFilter(entity, options, index)">
+<li>
+  ${h.select(name='emptyRestrictors-%s.location' % (index), selected_values='',
+       options=entity, tabindex=8)}
+  ${h.select(name='emptyRestrictors-%s.relation' % (index), selected_values='',
+       options=options, tabindex=8)}
+</li>
+</%def>
+
+
+<%def name="orderBy(columns, selected='id')">
+<fieldset>
+<legend>Order By</legend>
+<ol>
+ <li>
+  ${h.select(name='orderByColumn', selected_values='', options=columns,
+      tabindex=8)}
+  ${h.select(name='orderByDirection', selected_values='',
+      options=[('desc', 'descending'), ('asc', 'ascending')], tabindex=8)}
+ </li>
+</ol>
+</fieldset>
+</%def>
+
+
+<%def name="limit()">
+<fieldset>
+<legend>Limit</legend>
+<ol>
+ <li>
+  <input type='text' id='limit' name='limit' tabindex=8 />
+ </li>
+</ol>
+</fieldset>
+</%def>
+
+
+<%def name="dictionarySearch()">
+ <%
+    choices = [
+        (
+            'ol',        
+            '%s to %s' % (app_globals.objectLanguageName,
+            app_globals.metaLanguageName)
+        ),
+        (
+            'ml',
+            '%s to %s' % (app_globals.metaLanguageName,
+            app_globals.objectLanguageName)
+        )            
+    ]
+ %>
+  ${h.text(name='dictionarySearchTerm', size='40', tabindex=1)}
+  ${h.select(name='dictionarySearchType', selected_values="", options=choices,
+      tabindex=2)}
+</%def>

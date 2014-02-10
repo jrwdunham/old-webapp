@@ -1,0 +1,1313 @@
+/* PRIMARY POSITIONAL ELEMENTS */
+
+body
+{
+    font-family: sans-serif;
+    /* Verdana looks good, but certain characters (e.g., ejectives) either
+      display akwardly or not at all (Firefox...) 
+    font-family: Verdana, "Bitstream Vera Sans", sans-serif;*/
+    line-height: 1.5em;
+    font-size: 100%;
+    text-align: left;
+}
+
+#doc
+{
+    min-height: 1000px;
+    /*border-style: solid;
+    border-width: 1px;*/
+}
+
+#hd
+{
+    /*width: 57.69em;*/
+    width: 921px;
+    height: 100px;
+    border: solid 1px black;
+}
+
+#header
+{
+    z-index: 10;
+    height: 100px;
+}
+
+#titleWords
+{
+    font-size: 300%;
+    padding: 20px 0 0 20px;
+}
+
+#titleWords a
+{
+    color: white;
+    filter:alpha(opacity=55);
+    opacity:0.55;
+    text-decoration: none;
+}
+
+#titleWords a:hover
+{
+    filter:alpha(opacity=100);
+    opacity:1;
+}
+
+#onlinelinguisticdatabase
+{
+    font-size: 90%;
+    font-variant: small-caps;
+    margin: 15px 0 0 20px;
+    letter-spacing: 0.5em;
+}
+
+#topmenubar
+{
+    background-color: white;
+    width: 57.69em;
+    /*border: solid 1px black;*/
+    z-index:10;
+}
+
+#bd
+{
+    min-height: 1000px;
+    padding: 70px 150px;
+    background-color: white;
+    border: solid 1px black;
+    z-index:1;
+}
+
+#mainContent
+{
+    padding-right: 5em;
+}
+
+#topMenu ul,
+#topTopMenu ul
+{
+    list-style: none outside;
+    padding: 0;
+    margin: 0 0 0 0;
+    height: 4em; /* Setting a height makes it act like a block */
+    border-width: 0px;
+    border-style: dotted;
+    text-align: center;
+}
+
+#topMenu ul
+{
+    padding: 0 0 0 1em;
+}
+
+#topMenu li,
+#topTopMenu li 
+{
+    display: inline;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+#topMenu li a,
+#topMenu li a:link,
+#topMenu li a:visited, 
+#topTopMenu li a,
+#topTopMenu li a:link,
+#topTopMenu li a:visited 
+{
+    text-decoration: none;
+    text-align: center;
+    float: left;
+    display: block;
+    min-width: 45px;
+    padding: 1px 15px 2px 15px;
+    margin: 0;
+    margin-right: -1px;
+    background: transparent;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#sideMenu 
+{
+    line-height: 1em;
+    font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    padding: 20px 0 0 20px;
+    position: relative;
+}
+
+#sideMenu ul 
+{
+    margin: 0 0 3em 2em;
+}
+
+#sideMenu li 
+{
+    list-style: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+
+#sideMenu p 
+{
+    padding: 0;
+    letter-spacing: 2px;
+    margin: 0 0 1em 0;
+    font-size: 120%;
+}
+
+#sideMenu a 
+{
+    padding: 4px 4px 4px 4px;
+    text-decoration: none;
+}
+
+#ft
+{
+    margin-top: 2em;
+    padding: 30px;
+}
+
+hr
+{
+    height: 1px;
+    color: #7e6d63;
+    background-color: #7e6d63;
+}
+
+table.formTable,
+table.fileTable
+{
+}
+
+table.formTable tr,
+table.fileTable tr
+{
+    margin: 10px;
+}
+
+td.dataCellTr,
+td.dataCellTr
+{
+    /* Transcription data cell in formTable has italic text */
+    font-style: italic;  
+}
+
+table.formTable2,
+table.fileTable
+{
+    /*font-size: 80%;
+    border-top: solid 1px #7e6d63;*/
+    margin-bottom: 5px;
+}
+
+td.formTableRowLabel,
+td.fileTableRowLabel,
+td.label
+{
+    width: 120px;
+    min-width: 120px;
+    padding: 0 5px;
+    font-variant: small-caps;
+    vertical-align: top;
+    border-right: solid 1px #7e6d63;
+}
+
+formTable td
+{
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+#extraGlosses
+{
+    /* Extra glosses div is invisible by default */
+    display: none;
+}
+
+td.dataCell, 
+td.dataCellTr
+{
+    padding: 0 10px;
+}
+
+table.clearTable tr td
+{
+    padding: 2px 10px;
+    vertical-align: top;
+}
+
+input:focus, textarea:focus, select:focus
+{
+}
+
+input, textarea, select
+{
+}
+
+div.document h1
+{
+    margin-top: 2em;
+}
+
+div.document a
+{
+    text-decoration: none;
+}
+
+div.document p,
+p.fullyjustified
+{
+    text-align: justify;
+    text-indent: 50px;
+}
+
+.error-message,
+.warning-message,
+.required,
+#flash
+{
+    font-weight: bold;
+    color: red;
+}
+
+.warning-message-2
+{
+    font-size: 10px;
+    font-weight: bold;
+    color: orange;
+}
+
+span.error-message
+{
+
+}
+
+div.andOrNot
+{
+    float:left;
+}
+
+form.formTable fieldset,
+form.fileTable fieldset 
+{
+    margin-bottom: 2em;
+    /*border-style: solid;
+    border-width: 1px;*/
+    /*width: 38em;*/
+}
+
+form.formTable legend,
+form.fileTable legend 
+{
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0 0;
+}
+
+form.formTable label,
+form.fileTable label
+{
+    display: inline-block;
+    line-height: 1.8;
+    vertical-align: top;
+    width: 18em; /* Width of labels */
+}
+
+form.formTable select
+{
+    max-width: 300px;
+}
+
+
+form.formTable input[type=text]
+{
+    height: 1.25em;    
+}
+
+form.formTable fieldset ol,
+form.fileTable fieldset ol 
+{
+    padding: 0.5em;
+}
+
+form.formTable fieldset ol li,
+form.fileTable fieldset ol li 
+{
+    list-style: none;
+    /*padding: 0.5em;*/
+    margin-left: 0;
+}
+
+form.formTable ol li ul,
+form.fileTable ol li ul 
+{
+    margin-left: 10.3em; /* Move keywords multi-select to the right*/
+    position: relative;
+    top: -1em;
+}
+
+form.formTable ol.additionalSearchFilters li ul,
+form.fileTable ol.additionalSearchFilters li ul
+{
+    margin-left: 0px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+ 
+#morphemeBreak,
+#morphemeGloss, 
+#speakerComments, 
+#comments, 
+#pageContent, 
+#description, 
+#collectionContent, 
+#fullReference,
+#phoneticTranscription,
+#narrowPhoneticTranscription
+{
+    /*width: 35em;*/
+    width: 600px;
+}
+
+#transcription
+{
+    width: 553px;
+    max-width: 553px;
+}
+
+input.gloss
+{
+    width: 540px;
+}
+
+#dateElicited
+{
+    width: 6em;
+}
+
+.checklist,
+.checklistBig
+{
+    border-width: 1px;
+    border-style: solid;
+    list-style: none;
+    height: 10em;
+    overflow: auto;
+    width: 20em;
+    position: relative;
+    top: 1em;
+}
+
+.checklist, 
+.checklist li,
+.checklistBig,
+.checklistBig li
+{ 
+    margin: 0; padding: 0; 
+}
+
+.checklist label
+{
+    display: block;
+    padding-left: 20em;
+    text-indent: -19em;
+}
+
+.checklistBig label
+{
+    display: block;
+    padding-left: 30em;
+    text-indent: -29em;
+}
+
+.checklistBig
+{
+    height: 10em;
+    width: 30em;
+}
+
+div.tableSpacerDiv
+{
+    margin-bottom:100px;
+}
+
+div.tableSpacerDivHalf
+{
+    margin-bottom: 50px;
+}
+
+/* Class used in top-level buttons, e.g., "Forget All" in Memory */
+div.allFormButtonsDiv
+{
+    margin: 10px 0 40px 0;
+}
+
+/* Class used in low-level buttons, e.g., "Update" in a Form representation */
+div.formButtonsDiv,
+div.fileButtonsDiv
+{
+    margin: 10px 0;
+}
+
+#andOrNotOL
+{
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+#additionalSearchFilters
+{
+    display: none;
+}
+
+p#paginatorPager
+{
+    margin-bottom: 20px;
+}
+
+#flash
+{
+    margin-bottom: 10px;
+}
+
+.buttonLink
+{
+    text-align: center;
+    min-width: 45px;
+    padding: 1px 15px 3px 15px;
+    margin-right: -1px;
+    border-width: 1px;
+    border-style: solid;
+    font-variant: small-caps;
+    text-decoration: none;
+}
+
+.longButtonLink
+{
+    display: block;
+    padding: 1px 15px 3px 15px;
+    margin: 0px -1px 4px 0px;
+    border-width: 1px;
+    border-style: solid;
+    font-variant: small-caps;
+    text-decoration: none;
+    
+}
+
+.helper
+{
+    padding: 3px 3px 0 3px;
+    font-style: normal;
+}
+
+a#addRemoveGloss1Button,
+a#addRemoveASF
+{
+    padding: 1px 3px 3px 3px;   
+}
+
+.buttonLink:hover 
+{
+}
+
+.containerDiv, 
+.containerDivIndent
+{
+    margin: 1em 0 1em 0;
+}
+
+.containerDivIndent
+{
+    margin-left: 2em;
+}
+
+#exportDiv
+{
+    margin-top: 30px;
+    padding: 3px 10px;
+}
+
+li.radioLI
+{
+    margin: 5px 0 5px 5px;
+    padding-left: 5px;
+    list-style-type: none;
+}
+
+li.radioLI:hover
+{
+}
+
+#loginInfo
+{
+    font-size: 75%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    letter-spacing: 0.75em;
+    margin-top: 1em;
+}
+
+#loginInfo a
+{
+    text-decoration: none;
+}
+
+.emphasize
+{
+    font-style: italic;  
+}
+
+thead
+{
+    border-bottom: 1px solid;
+}
+
+a.link
+{
+    padding: 0.25em;
+    text-decoration: none;
+}
+
+p.descriptiveP
+{
+    position: relative;
+    top: -1em;
+}
+
+span.highlightHeader
+{
+    background-color: #d0dcaa;
+    padding: 0.5em;
+}
+
+td.userIDCell,
+td.tagIDCell
+{
+    width: 2em;
+}
+
+td.userNameCell,
+td.tagNameCell
+{
+    width: 12em;
+    max-width: 12em;
+}
+
+td.userAffiliationCell
+{
+    width: 12em;
+    max-width: 12em;
+}
+
+td.userEmailCell
+{
+    width: 12em;
+    max-width: 12em;
+}
+
+div.historyDiv
+{
+    /*background-color: #dee1d3;*/
+    margin: 1em 0 6em 2em;
+    padding: 1em;
+}
+
+span.datetimeHeader
+{
+    letter-spacing: 0.2em;
+    font-weight: bold;
+}
+
+div.fileContent
+{
+    margin: 1em 0;
+}
+
+img.imageFile
+{
+    max-width: 500px;
+}
+
+div.embeddedAudioDiv
+{
+    padding: 1em 0;        
+    display: none;
+}
+
+div.indentedDiv
+{
+    margin: 1em 0 1em 2em;
+}
+
+div.shiftUp
+{
+    position: relative;
+    bottom: 2.75em;
+}
+
+div.indentedDiv table tr td
+{
+    padding: 0 1em;
+}
+
+div.associatedEntitiesDiv
+{
+    border-width: 1px;
+    border-style: solid;
+    padding: 1em 1em 0 1em;
+    margin: 1em 0 0 4em;
+}
+
+h1
+{
+    font-size: 170%;
+    padding: 0.5em 0;
+}
+
+h2
+{
+    font-size: 150%;
+    padding: 0.5em 0;
+}
+
+h3
+{
+    font-size: 120%;
+    padding: 0.5em 0;
+}
+
+h4
+{
+    font-size: 115%;
+    padding: 0.5em 0;
+}
+
+h5
+{
+    font-size: 110%;
+    padding: 0.5em 0;
+    font-weight: bold;
+}
+
+h6
+{
+    font-size: 105%;
+    padding: 0.5em 0;
+}
+
+blockquote
+{
+    margin: 1em 2em;
+}
+
+ul li
+{
+    list-style-type: disc;
+    margin-left: 2em;
+}
+
+ol li
+{
+    list-style-type: decimal;
+    margin-left: 2em;
+}
+
+p
+{
+    margin: 1em 0;
+}
+
+div#helpDiv
+{
+    /* help div is invisible by default */
+    display: none;
+    visibility: hidden;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    width: 250px;
+    height: 500px;
+    padding: 20px;
+    background-color: black;
+    opacity:0.75;
+    color: black;
+}
+
+div#promptDiv
+{
+    /* help div is invisible by default */
+    display: none;
+    visibility: hidden;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-top: -150px;
+    margin-left: -125px;
+    width: 300px;
+    height: 250px;
+    padding: 20px;
+    background-color: black;
+    color: black;
+}
+
+div#promptDivInner
+{
+    font-size: 75%;
+    background-color: white;
+    padding: 20px;
+    width: 260px;
+    height: 210px;
+    overflow: auto;
+}
+
+div#helpDivInner
+{
+    font-size: 75%;
+    background-color: white;
+    padding: 20px;
+    width: 210px;
+    height: 460px;
+    overflow: auto;   
+    filter:alpha(opacity=100);
+    opacity:1; 
+}
+
+a#closeButton,
+a#closePromptDivButton
+{
+    padding: 0.5em 1em;
+    background-color: black;
+    color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+table.collectionColumns
+{
+    width: 100%;
+}
+
+table.collectionColumns tr td
+{
+    padding: 0.5em 1em 0.5em 0;
+    min-width: 50%;
+    vertical-align: top;
+}
+
+#collectionContentFieldset,
+#personalPageContentFieldset
+{
+    /*padding: 1em;*/
+}
+
+#collectionContent,
+#personalPageContent,
+#speakerPageContent
+{
+    width: 100%;
+}
+
+#userPageContent
+{
+    overflow: auto;
+}
+
+img.userEmbeddedImage
+{
+    max-width: 50%;
+    margin: 1em 1em 1em 0;
+}
+
+#dictionarysearchterm
+{
+    font-size: 200%;
+    width: 100%;
+}
+
+#dictionarySearchForm
+{
+    text-align: center;
+}
+
+p.headerLetter
+{
+    font-size: 400%;
+    text-align: center;
+}
+
+#headerLetterLinkDiv
+{
+    text-align: center;
+    font-size: 200%;
+}
+
+#headerLetterLinkDiv a
+{
+    text-decoration: none;
+}
+
+div.dictionaryEntry
+{
+    width: 400px;    
+    padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+div.dictionaryEntry span.word
+{
+    font-weight: bold; 
+    position: relative;
+    right: 2px;   
+    bottom: 2px;
+    margin-left: 4px;
+    margin-top: 4px;
+}
+
+div.dictionaryEntry span.meaning
+{
+    font-style: italic;  
+    text-align: justify;    
+    margin-left: 1em;
+}
+
+.longLabel
+{
+    width: 400px;   
+}
+
+dt
+{
+    font-size: 150%;
+    margin: 1em 0 0 0;  
+}
+
+dd
+{
+    margin: 0 0 1em 2em;   
+}
+
+.suggestion
+{
+    border-width: 1px;
+    border-style: solid;
+    width: 250px;
+    visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.75);
+    position: absolute;
+    z-index: 2;
+}
+
+li.suggestionList:hover
+{
+    background-color: blue;
+}
+
+table.infoTable td,
+table.infoTable th
+{
+    vertical-align: top;
+    padding: 1em;
+    width: 48%;
+    /*font-size: 150%;
+    border-bottom: solid 1px;
+    border-top: solid 1px;*/
+}
+
+table.infoTable
+{
+    table-layout: fixed;
+    margin: 1em 0;
+    /*border: solid 1px;*/
+    width: 100%;
+    max-width: 100%;
+}
+
+table.quarter
+{
+    table-layout: fixed;
+}
+
+table.quarter td,
+table.quarter th
+{
+    width: 24%;
+}
+
+input.shortinput
+{
+    width: 5em;
+}
+
+p.explanation
+{
+    /*font-size: 70%;*/
+    margin-left: 2em;   
+}
+
+table.orthographyDisplay,
+table.inventoryDisplay
+{
+    /*font-size: 60%;*/
+    border: none;
+}
+
+table.orthographyDisplay td,
+table.inventoryDisplay td
+{
+    width: 3em;
+    border: none;
+}
+
+table.smallOrthographyDisplay
+{
+    font-size: 40%;   
+    border-style: solid;
+    border-width: 1px;
+}
+
+table.orthographyAsLinks
+{
+    font-size: 125%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
+table.orthographyAsLinks td
+{
+    padding: 0.5em 0.25em;
+}
+
+a.dictionaryLink,
+table.orthographyAsLinks a
+{
+    text-decoration: none;
+    padding: 0.25em;
+}
+
+a.dictionaryLink:hover,
+table.orthographyAsLinks a:hover
+{
+    background-color: black;
+    color: white;
+}
+
+#headCharDiv
+{
+    font-size: 500%;
+    text-align: center;       
+    margin: 1em;
+}
+
+.centerHeading
+{
+    font-size: 250%;
+    text-align: center;
+    padding: 0.5em;   
+}
+
+.centerHeading a
+{
+    text-decoration: none;   
+    padding: 0.25em;
+}
+
+.centerHeading a:hover
+{
+    background-color: black;
+    color: white;
+}
+
+div.highlightDiv
+{
+    padding: 1em 0;
+}
+
+sup
+{
+    position: relative;
+    bottom: 0.5em;
+}
+
+.innerFieldset
+{
+    margin: 1em;
+    padding: 1em;
+}
+
+pre
+{
+    font-family: Courier, monospace;
+    margin-left: 2em;
+}
+
+pre.no-margin
+{
+    margin-left: 0;
+}
+
+table.docutils
+{
+    margin-bottom: 1em;
+}
+
+table.docutils td
+{
+    padding: 0.25em;
+}
+
+.margintop
+{
+    margin-top: 1em;
+}
+
+textarea.inputOrthography
+{
+    width: 621px;
+    padding: 10px;
+}
+
+div#outputorthographydiv
+{
+    width: 621px;
+    height: 20px;
+    padding: 10px;
+}
+
+table.keyboardTable
+{
+    table-layout: fixed;
+    width: 31.6em;
+}
+
+table.keyboardTable td
+{
+    /*border: 1px solid black;
+    background-color: red;*/
+    padding: 0.5em;
+    text-align: center;
+    width: 10%;
+}
+
+table.keyboardTable td:hover
+{
+    background-color: grey;
+}
+
+div.invisiDiv
+{
+    visibility: hidden;
+    display: none;
+}
+
+a.key
+{
+    display: block;
+    border: 1px solid gray;
+    text-decoration: none;
+}
+
+input,
+textarea
+{
+    font-family: sans-serif;
+}
+
+.centered
+{
+    text-align: center;
+}
+
+.enumerator
+{
+    width: 50px;
+    vertical-align: top;
+}
+
+.igt
+{
+    margin-bottom: 0.5em;
+}
+
+table.igt
+{
+    width: 100%;
+}
+
+#formcountdiv
+{
+    position: relative;
+}
+
+#formcountdivinner
+{
+    position: absolute;
+    right: 0;
+    top: -60px;
+    padding: 0.5em;
+    border-bottom: dotted 1px grey;
+    border-left: dotted 1px grey;
+}
+
+.big
+{
+    font-size: 300%;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+td.onethirdcell,
+th.onethirdcell
+{
+    width:33%;
+    padding:0 0.5em;
+    vertical-align: top;
+}
+
+.monospace
+{
+    font-family: Courier, monospace;
+}
+
+em
+{
+    font-style: italic;
+}
+
+div.blacklinks a:hover
+{
+    color: black;
+}
+
+table.smallTable
+{
+    font-size: 80%;
+}
+
+table.smallTable tr td
+{
+    vertical-align: top;
+    padding: 0.125em 0.5em;
+}
+
+.textareaTextInput
+{
+    height: 1.25em;
+    position: relative;
+    top: 6px;
+    padding: 2px 2px 0 2px;
+    max-width: 600px;    
+}
+
+div.tableContainer
+{
+    width: 100%;
+    /*max-width: 100%;*/
+    height: 500px;
+    max-height: 500px;
+    overflow: auto;
+    border: solid 2px black;
+}
+
+
+div.tableContainer table td,
+div.tableContainer table th
+{
+    border: solid 1px black;
+    white-space: nowrap;
+    padding: 3px 5px 2px 5px;
+}
+
+/* SVG-TREE-DRAWER CSS*/
+
+svg text {
+    padding:0.5em;
+    padding-left:0.20em;
+    padding-right:0.20em;
+}
+svg g.collapsed g text {
+    padding-left:0.5ex;
+    padding-right:0.5ex;
+}
+svg line,
+svg polyline {
+    font-size:1em; /*height not honored here by WebKit*/
+}
+svg polyline {
+    fill:none;
+}
+
+.shortTree line,
+.shortTree polyline {
+    font-size:0.25em;
+}
+.tallTree line,
+.tallTree polyline {
+    font-size:2em;
+}
+
+div.plusButton
+{
+    max-width: 2em;
+}
+
+a.openOption
+{
+    display: block;
+    padding: 5px;
+    width: 100%;
+}
+
+a.openOption:hover
+{
+    background-color: black;
+    color: white;
+}
+
+.invisible
+{
+    display: none;
+    visibility: hidden;
+}
+
+div.graphInfo
+{
+    display: none;
+    visibility: visible;
+    position: absolute;
+    max-width: 300px;
+    background-color: white;
+    border: solid 1px black;
+    padding: 4px 5px 0px 5px;
+}
+
+button
+{
+    padding: 4px 3px;
+}
+
+#getCharsResponseTable
+{
+    width: 620px;
+    margin-top: 20px;
+}
+
+#getCharsResponseTable td,
+#getCharsResponseTable th
+{
+    width: 155px;
+    vertical-align: top;
+}
+

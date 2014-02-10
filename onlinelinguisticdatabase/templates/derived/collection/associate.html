@@ -1,0 +1,24 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/collectionViews.html" name="collectionViews" import="collectionViewShort"/>
+
+<%def name="heading()">
+    <h1 class="heading">Associate Collection ${c.collection.id} to a File</h1>
+</%def>
+
+<br />
+${collectionViewShort(c.collection)}
+
+<div class="tableSpacerDivHalf"></div>
+
+<form class="formTable" action="${url(controller='collection', action='link', id=c.collection.id)}" method="post">
+ <fieldset>
+  <legend>Associate by File ID</legend>
+  <ol>
+   <li>
+    <label for="fileID">enter 1 or more comma-separated File IDs</label>  
+    <input id="fileID" name="fileID" tabindex="1" type="text" size="50" />    
+   </li>
+  </ol>
+ </fieldset>
+ <div>${h.submit(value="Associate", name='submit', tabindex=2)}</div>
+</form>

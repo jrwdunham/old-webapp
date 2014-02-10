@@ -1,0 +1,182 @@
+<%! 
+    from os import sep, path 
+    from random import randrange
+%> 
+
+<%doc>
+    Dec 10, 2010.  This Mako junk is very unreadable.  This comment marks the
+    beginning of the deprecation of these defs and the writing of attributes
+    on oldCoreObjects.File that replicate and improve upon their functionality.
+</%doc>
+
+<%def name="fileView(file)">
+    % if file.MIMEtype in app_globals.allowedFileTypes:
+      % if app_globals.allowedFileTypes[file.MIMEtype]:
+          <% fileType = app_globals.allowedFileTypes[file.MIMEtype] %>
+      % else: 
+          <% fileType = file.MIMEtype.split('/')[0] %>
+      % endif
+    % else:
+        <% fileType = u'embedded media' %>
+    % endif
+    ${self.displayFileMetaData(file, fileType)}
+    ${self.displayAssociatedForms(file)}
+    ${self.displayFileButtons(file)}
+    ${self.displayFile(file, fileType)}
+    <div class="tableSpacerDiv"></div>
+</%def>
+
+
+<%def name="fileViewShort(file)">
+    % if app_globals.allowedFileTypes[file.MIMEtype]:
+        <% fileType = app_globals.allowedFileTypes[file.MIMEtype] %>
+    % else: 
+        <% fileType = file.MIMEtype.split('/')[0] %>
+    % endif
+    ${self.displayFileMetaData(file, fileType)}
+    ${self.displayFile(file, fileType)}
+    <div class="tableSpacerDiv"></div>
+</%def>
+
+
+<%def name="displayFileMetaData(file, fileType)">
+    <table class="fileTable">
+    <tr><td class="fileTableRowLabel">ID</td><td class="dataCell">${file.id}</td></tr>
+    <tr><td class="fileTableRowLabel">name</td><td class="dataCellTr">${file.name}</td></tr>
+    <tr><td class="fileTableRowLabel">type</td><td class="dataCell">${fileType}</td></tr>
+    <tr><td class="fileTableRowLabel">size</td><td class="dataCell">${h.pretty_filesize(file.size)}</td></tr>
+    % if file.description:
+    <tr><td class="fileTableRowLabel">description</td><td class="dataCell">${file.description}</td></tr>
+    % endif
+    % if file.utteranceType:
+    <tr><td class="fileTableRowLabel">utterance type</td><td class="dataCell">${file.utteranceType}</td></tr>
+    % endif
+    <tr><td class="fileTableRowLabel">enterer</td><td class="dataCell">${file.enterer.firstName} ${file.enterer.lastName}</td></tr>
+    % if file.speaker:
+    <tr><td class="fileTableRowLabel">speaker</td><td class="dataCell">${file.speaker.firstName} ${file.speaker.lastName}</td></tr>
+    % endif
+    % if file.elicitor:
+    <tr><td class="fileTableRowLabel">elicitor</td><td class="dataCell">${file.elicitor.firstName} ${file.elicitor.lastName}</td></tr>
+    % endif
+    % if file.dateElicited:
+    <tr><td class="fileTableRowLabel">date elicited</td><td class="dataCell">${h.pretty_date(file.dateElicited)}</td></tr>
+    % endif    
+    <tr><td class="fileTableRowLabel">time entered</td><td class="dataCell">${h.pretty_date(file.datetimeEntered)}</td></tr>
+    <tr><td class="fileTableRowLabel">last updated</td><td class="dataCell">${h.pretty_date(file.datetimeModified)}</td></tr>
+    </table>
+</%def>
+
+
+<%def name="displayFileButtons(file)">
+  <div class="fileButtonsDiv">
+    <a href="${url(controller='file', action='update', id=file.id)}" class="buttonLink" title="Edit this File's data">update</a>
+    <a href="${url(controller='file', action='delete', id=file.id)}" class="buttonLink" onclick="return confirmDelete('File', ${file.id})" title="Delete this File; confirmation will be requested">delete</a>
+    <a href="${url(controller='file', action='associate', id=file.id)}" class="buttonLink" title="Associate one or more Forms to this File">associate</a>
+  </div>
+</%def>
+
+
+<%def name="displayFile(file, fileType)">
+ <% fileReference = url('retrieve', path=file.name) %>
+ <div class="fileContent">
+ % if fileType == 'image':
+    <% self.displayImage(file, fileReference) %>
+ % elif fileType == 'audio':
+    <% self.displayAudio(file, fileReference) %>
+ % elif fileType == 'video':
+    <% self.displayVideo(file, fileReference) %>
+ % elif fileType == 'embedded media':
+    ## This should pass control to a def called displayEmbeddedMedia ...
+    <% self.displayTextual(file, fileReference) %>
+ % else:
+    <% self.displayTextual(file, fileReference) %>
+ % endif
+ </div>
+</%def>
+
+
+<%def name="displayImage(file, fileReference)">
+  <% fileName = path.splitext(file.name)[0] %>
+  <% buttonID = fileName + 'Button' %>
+  <a onclick="addRemoveElement('${fileName}', '${buttonID}', 'image', 'hide image|show image');" class="buttonLink" id="${buttonID}" title="show image embedded in the page">show image</a>
+  <img alt="${file.name}" style="display:none;" src="${fileReference}" class="imageFile" id="${fileName}" />
+</%def>
+
+<%doc>
+                        mp3     ogg     wav     au/snd      aif/aifc/aiff   
+    Firefox (Linux, Mac)N       Y       Y       N           N               
+    Chrome (Linux)      Y       Y       N       N           N               
+    Safari (Mac)        Y       N       N       Y           N               
+</%doc>
+
+<%def name="displayAudio(file, fileReference)">
+ ${self.insertAudioJavaScript()}
+ <% 
+  fileName = file.name.replace('.', '_') 
+  uniqueNo = str(randrange(0,1000))
+  uniqueFileName = fileName + uniqueNo
+ %>
+ <a class="buttonLink" title="click to show audio embedded in page" onclick="playAudio('${fileReference}', '${fileName}', '${file.MIMEtype}', '${uniqueFileName}')">play audio</a>
+ <a href="${fileReference}" class="buttonLink" title="click to link to this audio file; right-click to download this audio file">link to audio</a>	
+ <div id="${uniqueFileName}" class="embeddedAudioDiv"></div>
+</%def>
+
+
+<%def name="displayVideo(file, fileReference)">
+video to be displayed...
+</%def>
+
+
+<%def name="displayTextual(file, fileReference)">
+  <% fileExtension = file.name.split('.')[-1] %>
+  <a href="${fileReference}" class="buttonLink" title="right-click to download this ${fileExtension} file">link to text</a>
+</%def>
+
+
+<%def name="displayAssociatedForms(file)">
+ % for form in file.forms:
+  <div class="associatedEntitiesDiv">
+  <% 
+    maxLen = 20
+    transcription = h.clip(form.grammaticality + form.transcription, maxLen)
+    gloss = h.clip(form.glosses[0].glossGrammaticality + form.glosses[0].gloss, maxLen)
+  %>
+   Associated Form ${form.id}:
+   <span class="emphasize">${h.storageToOutputTranslate(transcription)}</span> 
+   &lsquo;${h.literal(gloss)}&rsquo;
+  <div class="containerDivIndent">
+   <a href="${url('disassociate', controller='file', id=file.id, otherID=form.id)}" class="buttonLink" title='${"Click to disassociate Form %s from File %s"%(form.id, file.id)}'>disassociate</a> 
+   <a href="${url(controller='form', action='view', id=form.id)}" class="buttonLink" title="${'Click to view more info about Form %s' % form.id}">view</a>
+  </div>
+  </div>
+ % endfor
+</%def>
+
+
+<%def name="insertAudioJavaScript()">
+ <script type="text/javascript">
+  function playAudio(fileReference, fileName, MIMEtype, uniqueFileName)
+  {
+      var embeddedAudioDiv = document.getElementById(uniqueFileName);
+      var useAudioTag = canUseHTMLAudioTag(MIMEtype);
+      embeddedAudioDiv.style.display="block";
+      embeddedAudioDiv.style.display="visible";
+      if (useAudioTag)
+      {
+          embeddedAudioDiv.innerHTML = '<audio src="' + fileReference + '" controls="controls"></audio>';
+      }
+      else
+      {
+          output = '<embed src="' + fileReference + '" autoplay="false" autostart="false" width="300" height="30" />\n'
+          /*output += "<span class='error-message'>Sorry, your browser does not fully support embedding of this audio file type.  As a result, the above audio player may not work properly.  Try right-clicking on the &ldquo;link to audio&rdquo; button to open this file in a new tab or to download this file.</span>";*/
+          embeddedAudioDiv.innerHTML = output;
+      }
+  }
+  function canUseHTMLAudioTag(MIMEtype)
+  {
+      var audio  = document.createElement("audio");
+      canPlayMIMEtype = (typeof audio.canPlayType === "function" && audio.canPlayType(MIMEtype) !== "");
+      return(canPlayMIMEtype);	
+  }
+ </script>
+</%def>

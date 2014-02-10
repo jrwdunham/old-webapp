@@ -1,0 +1,18 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/searchFields.html" name="searchFields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Search Forms</h1>
+</%def>
+
+<form class="formTable" id="searchTable"
+    action="${url(controller='form', action='query')}" method="post">
+    ${searchFields.formSearchFields()}
+    <div>${h.submit(value="Search Forms", name='submit', tabindex=30)}</div>
+</form>
+
+<div class="allFormButtonsDiv">
+ <a href="${url(controller='form', action='previoussearches', id=None)}"
+    class="buttonLink">previous searches</a>
+</div>

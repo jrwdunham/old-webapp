@@ -1,0 +1,82 @@
+================================================================================
+  README
+================================================================================
+
+This document is being used to keep track of changes to this repo in order to
+make it match the OLD 0.2.7 production code that is deployed as of Feb 2014. 
+This code was changed ad hoc on the server so I do not currently have a local
+version that works like the deployed version, which is ridiculous.  So, making
+the changes listed below should remedy that.
+
+
+Todo
+================================================================================
+
+1. Check that deployed functionality is all there in this dev eniro.
+   Seems to be good.  ExPex export works, as does display of phonetic
+   transcription lines.
+
+2. Create a git repo in this directory.
+
+3. Watch out for hairy dependency issues; i.e., the deployment env might be very
+   hacked together compared to the Python 2.5 env on this dev machine (ugh ...)
+
+
+Issues Observed
+================================================================================
+
+1. Export to LaTeX.  xelatex typesetting will not work properly when fontspec
+   and its dependencies are loaded AND expex is loaded on a Debian TexLive 2009
+   install.  All of the \gla words are "it" !!!!  Anyways, it works when you
+   remove \usepackage{fontspec} and it works on more recent TexLive installs.
+   This may be something to watch for when I implement automatic .tex2.pdf 
+   server-side.
+
+
+Changes made
+================================================================================
+
+1. copied production's controllers/file.py to controllers/PROD_file.py
+
+2. copied production's controllers/settings.py to controllers/PROD_settings.py
+
+3. copied production's lib/orthography.py to lib/PROD_orthography.py
+
+4. copied production's lib/test_functions.py
+
+5. copied production's public/index-ria.html; I then deleted the
+   public/index.html file since these are the same files. THESE ARE THE SPA
+   JQUERY LANDING PAGES.
+
+6. copied production's templates/base/formViews.html to
+   templates/base/PROD_formViews.html
+
+7. copied production's templates/derived/collection/addUpdateFields.html to
+   templates/derived/collection/PROD_addUpdateFields.html
+
+8. copied production's templates/derived/file/addUpdateFields.html to
+   templates/derived/file/PROD_addUpdateFields.html
+
+9. reconcile the diffs between the PROD_-prefixed files and their counterparts.
+
+    1. took PROD_file.py and deleted file.py --- cosmetic changes only.
+
+    2. took PROD_settings.py and copied settings.py to settings.py_bk --- changes
+       to a try/except block and the PROD version used a custom error (whose name
+       was changed from the incorrect OrthographyIncompatibilityError to the 
+       correct OrthographyCompatibilityError).
+
+    3. took PROD_orthography.py and deleted orthography.py --- cosmetic changes
+       only.
+
+    4. Changed validDelimiters to morphDelimiters in formViews.html as per
+       PROD_formViews.html.  Note that both the production egg and this version
+       both have a validDelimiters property defined in lib/oldCoreObjects.py.
+
+    5. took /collection/PROD_addUpdateFields.html: some improved select options
+       for app_globals.
+
+    6. took /file/PROD_addUpdateFields.html: some improved select options for
+       app_globals.
+
+

@@ -1,0 +1,11 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/derived/tag/inputFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Add a new Elicitation Method</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='method', action='create')}" method="post">
+    ${fields.displayTagFields('elicitation method')}    
+    <div>${h.submit(value="Add Elicitation Method", name='submit', tabindex='5')}</div>
+</form>

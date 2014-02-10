@@ -1,0 +1,7 @@
+<%namespace file="addUpdateFields.html" name="fields" import="*"/>
+
+<form class="formTable" action="${url(controller='file', action='save')}" method="post">
+    ${fields.update()}
+    <input type="hidden" name="ID" id="ID" />    
+    <div>${h.submit(value="Save Changes", name='submit', tabindex=30)}</div>
+</form>

@@ -1,0 +1,2531 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+    This Relax NG Schema describes an allowable OLD XML file.
+    
+    OLD XML is a dialect of XML that describes linguistic data.  The structure
+    of OLD XML is nearly identical to the database schema used by the OLD.
+    
+    OLD XML is intended to be written by programs and humans.  That is, an OLD
+    application may use OLD XML to export all, or a subset of, its data.  It may
+    also provide a web service with data structured in OLD XML.  On the other
+    hand, a person might transcribe a linguistic elicitation using OLD XML.
+    
+    For transcribing Forms into OLD XML by hand, there is the terse OLD XML 'fo'
+    element.  Example usage:
+
+        <fo>
+            <tr>Une phrase du français</tr>
+            <gl>
+                <gl>A sentence of French</gl>
+            </gl>
+        </fo>
+
+        <fo>
+            <gr>*</gr>
+            <tr>Phrase une du français</tr>
+            <gl>
+                <gl>A sentence of French</gl>
+            </gl>
+        </fo>
+
+        <fo>
+            <tr>Une phrase du français</tr>
+            <gl>
+                <gl>A Sentence of French</gl>
+            </gl>
+            <gl>
+                <glgr>*</glgr>
+                <gl>Sentence a of French</gl>
+            </gl>
+        </fo>
+
+    Compare this to the verbose 'form' element:
+
+        <form>
+            <transcription>Une phrase du français</transcription>
+            <gloss>
+                <gloss>A sentence of French</gloss>
+            </gloss>
+        </form>
+
+        <form>
+            <grammaticality>*</grammaticality>
+            <transcription>Phrase une du français</transcription>
+            <gloss>
+                <gloss>A sentence of French</gloss>
+            </gloss>
+        </form>
+
+        <form>
+            <transcription>Une phrase du français</transcription>
+            <gloss>
+                <gloss>A Sentence of French</gloss>
+            </gloss>
+            <gloss>
+                <glossGrammaticality>*</glossGrammaticality>
+                <gloss>A sentence of French</gloss>
+            </gloss>
+        </form>
+
+    An OLD XML document consists of the root element 'oldentities' which may
+    have zero or more of any of the following children, in any order:
+
+        applicationSettings         √
+        collection                  √
+        collectionBackup            √
+        collectionFile              √
+        collectionForm              √
+        elicitationMethod           √
+        file                        √
+        form                        √
+        fo                          √
+        formBackup                  √
+        formFile                    √
+        formKeyword                 √
+        gloss                       √
+        keyword                     √
+        language                    √
+        page                        √
+        source                      √
+        speaker                     √
+        syntacticCategory           √
+        user                        √
+        userForm                    √
+
+-->
+
+<element name="oldentities" xmlns="http://relaxng.org/ns/structure/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <interleave>
+
+<!--                             APPLICATION SETTINGS                        -->
+
+        <zeroOrMore>
+            <element name="applicationSettings">
+                <interleave>
+
+                    <optional>
+                        <element name="id">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageName">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageId">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="metaLanguageName">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="metaLanguageId">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="metaLanguageOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="headerImageName">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="colorsCSS">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="storageOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="defaultInputOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="defaultOutputOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography1Name">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography1">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO1Lowercase">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO1InitialGlottalStops">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography2Name">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography2">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO2Lowercase">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO2InitialGlottalStops">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography3Name">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography3">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO3Lowercase">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO3InitialGlottalStops">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography4Name">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography4">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO4Lowercase">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO4InitialGlottalStops">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography5Name">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="objectLanguageOrthography5">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO5Lowercase">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="OLO5InitialGlottalStops">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeBreakIsObjectLanguageString">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+
+<!--                             /APPLICATION SETTINGS                       -->
+
+<!--                             COLLECTION                                  -->
+
+        <zeroOrMore>
+            <element name="collection">
+                <interleave>
+
+                    <optional>
+                        <element name="id">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <element name="title">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="type">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="url">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speaker">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="dialect">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="speakerPageContent">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="source">
+                            <interleave>
+                                <optional>
+                                    <element name="authorFirstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="authorLastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="year">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="title">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fullReference">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="file_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitor">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="enterer">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dateElicited">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeEntered">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="contents">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+
+<!--                             /COLLECTION                                 -->
+
+<!--                             COLLECTION BACKUP                           -->
+
+        <zeroOrMore>
+            <element name="collectionBackup">
+                <interleave>
+
+                    <element name="id">
+                        <text/>
+                    </element>
+
+                    <element name="collection_id">
+                        <text/>
+                    </element>
+
+                    <element name="title">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="type">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="url">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speaker">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="dialect">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="speakerPageContent">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="source">
+                            <interleave>
+                                <optional>
+                                    <element name="authorFirstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="authorLastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="year">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="title">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fullReference">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="file_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitor">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="enterer">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="backuper">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dateElicited">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeEntered">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="contents">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /COLLECTION BACKUP                          -->
+
+<!--                             COLLECTION FILE                             -->
+
+        <zeroOrMore>
+            <element name="collectionFile">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="collection_id">
+                        <text/>
+                    </element>
+                    <element name="file_id">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /COLLECTION FILE                            -->
+
+<!--                             COLLECTION FORM                             -->
+
+        <zeroOrMore>
+            <element name="collectionForm">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="collection_id">
+                        <text/>
+                    </element>
+                    <element name="form_id">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /COLLECTION FORM                            -->
+
+<!--                             ELICITATION METHOD                          -->
+
+        <zeroOrMore>
+            <element name="elicitationMethod">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="name">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /ELICITATION METHOD                         -->
+
+<!--                              FILE                                       -->
+
+        <zeroOrMore>
+            <element name="file">
+                <interleave>
+
+                    <element name="name">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="id">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="MIMEtype">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="size">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="enterer">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dateElicited">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeEntered">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitor">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speaker">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="dialect">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="speakerPageContent">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="utteranceType">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="embeddedFileMarkup">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="embeddedFilePassword">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /FILE                                       -->
+
+<!--                              FORM                                       -->
+
+        <zeroOrMore>
+            <element name="form">
+                <interleave>
+
+                    <element name="transcription">
+                        <text/>
+                    </element>
+
+                    <oneOrMore>
+                        <element name="gloss">
+                            <interleave>
+                                <element name="gloss">
+                                    <text/>
+                                </element>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="glossGrammaticality">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="form_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </oneOrMore>
+
+                    <optional>
+                        <element name="id">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="phoneticTranscription">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeBreak">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeGloss">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="comments">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speakerComments">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="grammaticality">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dateElicited">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeEntered">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="syntacticCategoryString">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeBreakIDs">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeGlossIDs">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitor">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="enterer">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="verifier">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speaker">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="dialect">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="speakerPageContent">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speakerInitials">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitationMethod">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+    
+                    <optional>
+                        <element name="syntacticCategory">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="source">
+                            <interleave>
+                                <optional>
+                                    <element name="authorFirstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="authorLastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="year">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="title">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fullReference">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="file_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <zeroOrMore>
+                        <element name="keyword">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="file">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="collection">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="memorizer">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /FORM                                      -->
+
+<!--                              FORM BACKUP                                -->
+
+        <zeroOrMore>
+            <element name="formbackup">
+                <interleave>
+
+                    <element name="transcription">
+                        <text/>
+                    </element>
+
+                    <oneOrMore>
+                        <element name="gloss">
+                            <interleave>
+                                <element name="gloss">
+                                    <text/>
+                                </element>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="glossGrammaticality">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="form_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </oneOrMore>
+
+                    <element name="id">
+                        <text/>
+                    </element>
+
+                    <element name="form_id">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="phoneticTranscription">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeBreak">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeGloss">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="comments">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speakerComments">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="grammaticality">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dateElicited">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeEntered">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="syntacticCategoryString">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeBreakIDs">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="morphemeGlossIDs">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitor">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="enterer">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="verifier">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="backuper">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speaker">
+                            <interleave>
+                                <optional>
+                                    <element name="firstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="dialect">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="speakerPageContent">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="speakerInitials">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elicitationMethod">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="syntacticCategory">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="source">
+                            <interleave>
+                                <optional>
+                                    <element name="authorFirstName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="authorLastName">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="year">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="title">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fullReference">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="file_id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <zeroOrMore>
+                        <element name="keyword">
+                            <interleave>
+                                <optional>
+                                    <element name="name">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="description">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datetimeModified">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="file">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="collection">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="memorizer">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /FORM BACKUP                               -->
+
+<!--                              FO                                         -->
+
+<!--    A "fo" element is simply an abbreviated "form" element where the tag
+        names are the first two letters of each word of the analogous "form" tag
+        names                                                                -->
+
+        <zeroOrMore>
+            <element name="fo">
+                <interleave>
+
+                    <element name="tr">
+                        <text/>
+                    </element>
+
+                    <oneOrMore>
+                        <element name="gl">
+                            <interleave>
+                                <element name="gl">
+                                    <text/>
+                                </element>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="glgr">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="foid">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </oneOrMore>
+
+                    <optional>
+                        <element name="id">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="phtr">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="mobr">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="mogl">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="co">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="spco">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="gr">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="dael">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datien">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datimo">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="sycast">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="mobrid">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="moglid">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="el">
+                            <interleave>
+                                <optional>
+                                    <element name="fina">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lana">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="en">
+                            <interleave>
+                                <optional>
+                                    <element name="fina">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lana">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="ve">
+                            <interleave>
+                                <optional>
+                                    <element name="fina">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="lana">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="sp">
+                            <interleave>
+                                <optional>
+                                    <element name="fina">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                   <element name="lana">
+                                       <text/>
+                                   </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="di">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="sppaco">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="spin">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="elme">
+                            <interleave>
+                                <optional>
+                                    <element name="na">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="de">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="syca">
+                            <interleave>
+                                <optional>
+                                    <element name="na">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="de">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="so">
+                            <interleave>
+                                <optional>
+                                    <element name="aufina">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="aulana">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="ye">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="ti">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fure">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="fiid">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </optional>
+
+                    <zeroOrMore>
+                        <element name="ke">
+                            <interleave>
+                                <optional>
+                                    <element name="na">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="id">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="de">
+                                        <text/>
+                                    </element>
+                                </optional>
+                                <optional>
+                                    <element name="datimo">
+                                        <text/>
+                                    </element>
+                                </optional>
+                            </interleave>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="fi">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="col">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                    <zeroOrMore>
+                        <element name="me">
+                            <element name="id">
+                                <text/>
+                            </element>
+                        </element>
+                    </zeroOrMore>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /FO                                        -->
+
+<!--                              FORM FILE                                  -->
+
+        <zeroOrMore>
+            <element name="formfile">
+                <interleave>
+
+                    <element name="id">
+                        <text/>
+                    </element>
+
+                    <element name="form_id">
+                        <text/>
+                    </element>
+
+                    <element name="file_id">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /FORM FILE                                 -->
+
+<!--                              FORM KEYWORD                               -->
+
+        <zeroOrMore>
+            <element name="formkeyword">
+                <interleave>
+
+                    <element name="id">
+                        <text/>
+                    </element>
+
+                    <element name="form_id">
+                        <text/>
+                    </element>
+
+                    <element name="keyword_id">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /FORM KEYWORD                              -->
+
+<!--                              GLOSS                                      -->
+
+        <zeroOrMore>
+            <element name="gloss">
+                <interleave>
+
+                    <element name="id">
+                        <text/>
+                    </element>
+
+                    <element name="form_id">
+                        <text/>
+                    </element>
+
+                    <element name="gloss">
+                        <text/>
+                    </element>
+
+                    <optional>
+                        <element name="glossGrammaticality">
+                            <text/>
+                        </element>
+                    </optional>
+
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                              /GLOSS                                     -->
+
+<!--                             KEYWORD                                     -->
+
+        <zeroOrMore>
+            <element name="keyword">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="name">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /KEYWORD                                    -->
+
+<!--                             LANGUAGE                                    -->
+
+        <zeroOrMore>
+            <element name="language">
+                <interleave>
+                    <element name="Id">
+                        <text/>
+                    </element>
+                    <element name="Part2B">
+                        <text/>
+                    </element>
+                    <element name="Part2T">
+                        <text/>
+                    </element>
+                    <element name="Part1">
+                        <text/>
+                    </element>
+                    <element name="Scope">
+                        <text/>
+                    </element>
+                    <element name="Type">
+                        <text/>
+                    </element>
+                    <element name="Ref_Name">
+                        <text/>
+                    </element>
+                    <element name="Comment">
+                        <text/>
+                    </element>
+                    <element name="datetimeModified">
+                        <text/>
+                    </element>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /LANGUAGE                                   -->
+
+<!--                             PAGE                                        -->
+
+        <zeroOrMore>
+            <element name="page">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="name">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="content">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="heading">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="markup">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /PAGE                                       -->
+
+<!--                             SOURCE                                      -->
+
+        <zeroOrMore>
+            <element name="source">
+                <interleave>
+                    <element name="authorFirstName">
+                        <text/>
+                    </element>
+                    <element name="authorLastName">
+                        <text/>
+                    </element>
+                    <element name="year">
+                        <text/>
+                    </element>
+                    <element name="title">
+                        <text/>
+                    </element>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="fullReference">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="file_id">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /SOURCE                                     -->
+
+<!--                             SPEAKER                                     -->
+
+        <zeroOrMore>
+            <element name="speaker">
+                <interleave>
+                    <element name="firstName">
+                        <text/>
+                    </element>
+                    <element name="lastName">
+                        <text/>
+                    </element>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="dialect">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="speakerPageContent">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /SPEAKER                                    -->
+
+<!--                             SYNTACTIC CATEGORY                          -->
+
+        <zeroOrMore>
+            <element name="syntacticCategory">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="name">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="description">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /SYNTACTIC CATEGORY                         -->
+
+<!--                             USER                                        -->
+
+        <zeroOrMore>
+            <element name="user">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="username">
+                        <text/>
+                    </element>
+                    <element name="firstName">
+                        <text/>
+                    </element>
+                    <element name="lastName">
+                        <text/>
+                    </element>
+                    <element name="email">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="affiliation">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="role">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="personalPageContent">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="collectionViewType">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="inputOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="outputOrthography">
+                            <text/>
+                        </element>
+                    </optional>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /USER                                       -->
+
+<!--                             USER FORM                                   -->
+
+        <zeroOrMore>
+            <element name="userForm">
+                <interleave>
+                    <element name="id">
+                        <text/>
+                    </element>
+                    <element name="form_id">
+                        <text/>
+                    </element>
+                    <element name="user_id">
+                        <text/>
+                    </element>
+                    <optional>
+                        <element name="datetimeModified">
+                            <text/>
+                        </element>
+                    </optional>
+                </interleave>
+            </element>
+        </zeroOrMore>
+
+<!--                             /USER FORM                                  -->
+
+    </interleave>
+
+</element>

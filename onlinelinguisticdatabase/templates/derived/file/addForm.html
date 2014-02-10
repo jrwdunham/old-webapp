@@ -1,0 +1,7 @@
+<%namespace file="addUpdateFields.html" name="fields" import="*"/>
+
+<form class="formTable" action="${url(controller='file', action='create')}"
+      method="post" enctype="multipart/form-data">
+    ${fields.add()}    
+    <div>${h.submit(value="Add File", name='submit', tabindex=9)}</div>
+</form>

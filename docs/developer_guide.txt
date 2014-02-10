@@ -1,0 +1,85 @@
+Developer Guide
+===============
+
+This document contains information for OLD developers or administrators.
+
+
+OLD 0.1 to OLD 0.2
+==================
+
+
+Changes to the Model
+--------------------
+
+- added table 'collectionbackup'
+- added 'datetimeModified' column on all tables that didn't have it previously
+- added 'url' column to collection table
+
+
+Manual SQL Statements Required to Convert an OLD 0.1 Table to an OLD 0.2 Table
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ALTER TABLE 'collection' ADD 'url' VARCHAR(255);
+
+ALTER TABLE 'userform' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'user' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'syntacticcategory' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'speaker' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'source' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'page' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'language' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'keyword' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'gloss' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'formkeyword' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'formfile' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'elicitationmethod' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'collectionform' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'collectionfile' ADD 'datetimeModified' TIMESTAMP;
+ALTER TABLE 'application_settings' ADD 'datetimeModified' TIMESTAMP;
+
+Features Added
+--------------
+
+- Collections can have user-specified urls
+- YUI menubar replaces top, secondary and side menus
+- Cleaner look: fewer lines and highlighting
+- Collections now look like LaTeX documents
+- The home page displays the number of Forms in the db
+- Asynchronous duplicate detection when adding a Form transcription
+- OLD Markup is now more consistent and (hopefully) intuitive
+
+Other Changes
+-------------
+
+- removed FormBuild-2.2.0 requirement (was causing a bug with
+  WebHelpers.paginate)
+
+
+How to Upgrade an OLD 0.1 Application to OLD 0.2
+------------------------------------------------
+
+1. backup the db (and maybe even the 'files' directory)
+2. install OLD on the server (via PyPI)
+3. modify the db (cf. `Changes to the Model`_)
+4. run setup.py, paster setup-app and paster serve
+
+Does this work?
+
+
+
+
+
+
+To OLD 0.2.3
+============
+
+
+Changes to the Model
+--------------------
+
+- altered form.morphemeBreakIDs, form.morphemeGlossIDs, formBackup.morphemeBreakIDs and formBackup.morphemeGlossIDs to be VARCHAR(4000)
+
+- alter table application_settings add unrestrictedUsers TEXT
+
+  - make sure that unrestrictedUsers has '[]' (JSON empty list) as default
+

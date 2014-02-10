@@ -1,0 +1,82 @@
+<%def name="add()">
+ ${self.fileUpload()}
+ ${self.generalInfo()}
+ ${self.recordingInfo()}
+</%def>
+
+<%def name="update()">
+ ${self.generalInfo()}
+ ${self.recordingInfo()}
+</%def>
+
+<%def name="unalterableData()">
+<%namespace file="/base/fileViews.html" name="fileViews" import="displayFile"/>
+<br />${c.file.name}
+
+% if c.file.MIMEtype in app_globals.allowedFileTypes:
+    % if app_globals.allowedFileTypes[c.file.MIMEtype]:
+        <% fileType = app_globals.allowedFileTypes[c.file.MIMEtype] %>
+    % else: 
+        <% fileType = c.file.MIMEtype.split('/')[0] %>
+    % endif
+% else:
+    <% fileType = u'' %>
+% endif
+
+${displayFile(c.file, fileType)}
+</%def>
+
+<%def name="fileUpload()">
+<fieldset>
+<legend>File</legend>
+<ol>
+ <li>
+  <label for="fileData">Upload * <span class="emphasize">(text, image, audio or video)</span></label><br />
+  ${h.file('fileData', tabindex=1)}
+ </li>
+</ol>
+</fieldset>
+</%def>
+
+<%def name="generalInfo()">
+<fieldset>
+<legend>General Info</legend>
+<ol>
+ <li>
+  <label for="description">Description</label>
+  <textarea id="description" name="description" rows="2" cols="10" tabindex="2"></textarea>
+ </li>
+</ol>
+</fieldset>
+</%def>
+
+<%def name="recordingInfo()">
+<fieldset>
+<legend>Recording-specific Info</legend>
+<ol>
+ <li>
+  <label for="speaker">Speaker</label>
+  <% speakers = [('', '')] + [(speaker.id, speaker.firstName + ' ' + speaker.lastName) for speaker in app_globals.speakers] %>
+  ${h.select(name='speaker', selected_values="", options=speakers, tabindex=3)}
+ </li>
+ <li>
+  <label for="elicitor">Elicitor</label>
+  <% users = [('', '')] + [(user.id, user.firstName + ' ' + user.lastName) for user in app_globals.users if user.role != u'viewer'] %>
+  ${h.select(name='elicitor', selected_values="", options=users, tabindex=4)}
+ </li>
+<%
+dateFormat = session.get('userSettings').get('dateFormat')
+if not dateFormat:
+    dateFormat = 'MM/DD/YYYY'
+%>
+ <li>
+  <label for="dateElicited">Date Elicited (${dateFormat})</label>
+  <input id="dateElicited" maxlength="10" name="dateElicited" tabindex="5" type="text" />
+ </li>
+ <li>
+  <label for="utteranceType">Utterance Type</label>
+  ${h.select(name='utteranceType', selected_values="None", options=[('', 'None'), 'Object Language Utterance', 'Metalanguage Utterance', 'Mixed Utterance'], tabindex=5)}
+ </li>
+</ol>
+</fieldset>
+</%def>

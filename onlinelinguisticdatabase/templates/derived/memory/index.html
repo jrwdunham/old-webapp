@@ -1,0 +1,26 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Memory for ${session['user_firstName']} ${session['user_lastName']}</h1>
+</%def>
+
+% if c.rememberedForms:
+
+<div class="allFormButtonsDiv">
+ <a href="${url(controller='memory', action='forget', id=None)}"
+    class="buttonLink">forget all</a>
+ <a href="${url(controller='export', action='options', id='memory')}"
+    class="buttonLink">export all</a>
+</div>
+
+% for form in c.rememberedForms:
+ ${formViews.formViewForMemory(form)}
+% endfor
+
+% else:
+
+You have no Forms in Memory
+
+% endif

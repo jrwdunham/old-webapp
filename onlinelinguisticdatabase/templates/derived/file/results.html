@@ -1,0 +1,36 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/fileViews.html" name="fileViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="heading()">
+    % if hasattr(c, 'browsing'):
+    <h1 class="heading">Files (${c.paginator.item_count})</h1>       
+    % elif c.paginator.item_count == 1:
+    <h1 class="heading">File Results: ${c.paginator.item_count} match</h1>
+    % else:
+    <h1 class="heading">File Results: ${c.paginator.item_count} matches</h1>
+    % endif
+</%def>
+
+% if len(c.paginator):
+
+<div class="allFormButtonsDiv">
+ <a href="${url(controller='file', action='export', id=None)}" class="buttonLink" title="archive and export all of these files">export all</a>
+</div>
+
+<p id="paginatorPager">${ c.paginator.pager('$link_first $link_previous $first_item to $last_item of $item_count $link_next $link_last') }</p>
+
+${javascriptDefs.toggleLabelsJavaScript('fileTableRowLabel')}
+<a class="buttonLink" id="toggleRowLabelsButton" title="hide labels">-</a>
+<div class="tableSpacerDivHalf"></div>
+
+<% counter=0 %>
+% for file in c.paginator:
+    ${file.getHTMLRepresentation()}
+    <% counter += 1 %>
+% endfor
+
+<p>${ c.paginator.pager('~2~') }</p>
+
+% endif

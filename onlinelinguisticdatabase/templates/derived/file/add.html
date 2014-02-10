@@ -1,0 +1,8 @@
+<%inherit file="/base/index.html" />
+<%namespace file="addUpdateFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">${h.literal(c.heading)}</h1>
+</%def>
+
+${h.literal(c.filledForm)}

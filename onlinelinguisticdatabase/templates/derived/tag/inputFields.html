@@ -1,0 +1,14 @@
+<%def name="displayTagFields(label)">
+<fieldset>
+<legend>${label} Info</legend>
+<ol>
+ <li>
+  <label for="name">name *</label>
+  <input id="name" maxlength="255" name="name" tabindex="1" type="text" />
+ </li>
+ <li>
+  <label for="description">description</label>
+  <textarea id="description" cols="40" rows="15" name="description" tabindex="2"></textarea>
+ </li>
+</fieldset>
+</%def>

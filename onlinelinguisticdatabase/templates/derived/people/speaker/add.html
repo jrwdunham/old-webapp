@@ -1,0 +1,11 @@
+<%inherit file="/base/index.html" />
+<%namespace file="inputFields.html" name="fields" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Add a new Speaker</h1>
+</%def>
+
+<form class="formTable" action="${url(controller='speaker', action='create')}" method="post">
+    ${fields.body()}    
+    <div>${h.submit(value="Add Speaker", name='submit', tabindex='5')}</div>
+</form>

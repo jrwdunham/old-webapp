@@ -1,0 +1,17 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">Speaker: ${c.speaker.firstName} ${c.speaker.lastName}</h1>
+</%def>
+
+<p>Dialect: ${c.speaker.dialect}</p>
+
+% if c.speakerPageContent:
+ <div id="userPageContent">
+ ${h.literal(c.speakerPageContent)}
+ </div>
+% endif
+
+<a href="${url(controller='speaker', action='edit', id=c.speaker.id)}" class="buttonLink">Edit</a>
+<a href="${url(controller='speaker', action='delete', id=c.speaker.id)}" class="buttonLink" onclick="return confirmDelete('Speaker', '${c.speaker.firstName} ${c.speaker.lastName}')">Delete</a>

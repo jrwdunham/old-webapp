@@ -1,0 +1,25 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Import an OLD XML file</h1>
+</%def>
+
+<p>You can import data into an OLD application if such data are structured in a
+dialect of XML called OLD XML.  Choose an OLD XML file using the form below.</p>
+    
+<form class="formTable" action="${url(controller='import', action='process')}" method="post" enctype="multipart/form-data">
+    ${self.fileUpload()}
+    <div>${h.submit(value="Import OLD XML file", name='submit', tabindex=9)}</div>
+</form>
+
+
+<%def name="fileUpload()">
+<fieldset>
+<legend>Choose an OLD XML file to import</legend>
+<ol>
+ <li>
+  ${h.file('fileData', tabindex=1)}
+ </li>
+</ol>
+</fieldset>
+</%def>

@@ -1,0 +1,22 @@
+*.egg
+*.egg-info
+*.pyc
+*.db
+*.sqlite
+*.sql
+*.cache
+*.lock
+*.log
+*.swp
+*.DS_Store
+
+# Some Pylons-generated directories that should be ignored
+/dist/
+/data/
+/build/
+
+# Some OLD-specific directories that should be ignored
+/parser/
+/files/
+/analysis/
+

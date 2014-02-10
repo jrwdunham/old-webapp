@@ -1,0 +1,195 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" \
+import="getSVGTreeScript"/>
+
+<%def name="heading()">
+    <a name='administer'></a>
+    <h1 class="heading">Administrator Page</h1>
+</%def>
+
+<p>This page contains rudimentary commands and functionalities that should only
+be used by administrators or developers and with a good deal of caution.  <b>Be
+careful!  Issuing certain commands may slow down the application or result in
+data loss or corruption</b>.</p>
+
+
+
+<!-- TREES! -->
+
+<br />
+<h2>Draw a Phrase Structure Tree!</h2>
+
+<p>Enter a tree in PTB parenthesis notation in the text box below and press CTRL
++ Enter to convert it to a tree.</p>
+
+<div>
+ <textarea id="ptbTree" name="ptbTree" tabindex=1
+           style="width: 100%; height: 200px;">(S (NP (N John)) (VP (V ran)))
+ </textarea>
+</div>
+
+<div id="SVGTreeDisplay" name="SVGTreeDisplay"></div>
+
+${getSVGTreeScript('ptbTree', 'SVGTreeDisplay')}
+
+
+
+
+<!-- NORMALIZE -->
+
+<br />
+<h2>Unicode Normalization (NFD)</h2>
+
+<p>Click the 'Normalize' button below to perform canonical decompositional
+unicode normalization on all of the textual data in all of the forms, files and
+collections in the database.  <b>Warning, depending on the number of
+forms in the database, this can take a long time.</b></p>
+
+<button id="normalize">Normalize</button>
+<span id="normalizeSpinner"></span>
+<div id="normalizeResponse"></div>
+
+
+
+
+
+
+<!-- GET CHARACTERS -->
+
+<br />
+<h2>Get Characters Used by Field</h2>
+
+<p>This command returns the name, code point and token count of each character
+found in the specified field.</p>
+
+<form id="getCharsForm">
+    ${h.select(name='field', selected_values='',
+      options=[(u'transcription', u'orthographic transcription'),
+                (u'phoneticTranscription', u'broad phonetic transcription'),
+                (u'narrowPhoneticTranscription', u'narrow phonetic transcription'),
+                (u'morphemeBreak', u'morpheme break')])}
+    <input id="getCharsSubmit" type="submit" value="Get Characters" />
+</form>
+
+<div id="getCharsResponseDiv"></div>
+
+
+<script type="text/javascript">
+
+// Put commas into long numbers
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+$(function () {
+
+    // Unicode Normalize (NFD): asynchronously call normalizeNFDEverything
+    $('#normalize').click(function () {
+
+        // spinner
+        $('#normalizeSpinner').html(
+            $('<img>')
+                .attr({'src': '/images/ajax-loader.gif', 'id': 'spinner'}));
+
+        // GET normalizationNFDEverything server-side
+        $.get('/administer/normalizeNFDEverything');
+
+        // Poll normalizeNFDEverythingCheck to see how normalization is progressing
+        //  response is {'statusMsg': '...', 'complete': true|false}
+        (function pollNormalizeNFDEverything(){
+            setTimeout(function () {
+                $.ajax({
+                    url: "/administer/normalizeNFDEverythingCheck",
+                    success: function (r) {
+                        //Update your dashboard gauge
+                        if (r !== null) {
+                            rDiv = $('#normalizeResponse');
+                            if (rDiv.text() !== r.statusMsg) {
+                                rDiv.fadeOut('fast', function () {
+                                        rDiv.html('<p>' + r.statusMsg + '</p>')
+                                    })
+                                    .fadeIn('slow');
+                            }
+                            if (r.complete !== true) {
+                                pollNormalizeNFDEverything();
+                            } else {
+                                $('#normalizeSpinner').empty();
+                            }
+                        }
+                    },
+                    dataType: "json"
+                });
+            }, 3000);
+        })();
+
+    });
+
+
+    // Get Characters Used by Field: asynchronously call getCharacters
+    $('#getCharsSubmit').click(function (event) {
+        // spinner
+        $('#getCharsResponseDiv').html(
+            $('<img>')
+                .attr({'src': '/images/ajax-loader.gif', 'id': 'spinner'}));
+        // POST getCharacters
+        $.post("${url(controller='administer', action='getCharacters')}",
+            $("#getCharsForm").serialize(), function (data) {
+            if (data.valid == true) {
+                var table = '<table id="getCharsResponseTable">' + \
+                    '<tr>' + \
+                        '<th>Graph</th>' + \
+                        '<th>Count</th>' + \
+                        '<th>Code Point(s)</th>' + \
+                        '<th>Name(s)</th>' + \
+                    '</tr></table>';
+                $('#getCharsResponseDiv').html(table);
+    
+                $.each(data.response, function (i, v) {
+                    $('#getCharsResponseTable').append('<tr>' + \
+                        '<td>' + v[0] + '</td>' + \
+                        '<td>' + numberWithCommas(v[1]) + '</td>' + \
+                        '<td>' + v[3] + '</td>' + \
+                        '<td>' + v[2] + '</td>' + \
+                        '</tr>');
+                });
+            } else {
+                $('#getCharsResponseDiv').html(data.errors);
+            }
+        }, 'json');
+        return false;
+    });
+});
+</script>
+
+
+
+
+<!-- RECOMPUTE MORPHEME REFERENCES -->
+
+<br />
+<a href=${url(controller='administer', action='recomputeMorphemeReferences')}>
+    <h2>Recompute Morpheme References</h2>
+</a>
+
+<p>This command recalculates the morphemeBreakIDs, morphemeGlossIDs and
+syntacticCategoryString fields.  That is to say, it looks up each morpheme-gloss
+pair in each form in the database and checks for a match in the database.
+User-entered data are not altered; however, the syntactic category strings may
+change as may the way in which the morpheme break and morpheme gloss elements
+are displayed as links in IGT view.  This script can take a long time to
+terminate.</p>
+
+
+
+
+<!-- CREATE SQLITE DATABASE -->
+
+<br />
+<a href=${url(controller='administer', action='createSQLiteDBCopy')}>
+    <h2>Create an SQLite Copy of the Database</h2>
+</a>
+
+<p>This command copies the entire database to an SQLite database with
+the name db_name_bk.db.  Depending on the size of the database, this command
+can take a long time to terminate.</p>
+

@@ -1,0 +1,293 @@
+<%! import re %>
+<%namespace file="/base/markup.html" name="markup" import="linkToOLDEntitites"/>
+
+<%def name="formViewLong(form)">
+
+% if 'restricted' not in [x.name for x in form.keywords] or \
+session['user_role'] == u'administrator' or \
+session['user_id'] in [x.id for x in app_globals.unrestrictedUsers]:
+ ${self.displayPrimaryData(form, True)}
+ <hr />
+ ${self.displaySecondaryData(form, False)}
+ ${self.displayAssociatedFiles(form, 'form')}
+ ${self.displayFormButtons(form)}
+ <div class="tableSpacerDiv"></div>
+% else:
+ ${h.literal('<p><span class="warning-message">Sorry, you are not authorized to view Form %s.</span></p>' % form.id)}
+% endif
+
+</%def>
+
+
+<%def name="formViewForMemory(form)">
+    <%self.displayPrimaryData(form)%>
+    <%self.displayFormButtonsForMemory(form)%>
+    <div class="tableSpacerDivHalf"></div>
+</%def>
+
+
+<%def name="formViewForHistory(form)">
+    <%self.displayPrimaryData(form, True)%>
+    <hr />
+    <%self.displaySecondaryData(form)%>
+</%def>
+
+
+<%def name="formViewForAssociation(form)">
+    <%self.displayPrimaryData(form, True)%>
+</%def>
+
+
+<%def name="displayPrimaryData(form, noID=False)">
+    % if form.morphemeGloss and form.morphemeBreak and len(form.transcription.split(' ')) == len(form.morphemeGloss.split(' ')) and len(form.transcription.split(' ')) == len(form.morphemeBreak.split(' ')):
+        <%self.alignWords(form, noID)%>
+    % else:
+    <table class="formTable">
+    % if not noID:
+    <tr><td class="formTableRowLabel">ID</td><td class="dataCell">${form.id}</td></tr>
+    % endif
+    <tr><td class="formTableRowLabel">transcription</td><td class="dataCellTr">${form.grammaticality}${h.storageToOutputTranslate(form.transcription)}</td></tr>
+    <tr><td class="formTableRowLabel">morph break</td><td class="dataCell">${h.storageToOutputTranslate(form.morphemeBreak, True)}</td></tr>
+    <tr><td class="formTableRowLabel">morph gloss</td><td class="dataCell">${form.morphemeGloss}</td></tr>
+    % for gloss in [gloss for gloss in form.glosses if not gloss.glossGrammaticality]:
+        <tr><td class="formTableRowLabel">gloss</td><td class="dataCell">&lsquo;${gloss.glossGrammaticality}${gloss.gloss}&rsquo;</td></tr>
+    % endfor
+    % for gloss in [gloss for gloss in form.glosses if gloss.glossGrammaticality]:
+        <tr><td class="formTableRowLabel">gloss</td><td class="dataCell">&lsquo;${gloss.glossGrammaticality}${gloss.gloss}&rsquo;</td></tr>
+    % endfor
+    % endif
+    </table>
+</%def>
+
+
+<%def name="alignWords(form, noID=False)">
+ <%doc>
+    listifyCoreData() method breaks up transcription, morphemeBreak and morphemeGloss
+    into lists of lists of shorter length.  See lib/oldCoreObjects.py
+ </%doc>
+ <% form.listifyCoreData() %>
+    <table class="formTable">
+    % if not noID:
+    <tr><td class="formTableRowLabel">ID</td><td class="dataCell">${form.id}</td></tr>
+    </table>
+    % endif
+    % for i in range(len(form.transcriptionList)):
+     <%doc> 
+        styleAttribute makes a dummy <td> have a greater and greater width
+         on each iteration, thus creating the "upside down staircase effect"-->
+     </%doc>
+     <% 
+        styleAttribute = 'width: %sem;min-width: %sem; padding: 0;' % ((i * 2), (i * 2)) 
+     %>  
+     <table class="formTable">
+        <tr><td class="formTableRowLabel">transcription</td><td style="${styleAttribute}"></td>${self.oneWordPerCell(form.transcriptionList[i], 'transcription', form, i)}</tr>
+        <tr><td class="formTableRowLabel">morph break</td><td style="${styleAttribute}"></td>${self.oneWordPerCell(form.morphemeBreakList[i], 'morphemeBreak', form, i)}</tr>
+        <tr><td class="formTableRowLabel" style="padding-bottom: 0.5em;">morph gloss</td><td style="${styleAttribute}"></td>${self.oneWordPerCell(form.morphemeGlossList[i], 'morphemeGloss', form, i)}</tr>
+     </table>
+    % endfor
+    % for gloss in form.glosses:
+     <table class="formTable">
+        <tr><td class="formTableRowLabel">gloss</td><td class="dataCell">&lsquo;${gloss.glossGrammaticality}${gloss.gloss}&rsquo;</td></tr>
+    % endfor
+     </table>
+</%def>
+
+
+<%def name="oneWordPerCell(wordList, lineType, form, subListIndex)"> 
+    % for ii in range(len(wordList)): 
+        <% 
+            word = wordList[ii]
+        %>
+        % if lineType == 'transcription' and ii == 0 and subListIndex == 0:
+            <td class="dataCellTr">${form.grammaticality}${h.storageToOutputTranslate(word)}</td>
+        % elif lineType == 'transcription':
+            <td class="dataCellTr">${h.storageToOutputTranslate(word)}</td>
+        % else: 
+            <td class="dataCell">${self.morphemesToLinks(word, lineType, form, subListIndex, ii)}</td>
+        % endif
+    % endfor
+</%def>
+
+
+<%def name="morphemesToLinks(word, lineType, form, subListIndex, wordIndex)">
+  <%doc>
+    For each morpheme (or morpheme gloss), check if it has a list of IDs in
+    morphemeBreakIDs and, if so, convert the string representing the morpheme
+    into a link to the appropriate Forms.  Links where the morpheme and morpheme
+    gloss have the class 'match' so that a color representation of the consistency
+    can be made via CSS.
+  </%doc>
+  <%    
+      morphDelimiters = app_globals.morphDelimiters
+      patt = '([%s])' % ''.join(morphDelimiters)
+      spacePatt = re.compile('([\t\n]| {2,})')
+      morphemeBreakWords = spacePatt.sub(' ', form.morphemeBreak.strip()).split()
+      morphemeGlossWords = spacePatt.sub(' ', form.morphemeGloss.strip()).split()
+      morphemes = [len(re.split(patt, x)) for x in morphemeBreakWords]
+      glosses = [len(re.split(patt, x)) for x in morphemeGlossWords]
+      if morphemes == glosses:
+          morphsAndDelimitersList = re.split(patt, word)
+          mbIDsList = form.morphemeBreakIDsList[subListIndex][wordIndex]
+          mgIDsList = form.morphemeGlossIDsList[subListIndex][wordIndex]
+          madList = []
+          for iii in range(len(morphsAndDelimitersList)):
+              el = morphsAndDelimitersList[iii]
+              if el in morphsAndDelimitersList[::2]:
+                  if lineType == 'morphemeBreak':
+                      elIDsList = mbIDsList[iii / 2]
+                      otherIDsList = mgIDsList[iii / 2]
+                  else:
+                      elIDsList = mgIDsList[iii / 2]
+                      otherIDsList = mbIDsList[iii / 2]
+                  if [triple[0] for triple in elIDsList] == [triple[0] for triple in otherIDsList]:
+                      klass = 'match'
+                  else:
+                      klass = 'nonmatch'
+                  if len(elIDsList) > 0:
+                      id = ','.join([str(triple[0]) for triple in elIDsList])
+                      URL = url(controller='form', action='view', id=id)
+                      title = '; '.join(['%s (%s)' % (triple[1], triple[2] or 'NULL') for triple in elIDsList])
+                      madList.append('<a class="%s" href="%s" title="%s">%s</a>' % (klass, URL, title, el))
+                  else:
+                      id = None
+                      madList.append(el)
+              else:
+                  madList.append(el)
+          word = ''.join(madList)
+  %>
+  ${h.literal(h.storageToOutputTranslate(word, True))}
+</%def>
+
+
+<%def name="displaySecondaryData(form, noID=True)">
+    <table class="formTable2">
+    % if form.phoneticTranscription:
+    <tr>
+     <td class="formTableRowLabel">phonetic transcription</td>
+     <td class="dataCell">${form.phoneticTranscription}</td>
+    </tr>
+    % endif
+    % if form.comments:
+    <% comments = h.literal(capture(linkToOLDEntitites, form.comments)) %>    
+    <tr><td class="formTableRowLabel">comments</td><td class="dataCell">${h.storageToOutputTranslateOLOnly(comments)}</td></tr>
+    % endif
+    % if form.speakerComments:
+    <tr><td class="formTableRowLabel">speaker comments</td><td class="dataCell">${h.storageToOutputTranslateOLOnly(h.literal(form.speakerComments))}</td></tr>
+    % endif
+    % if form.speaker:    
+    <tr><td class="formTableRowLabel">speaker</td><td class="dataCell"><a href="${url(controller='speaker', action='view', id=form.speaker.id)}" title="View more info about this speaker">${form.speaker.firstName} ${form.speaker.lastName} (${form.speaker.dialect})</a></td></tr>
+    % endif
+    % if form.elicitor:
+    <tr><td class="formTableRowLabel">elicitor</td><td class="dataCell"><a href="${url(controller='researcher', action='view', id=form.elicitor.id)}" title="View more info about this researcher">${form.elicitor.firstName} ${form.elicitor.lastName}</a></td></tr>
+    % endif
+    % if form.source:
+    <tr><td class="formTableRowLabel">source</td><td class="dataCell"><a href="${url(controller='source', action='view', id=form.source.id)}" title="View more info about this source">${form.source.authorLastName} (${form.source.year})</a></td></tr>
+    % endif
+    % if form.enterer:
+    <tr><td class="formTableRowLabel">enterer</td><td class="dataCell"><a href="${url(controller='researcher', action='view', id=form.enterer.id)}" title="View more info about this researcher">${form.enterer.firstName} ${form.enterer.lastName}</a></td></tr>
+    % endif
+    % if form.verifier:
+    <tr><td class="formTableRowLabel">verifier</td><td class="dataCell"><a href="${url(controller='researcher', action='view', id=form.verifier.id)}" title="View more info about this researcher">${form.verifier.firstName} ${form.verifier.lastName}</a></td></tr>
+    % endif
+    % if form.dateElicited:
+    <tr><td class="formTableRowLabel">date elicited</td><td class="dataCell">${h.pretty_date(form.dateElicited)}</td></tr>
+    % endif
+    % if form.datetimeEntered:
+    <tr><td class="formTableRowLabel">time entered</td><td class="dataCell">${h.pretty_date(form.datetimeEntered)}</td></tr>
+    % endif
+    % if form.datetimeModified:
+    <tr><td class="formTableRowLabel">last updated</td><td class="dataCell">${h.pretty_date(form.datetimeModified)}</td></tr>
+    % endif
+    % if form.keywords:
+    <tr><td class="formTableRowLabel">keywords</td><td class="dataCell">
+            ${', '.join([keyword.name for keyword in form.keywords])}
+    </td></tr>
+    % endif
+    % if form.syntacticCategory:
+    <tr><td class="formTableRowLabel">category</td><td class="dataCell">${form.syntacticCategory.name}</td></tr>
+    % endif
+    % if form.syntacticCategoryString:
+    <tr><td class="formTableRowLabel">category string</td><td class="dataCell">${form.syntacticCategoryString}</td></tr>
+    % endif
+    % if form.elicitationMethod:
+    <tr><td class="formTableRowLabel">method</td><td class="dataCell">${form.elicitationMethod.name}</td></tr>
+    % endif
+    % if not noID:
+    <tr><td class="formTableRowLabel">ID</td><td class="dataCell">${form.id}</td></tr>
+    % endif
+    </table>
+</%def>
+
+
+<%def name="displayFormButtons(form)">
+  <div class="formButtonsDiv">
+    <a href="${url(controller='form', action='update', id=form.id)}" class="buttonLink" title="Edit this Form's data">update</a>
+    <a href="${url(controller='form', action='delete', id=form.id)}" class="buttonLink" onclick="return confirmDelete('Form', ${form.id})" title="delete this Form; confirmation will be requested">delete</a>
+    <a href="${url(controller='form', action='history', id=form.id)}" class="buttonLink" title="View previous versions of this Form">history</a>
+    <a href="${url(controller='form', action='associate', id=form.id)}" class="buttonLink" title="Associate one or more Files to this Form">associate</a>
+    <a href="${url(controller='form', action='remember', id=form.id)}" class="buttonLink" title="Store a reference to this Form in your Memory">remember</a>
+    <a href="${url(controller='export', action='options', id='form%s' % form.id)}" class="buttonLink" title="Export this Form; you will be asked to choose a format">export</a>
+  </div>
+</%def>
+
+
+<%def name="displayFormButtonsForMemory(form)">
+  <div class="formButtonsDiv">
+    <a href="${url(controller='form', action='view', id=form.id)}" class="buttonLink" title="View more details about this Form"">view</a>
+    <a href="${url(controller='form', action='export', id=form.id)}" class="buttonLink" title="Export this Form to a variety of formats">export</a>
+    <a href="${url(controller='memory', action='forget', id=form.id)}" class="buttonLink" title="Remove this form from your Memory">forget</a>
+  </div>
+</%def>
+
+
+<%def name="displayAssociatedFiles(entity, entityType)">
+  <%namespace file="/base/fileViews.html" name="fileViews" import="displayFile"/>
+  % for file in entity.files:
+    % try:
+      % if app_globals.allowedFileTypes[file.MIMEtype]:
+        <% fileType = app_globals.allowedFileTypes[file.MIMEtype] %>
+      % else: 
+        <% fileType = file.MIMEtype.split('/')[0] %>
+      % endif
+    % except KeyError:
+      <% fileType = u'embedded media' %>
+    % endtry
+
+    <div class="associatedEntitiesDiv">
+     Associated File ${file.id}: <span class="emphasize">${file.name}</span> (${h.pretty_filesize(file.size)})
+     <div class="containerDivIndent">
+      <a href="${url('disassociate', controller='%s'%entityType, id=entity.id, otherID=file.id)}" class="buttonLink" title='${"Click to disassociate %s %s from File %s"%(entityType.capitalize(), entity.id, file.id)}'>disassociate</a> 
+      <a href="${url(controller='file', action='view', id=file.id)}" class="buttonLink" title="${'Click to view more info about File %s' % file.id}">view</a>
+     </div>
+     <div class="containerDivIndent">
+      ${displayFile(file, fileType)}
+     </div>
+    </div>
+  % endfor
+</%def>
+
+<%def name="dictionaryView(form, languageToSortBy)">
+% if 'restricted' not in [x.name for x in form.keywords] or \
+session['user_role'] == u'administrator' or \
+session['user_id'] in [x.id for x in app_globals.unrestrictedUsers]:
+    % if c.languageToSortBy == 'ol':
+          <div class="dictionaryEntry">
+            <p>
+              <a href="${url(controller='form', action='view', id=form.id)}" title="view more details about '${h.storageToOutputTranslate(form.transcription)}' (${form.id})" class="dictionaryLink">
+                <span class="word">${h.storageToOutputTranslate(form.transcription)}</span>
+              </a>
+              <span class="meaning">${', '.join([gloss.gloss for gloss in form.glosses if not gloss.glossGrammaticality])}</span>
+            </p>
+          </div>
+    % elif c.languageToSortBy == 'ml':
+          <div class="dictionaryEntry">
+            <p>
+              <a href="${url(controller='form', action='view', id=form.id)}" title="view more details about '${form.transcription}' (${form.id})" class="dictionaryLink">
+                <span class="word">${form.transcription}</span>
+              </a>
+              <span class="meaning">${h.storageToOutputTranslate(form.gloss)}</span>
+            </p>
+          </div>
+    % endif
+% endif
+</%def>

@@ -1,0 +1,20 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="heading()"></%def>
+
+% if c.exactMatchList:
+  <div class="highlightDiv">
+    % for form in c.exactMatchList:
+        ${formViews.dictionaryView(form, c.languageToSortBy)}
+    % endfor
+  </div>
+% endif
+
+% if c.fuzzyMatchList:
+    % for form in c.fuzzyMatchList:
+        ${formViews.dictionaryView(form, c.languageToSortBy)}
+    % endfor
+% endif

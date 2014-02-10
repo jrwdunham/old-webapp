@@ -1,0 +1,27 @@
+<%inherit file="/base/index.html" />
+<%namespace file="/base/exporter.html" name="exporter" import="*"/>
+
+<%def name="heading()">
+    % if c.id:
+        % if c.id == 'memory':
+        <h1 class="heading">Export Forms in Memory</h1>
+        % else:
+        <h1 class="heading">Export Form ${c.id}</h1>
+        % endif
+    % else:
+    <h1 class="heading">Export All Form Search Results</h1>
+    % endif
+</%def>
+
+<p>Choose export type</p>
+
+<form action="${url(controller='form', action='exporter', id=c.id)}" \
+      method="post">
+    <ul>    
+    % for exportOption in app_globals.exportOptions:
+        <li class="radioLI">${h.radio(name='exportType', \
+        value=exportOption[0], label=exportOption[1])}</li>    
+    % endfor
+    </ul>
+    <div>${h.submit(value="Export", name='submit')}</div>
+</form>

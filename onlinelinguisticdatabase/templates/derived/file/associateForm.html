@@ -1,0 +1,15 @@
+<form class="formTable"
+      action="${url(controller='file', action='link', id=c.file.id)}"
+      method="POST">
+ <fieldset>
+  <legend>Associate by Form ID</legend>
+  <ol>
+   <li>
+    <label for="formID" style="width: auto;">
+      enter 1 or more comma-separated Form IDs</label>  
+    <input id="formID" name="formID" tabindex="1" type="text" size="50" />    
+   </li>
+  </ol>
+ </fieldset>
+ <div>${h.submit(value="Associate", name='submit', tabindex=2)}</div>
+</form>

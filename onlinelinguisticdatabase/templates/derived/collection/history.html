@@ -1,0 +1,27 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+
+<%def name="heading()">
+    <h1 class="heading">History of Form ${c.form.id}</h1>
+</%def>
+
+<div class="tableSpacerDivHalf"></div>
+<h2>Current Version</h2>
+<div class="tableSpacerDivHalf"></div>
+
+
+
+${formViews.formViewLong(c.form)}
+
+<h2>Previous Versions</h2>
+<div class="tableSpacerDivHalf"></div>
+% for formBackup in c.formBackups:
+    <% formBackup.fromJSON() %>
+    <span class="datetimeHeader">
+      ${h.pretty_date(formBackup.datetimeModified)}
+    </span>
+    <div class="historyDiv">
+    ${formViews.formViewForHistory(formBackup)}
+    </div>
+% endfor

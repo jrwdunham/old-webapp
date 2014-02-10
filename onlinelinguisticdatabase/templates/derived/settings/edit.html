@@ -1,0 +1,613 @@
+<%namespace file="/base/helper.html" name="helper" \
+import="OLOrthographySpecifyingHelp, MLOrthographySpecifyingHelp, ISO_639Help,
+objectLanguageNameHelp, storageOrthographyHelp, defaultInputOrthographyHelp,
+defaultOutputOrthographyHelp, orthographyNameHelp, OLOrthographyHelp,
+metaLanguageNameHelp, headerImageHelp, orthographiesHelp,
+storageOrthographyHelp, defaultInputOrthographyHelp,
+defaultOutputOrthographyHelp, orthographyLowerCaseGraphsHelp,
+wordInitialGlottalStopsHelp, morphemeBreakIsOrthographicHelp,
+unrestrictedUsersHelp, CSSColorsHelp, orthographicValidationHelp,
+narrPhonInventoryHelp, narrPhonValidationHelp, broadPhonInventoryHelp,
+broadPhonValidationHelp, morphPhonInventoryHelp, morphDelimitersHelp,
+morphPhonValidationHelp, grammaticalitiesHelp, punctuationHelp" />
+
+
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" \
+import="getMatchingLanguagesScript, getToggleDivByTextInputScripts"/>
+
+<%inherit file="/base/index.html" />
+
+
+<% 
+    sUrl = url(controller='settings', action='getmatchinglanguages') 
+%>
+
+<%def name="writeJavascriptToHead()">
+    ${getMatchingLanguagesScript()}
+    ${getToggleDivByTextInputScripts()}
+</%def>
+ 
+<%def name="heading()">
+    <h1 class="heading">Editing Application Settings</h1>
+</%def>
+
+<p>This page permits editing of system-wide application settings. \
+Only administrators should alter these settings.</p>
+
+<form class="formTable" \
+      action="${url(controller='settings', action='save')}" method="post">
+
+ <h1 class="heading margintop">Object Language</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Name ${objectLanguageNameHelp()}
+    </td>
+    <td>
+     <input id="OLName" maxlength="255" style="width:250px;" name="OLName"
+          tabindex="1" type="text"
+          onkeyup="getMatchingLanguages('${sUrl}', 'OLName', 'Ref_Name');"
+          onfocus="divOn('OLNameSuggestion'); applyFuncToAll(divOff, \
+          ['OLIdSuggestion', 'MLNameSuggestion', 'MLIdSuggestion']);" />
+     <div class="suggestion" id="OLNameSuggestion"></div>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     ISO 639-3 Code ${ISO_639Help()}
+    </td>
+    <td>
+     <input id="OLId" maxlength="255" style="width:250px;" name="OLId"
+            tabindex="2" type="text"
+            onkeyup="getMatchingLanguages('${sUrl}', 'OLId', 'Id');"
+            onfocus="divOn('OLIdSuggestion'); applyFuncToAll(divOff, \
+            ['OLNameSuggestion', 'MLNameSuggestion', 'MLIdSuggestion']);" />
+     <div class="suggestion" id="OLIdSuggestion"></div>
+    </td>
+      </tr>
+
+  </table>
+
+
+
+ <h1 class="heading margintop">Orthographies ${orthographiesHelp()}</h1>
+
+  <input type='hidden' id='OLOrthographiesWarning' \
+           name='OLOrthographiesWarning' />
+
+<%
+  OLOOptions = ['Orthography %s' % str(i) for i in \
+               range(1,6)]
+%>
+
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Storage Orthography ${storageOrthographyHelp()}
+    </td>
+    <td>
+     ${h.select(name='storageOrthography', selected_values='',\
+     options=OLOOptions, tabindex=4)}
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Input Orthography (default) ${defaultInputOrthographyHelp()}
+    </td>
+    <td>
+     ${h.select(name='defaultInputOrthography', selected_values='',\
+     options=OLOOptions , tabindex=4)}
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Output Orthography (default) ${defaultOutputOrthographyHelp()}
+    </td>
+    <td>
+     ${h.select(name='defaultOutputOrthography', selected_values='',\
+     options=OLOOptions , tabindex=4)}
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Morpheme Break is Orthographic ${morphemeBreakIsOrthographicHelp()}
+    </td>
+    <td>
+     ${h.select(name='morphemeBreakIsObjectLanguageString', selected_values='', \
+                      options=[u'no', u'yes'], tabindex=4)}
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Validation ${orthographicValidationHelp()}
+    </td>
+    <td>
+     ${h.select(name='orthographicValidation', selected_values='', \
+                options=[u'None', u'Warning', u'Error'], tabindex=4)}
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 1 Name ${orthographyNameHelp()}
+    </td>
+    <td>
+     <input id="objectLanguageOrthography1Name" maxlength="255" \
+            style="width:250px;" name="objectLanguageOrthography1Name" \
+            tabindex="4" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 1 Graphemes ${OLOrthographyHelp()}
+    </td>
+    <td>
+     <textarea id="objectLanguageOrthography1"
+               name="objectLanguageOrthography1" rows="3"
+               style="width: 250px;" tabindex="5"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 1 -- Only Lowercase ${orthographyLowerCaseGraphsHelp()}
+    </td>
+    <td>
+     <input id='OLO1Lowercase' name='OLO1Lowercase' type="checkbox"
+            value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 1 -- Word-initial Glottal Stops ${wordInitialGlottalStopsHelp()}
+    </td>
+    <td>
+     <input id='OLO1InitialGlottalStops' name='OLO1InitialGlottalStops' \
+            type="checkbox" value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <script type="text/javascript">
+   $(function () {
+      var toggler = $('#orthographicFieldsToggler');
+      var toBeToggled = $($(toggler.closest('tr')).nextAll('tr'));
+      toBeToggled.hide();
+      toggler.click(function () {
+          toBeToggled.toggle('slow');
+      });
+   })
+   </script>
+
+   <tr>
+    <td>
+     <a id="orthographicFieldsToggler">Toggle Additional Orthographic Fields</a>
+    </td>
+    <td>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 2 Name ${orthographyNameHelp()}
+    </td>
+    <td>
+     <input id="objectLanguageOrthography2Name" maxlength="255" \
+            style="width:250px;" name="objectLanguageOrthography2Name" \
+            tabindex="6" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 2 Graphemes ${OLOrthographyHelp()}
+    </td>
+    <td>
+     <textarea id="objectLanguageOrthography2"
+               name="objectLanguageOrthography2" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 2 -- Only Lowercase ${orthographyLowerCaseGraphsHelp()}
+    </td>
+    <td>
+     <input id='OLO2Lowercase' name='OLO2Lowercase' type="checkbox"
+            value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 2 -- Word-initial Glottal Stops ${wordInitialGlottalStopsHelp()}
+    </td>
+    <td>
+     <input id='OLO2InitialGlottalStops' name='OLO2InitialGlottalStops' \
+            type="checkbox" value='1' tabindex="6" />
+    </td>
+   </tr>
+
+
+   <tr>
+    <td>
+     Orthography 3 Name ${orthographyNameHelp()}
+    </td>
+    <td>
+     <input id="objectLanguageOrthography3Name" maxlength="255" \
+            style="width:250px;" name="objectLanguageOrthography3Name" \
+            tabindex="6" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 3 Graphemes ${OLOrthographyHelp()}
+    </td>
+    <td>
+     <textarea id="objectLanguageOrthography3"
+               name="objectLanguageOrthography3" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 3 -- Only Lowercase ${orthographyLowerCaseGraphsHelp()}
+    </td>
+    <td>
+     <input id='OLO3Lowercase' name='OLO3Lowercase' type="checkbox"
+            value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 3 -- Word-initial Glottal Stops ${wordInitialGlottalStopsHelp()}
+    </td>
+    <td>
+     <input id='OLO3InitialGlottalStops' name='OLO3InitialGlottalStops' \
+            type="checkbox" value='1' tabindex="6" />
+    </td>
+   </tr>
+
+
+   <tr>
+    <td>
+     Orthography 4 Name ${orthographyNameHelp()}
+    </td>
+    <td>
+     <input id="objectLanguageOrthography4Name" maxlength="255" \
+            style="width:250px;" name="objectLanguageOrthography4Name" \
+            tabindex="6" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 4 Graphemes ${OLOrthographyHelp()}
+    </td>
+    <td>
+     <textarea id="objectLanguageOrthography4"
+               name="objectLanguageOrthography4" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 4 -- Only Lowercase ${orthographyLowerCaseGraphsHelp()}
+    </td>
+    <td>
+     <input id='OLO4Lowercase' name='OLO4Lowercase' type="checkbox"
+            value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 4 -- Word-initial Glottal Stops ${wordInitialGlottalStopsHelp()}
+    </td>
+    <td>
+     <input id='OLO4InitialGlottalStops' name='OLO4InitialGlottalStops' \
+            type="checkbox" value='1' tabindex="6" />
+    </td>
+   </tr>
+
+
+   <tr>
+    <td>
+     Orthography 5 Name ${orthographyNameHelp()}
+    </td>
+    <td>
+     <input id="objectLanguageOrthography5Name" maxlength="255" \
+            style="width:250px;" name="objectLanguageOrthography5Name" \
+            tabindex="6" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 5 Graphemes ${OLOrthographyHelp()}
+    </td>
+    <td>
+     <textarea id="objectLanguageOrthography5"
+               name="objectLanguageOrthography5" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 5 -- Only Lowercase ${orthographyLowerCaseGraphsHelp()}
+    </td>
+    <td>
+     <input id='OLO5Lowercase' name='OLO5Lowercase' type="checkbox"
+            value='1' tabindex="6" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Orthography 5 -- Word-initial Glottal Stops ${wordInitialGlottalStopsHelp()}
+    </td>
+    <td>
+     <input id='OLO5InitialGlottalStops' name='OLO5InitialGlottalStops' \
+            type="checkbox" value='1' tabindex="6" />
+    </td>
+   </tr>
+
+  </table>
+
+
+
+
+ <h1 class="heading margintop">Narrow Phonetic Transcription</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Inventory ${narrPhonInventoryHelp()}
+    </td>
+    <td>
+     <textarea id="narrPhonInventory" name="narrPhonInventory" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Validation ${narrPhonValidationHelp()}
+    </td>
+    <td>
+     ${h.select(name='narrPhonValidation', selected_values='', \
+                options=[u'None', u'Warning', u'Error'], tabindex=6)}
+    </td>
+   </tr>
+  
+  </table>
+
+
+
+ <h1 class="heading margintop">Broad Phonetic Transcription</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Inventory ${broadPhonInventoryHelp()}
+    </td>
+    <td>
+     <textarea id="broadPhonInventory" name="broadPhonInventory" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Validation ${broadPhonValidationHelp()}
+    </td>
+    <td>
+     ${h.select(name='broadPhonValidation', selected_values='', \
+                options=[u'None', u'Warning', u'Error'], tabindex=6)}
+    </td>
+   </tr>
+  
+  </table>
+
+
+
+ <h1 class="heading margintop">Morphophonemic Segmentation</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Inventory ${morphPhonInventoryHelp()}
+    </td>
+    <td>
+     <textarea id="morphPhonInventory" name="morphPhonInventory" rows="3"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Morpheme Delimiters ${morphDelimitersHelp()}
+    </td>
+    <td>
+     <input id="morphDelimiters" maxlength="255" style="width:250px;"
+            name="morphDelimiters" tabindex="6" type="text" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     Validation ${morphPhonValidationHelp()}
+    </td>
+    <td>
+     ${h.select(name='morphPhonValidation', selected_values='', \
+                options=[u'None', u'Warning', u'Error'], tabindex=6)}
+    </td>
+   </tr>
+  
+  </table>
+
+
+
+ <h1 class="heading margintop">Punctuation</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Characters ${punctuationHelp()}
+    </td>
+    <td>
+     <textarea id="punctuation" name="punctuation" rows="2"
+               style="width: 250px;" tabindex="6"></textarea>
+    </td>
+   </tr>
+
+  </table>
+
+
+
+ <h1 class="heading margintop">Grammaticality</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Values ${grammaticalitiesHelp()}
+    </td>
+    <td>
+     <input id="grammaticalities" maxlength="255" style="width:250px;"
+            name="grammaticalities" tabindex="6" type="text" />
+    </td>
+   </tr>
+
+  </table>
+
+
+
+
+
+ <h1 class="heading margintop">Metalanguage</h1>
+
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Name ${metaLanguageNameHelp()}
+    </td>
+    <td>
+     <input id="MLName" maxlength="255" style="width:250px;" name="MLName" \
+        tabindex="14" type="text" \
+        onkeyup="getMatchingLanguages('${sUrl}', 'MLName', 'Ref_Name');" \
+        onfocus="divOn('MLNameSuggestion'); applyFuncToAll(divOff, \
+        ['OLIdSuggestion', 'OLNameSuggestion', 'MLIdSuggestion']);" />
+     <div class="suggestion" id="MLNameSuggestion"></div>
+    </td>
+   </tr>
+
+
+   <tr>
+    <td>
+     ISO 639-3 Code ${ISO_639Help()}
+    </td>
+    <td>
+     <input id="MLId" maxlength="255" style="width:250px;" name="MLId" \
+            tabindex="15" type="text" \
+            onkeyup="getMatchingLanguages('${sUrl}', 'MLId', 'Id');" \
+            onfocus="divOn('MLIdSuggestion'); applyFuncToAll(divOff, \
+            ['OLIdSuggestion', 'OLNameSuggestion', 'MLNameSuggestion']);" />
+     <div class="suggestion" id="MLIdSuggestion"></div>
+    </td>
+   </tr>
+
+
+   <tr>
+    <td>
+     Orthography ${MLOrthographySpecifyingHelp()}
+    </td>
+    <td>
+     <textarea id="MLOrthography" name="MLOrthography" rows="3" style="width: 250px;" \
+               tabindex="16"></textarea>
+    </td>
+   </tr>
+
+  </table>
+
+
+
+ <h1 class="heading margintop">Restricted Access</h1>
+
+  <table class="infoTable">
+   <tr>
+    <td>
+     Unrestricted Users ${unrestrictedUsersHelp()}
+    </td>
+    <td>
+      <ul id="unrestrictedUsers_list" class="checklist">
+    % for i in range(len(app_globals.nonAdministrators)): 
+       <li>
+        <%
+         ID = "unrestrictedUsers-%s.unrestrictedUser" % app_globals.nonAdministrators[i].id
+        %>
+        <label for='${ID}'>
+        <input id='${ID}' name='${ID}' type="checkbox"
+               value="${app_globals.nonAdministrators[i].id}" />
+               ${app_globals.nonAdministrators[i].firstName + ' ' + app_globals.nonAdministrators[i].lastName}
+        </label>
+       </li>
+    % endfor
+      </ul>
+    </td>
+   </tr>
+  </table>
+
+
+ <h1 class="heading margintop">Appearance</h1>
+
+  <table class="infoTable">
+
+   <tr>
+    <td>
+     Header Image ${headerImageHelp()}
+    </td>
+    <td>
+     <input id="headerImageName" name="headerImageName" tabindex="17" />
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     CSS Colors ${CSSColorsHelp()}
+    </td>
+    <td>
+     ${h.select(name='colorsCSS', selected_values='',\
+      options=c.colorsCSSOptions, tabindex=16)}
+    </td>
+   </tr>
+
+  </table>
+
+
+ <div>${h.submit(value="Save Changes", name='submit', tabindex=30)}</div>
+</form>
+
+ 

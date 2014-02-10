@@ -1,0 +1,788 @@
+## -*- coding: utf-8 -*-
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    ${h.stylesheet_link(
+        url('/yui/2.9.0/reset-fonts-grids/reset-fonts-grids.css'))}
+    ${self.colorsCSS()}
+    ${h.stylesheet_link(url('/css/main.css'))}
+    ${h.javascript_link(url('/javascript/jquery-1.7.2.min.js'))}
+    ${h.javascript_link(url('/javascript/jquery-caret-1.02.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/yahoo-dom-event/yahoo-dom-event.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/connection/connection_core-min.js'))}
+    ${h.stylesheet_link(url('/yui/2.9.0/menu/assets/skins/sam/menu.css'))}
+    ${h.javascript_link(url('/yui/2.9.0/yahoo-dom-event/yahoo-dom-event.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/container/container_core-min.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/menu/menu-min.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/yahoo/yahoo-min.js'))}
+    ${h.javascript_link(url('/yui/2.9.0/json/json-min.js'))}
+    ${h.javascript_link(url('/javascript/functions.js'))}
+    ${h.javascript_link(url('/javascript/svg-tree-drawer.js'))}
+    ${self.writeJavascriptToHead()}
+
+<%
+def disabled():
+    if not session.has_key('user_username'):
+        return u'true'
+    else:
+        return u'false'
+%>
+
+    <script type="text/javascript">
+        YAHOO.util.Event.onDOMReady(function () {
+            var disabled = ${disabled()};
+            var formsURL = '${url(controller='form', action='browse')}';
+            var formAddURL = '${url(controller='form', action='add')}';
+            var formSearchURL = '${url(controller='form', action='search')}';
+            var formBrowseURL = '${url(controller='form', action='browse')}';
+            var filesURL = '${url(controller='file', action='browse')}';
+            var fileAddURL = '${url(controller='file', action='add')}';
+            var fileSearchURL = '${url(controller='file', action='search')}';
+            var fileBrowseURL = '${url(controller='file', action='browse')}';
+            var collURL = '${url(controller='collection', action='browse')}';
+            var collAddURL = '${url(controller='collection', action='add')}';
+            var collSearchURL = '${url(controller='collection',
+                                        action='search')}';
+            var collBrowseURL = '${url(controller='collection',
+                                        action='browse')}';
+            var dictURL = '${url(controller='dictionary', action='browse')}';
+            var dictSearchURL = '${url(controller='dictionary',
+                                        action='search')}';
+            var dictBrowseURL = '${url(controller='dictionary',
+                                        action='browse')}';
+            var peopleURL = '${url(controller='people', action='index')}';
+            var peopleViewURL = '${url(controller='people', action='index')}';
+            var speakersURL = '${url(controller='people', action='index',
+                                        anchor='speakers')}';
+            var speakerAddURL = '${url(controller='speaker', action='add')}';
+            var usersURL = '${url(controller='people', action='index',
+                                        anchor='users')}';
+            var userAddURL = '${url(controller='researcher', action='add')}';
+            var tagURL = '${url(controller='tag', action='index')}';
+            var keyURL = '${url(controller='tag', action='index',
+                                        anchor='keywords')}';
+            var keyAddURL = '${url(controller='key', action='add')}';
+            var catURL = '${url(controller='tag', action='index',
+                                        anchor='categories')}';
+            var catAddURL = '${url(controller='category', action='add')}';
+            var methURL = '${url(controller='tag', action='index',
+                                        anchor='methods')}';
+            var methAddURL = '${url(controller='method', action='add')}';
+            var sourceURL = '${url(controller='source', action='index')}';
+            var sourceAddURL = '${url(controller='source', action='add')}';
+            var helpURL = '${url(controller='help', action='applicationhelp')}';
+            var OLDUGURL = '${url(controller='help', action='olduserguide')}';
+            var settURL = '${url(controller='settings', action='index')}';
+            var settEditURL = '${url(controller='settings', action='edit')}';
+            var loginURL = '${url(controller='login', action='login')}';
+            var orthInvURL = '${url(controller='settings', action='orthography')}';
+            var adminURL = '${url(controller='administer', action='index')}';
+            var anaURL = '${url(controller='analysis', action='index')}';
+            var phonURL = '${url(controller='analysis', action='phonology')}';
+            var anaWordCorpURL = '${url(controller='analysis',
+                                        action='analyzedwordcorpus')}';
+            var morphtaxURL = '${url(controller='analysis',
+                                        action='morphotactics')}';
+            var morphphonURL = '${url(controller='analysis',
+                                        action='morphophonology')}';
+            var probCalcURL = '${url(controller='analysis',
+                                        action='probabilitycalculator')}';
+            var morphParseURL = '${url(controller='analysis',
+                                        action='morphologicalparser')}';
+% if session.has_key('user_id'):
+            var myPageURL = '${url(controller='researcher', action='view',
+                                        id=session['user_id'])}';
+            var myPageEditURL = '${url(controller='researcher', action='edit',
+                                        id=session['user_id'])}';
+            var mySettURL = '${url(controller='researcher', action='settings',
+                                        id=session['user_id'])}';
+            var mySettEditURL = '${url(controller='researcher',
+                                        action='editsettings',
+                                        id=session['user_id'])}';
+            var myMemURL = '${url(controller='memory', action='index')}';
+            var logoutURL = '${url(controller='login', action='logout')}';
+% endif
+            var aItemData = [
+                {
+                    text: "Forms",
+                    url: formsURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "formmenu",
+                        itemdata: [
+                            {
+                                text: "Add a Form",
+                                helptext: "(a)",
+                                url: formAddURL
+                            },
+                            {
+                                text: "Search Forms",
+                                helptext: "(s)",
+                                url: formSearchURL
+                            },
+                            {
+                                text: "Browse Forms",
+                                helptext: "(f)",
+                                url: formBrowseURL
+                            },
+                            {
+                                text: "QuickSearch",
+                                onclick: {fn: showQuicksearchDiv}
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Files",
+                    url: filesURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "filemenu",
+                        itemdata: [
+                            {
+                                text: "Add a File",
+                                helptext: "(q)",
+                                url: fileAddURL
+                            },
+                            {
+                                text: "Search Files",
+                                helptext: "(w)",
+                                url: fileSearchURL
+                            },
+                            {
+                                text: "Browse Files",
+                                helptext: "(r)",
+                                url: fileBrowseURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Collections",
+                    url: collURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "collectionmenu",
+                        itemdata: [
+                            {
+                                text: "Add a Collection",
+                                helptext: "(z)",
+                                url: collAddURL
+                            },
+                            {
+                                text: "Search Collections",
+                                helptext: "(x)",
+                                url: collSearchURL
+                            },
+                            {
+                                text: "Browse Collections",
+                                helptext: "(c)",
+                                url: collBrowseURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Analysis",
+                    url: anaURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "analysismenu",
+                        itemdata: [
+                            {
+                                text: "Phonology",
+                                url: phonURL
+                            },
+                            {
+                                text: "Analyzed Words Corpus",
+                                url: anaWordCorpURL,
+                                disabled: true
+                            },
+                            {
+                                text: "Morphotactics",
+                                url: morphtaxURL,
+                                disabled: true
+                            },
+                            {
+                                text: "Morphophonology",
+                                url: morphphonURL,
+                                disabled: true
+                            },
+                            {
+                                text: "Morphological Probability Calculator",
+                                url: probCalcURL,
+                                disabled: true
+                            },
+                            {
+                                text: "Morphological Parser",
+                                url: morphParseURL,
+                                disabled: true
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Dictionary",
+                    disabled: disabled,
+                    url: dictURL,
+                    submenu: {
+                        id: "dictionarymenu",
+                        itemdata: [
+                            {
+                                text: "Search Dictionary",
+                                url: dictSearchURL
+                            },
+                            {
+                                text: "Browse Dictionary",
+                                helptext: "(d)",
+                                url: dictBrowseURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "People",
+                    url: peopleURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "peoplemenu",
+                        itemdata: [
+                            {
+                                text: "View All",
+                                helptext: "(p)",
+                                url: peopleURL
+                            },
+                            {
+                                text: "Speakers",
+                                url: speakersURL,
+                                submenu: {
+                                    id: "speakersmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Add a Speaker",
+                                            url: speakerAddURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "Users",
+                                url: usersURL,
+                                submenu: {
+                                    id: "usersmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Add a User",
+                                            url: userAddURL
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Tags",
+                    url: tagURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "tagsmenu",
+                        itemdata: [
+                            {
+                                text: "View All",
+                                helptext: "(t)",
+                                url: tagURL
+                            },
+                            {
+                                text: "Keywords",
+                                url: keyURL,
+                                submenu: {
+                                    id: "keywordsmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Add a Keyword",
+                                            url: keyAddURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "Syntactic Categories",
+                                url: catURL,
+                                disabled: disabled,
+                                submenu: {
+                                    id: "categoriesmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Add a Category",
+                                            url: catAddURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "Elicitation Methods",
+                                url: methURL,
+                                disabled: disabled,
+                                submenu: {
+                                    id: "methodsmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Add an Elicitation Method",
+                                            url: methAddURL
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Sources",
+                    url: sourceURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "sourcesmenu",
+                        itemdata: [
+                            {
+                                text: "Add a Source",
+                                url: sourceAddURL
+                            },
+                            {
+                                text: "Browse Sources",
+                                url: sourceURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Help",
+                    url: helpURL,
+                    submenu: {
+                        id: "helpmenu",
+                        itemdata: [
+                            {
+                                text: "Help Page",
+                                helptext: '(h)',
+                                url: helpURL
+                            },
+                            {
+                                text: "OLD User Guide",
+                                url: OLDUGURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Settings",
+                    url: settURL,
+                    disabled: disabled,
+                    submenu: {
+                        id: "settingsmenu",
+                        itemdata: [
+                            {
+                                text: "System Settings",
+                                url: settURL,
+                                submenu: {
+                                    id: "systemsettingsmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Edit System Settings",
+                                            url: settEditURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "Orthographies & Inventories",
+                                url: orthInvURL
+                            },
+                            {
+                                text: "Administrator",
+                                url: adminURL
+                            }
+                        ]
+                    }
+                },
+                {
+                    text: "Account",
+                    submenu: {
+                        id: "accountmenu",
+                        itemdata: [
+% if session.has_key('user_id'):
+                            {
+                                text: "My Page",
+                                url: myPageURL,
+                                submenu: {
+                                    id: "mypagemenu",
+                                    itemdata: [
+                                        {
+                                            text: "Edit My Page",
+                                            url: myPageEditURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "My Settings",
+                                url: mySettURL,
+                                submenu: {
+                                    id: "mysettingsmenu",
+                                    itemdata: [
+                                        {
+                                            text: "Edit My Settings",
+                                            url: mySettEditURL
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                text: "My Memory",
+                                url: myMemURL,
+                                helptext: '(m)'
+                            },
+                            {
+                                text: "Logout",
+                                helptext: '(l)',
+                                url: logoutURL
+                            }
+% else:
+                            {
+                                text: "Login",
+                                helptext: '(l)',
+                                url: loginURL
+                            }
+% endif
+                        ]
+                    }
+                }
+            ];
+            var oMenuBar = new YAHOO.widget.MenuBar("mymenubar", {
+                autosubmenudisplay: true});
+            oMenuBar.addItems(aItemData);
+            oMenuBar.render('topmenubar');
+
+            function getEmptyAnchor(item)
+            {
+                var temp = '';
+                if (item.hasOwnProperty('helptext'))
+                {
+                    temp = '<a href="' + item['url'] + '" accesskey="' +
+                        item['helptext'].charAt(1) + '"></a>\n';
+                }
+                return temp;
+            }
+            
+            function getAccessKey(itemList)
+            {
+                var temp = '';
+                for (var i = 0; i < itemList.length; i++) 
+                {
+                    var item = itemList[i];
+                    temp += getEmptyAnchor(item);
+                    if (item.hasOwnProperty('submenu'))
+                    {
+                        temp += getAccessKey(item['submenu']['itemdata']);
+                    }
+                }
+                return temp;
+            }
+            document.getElementById('keyboardshortcuts').innerHTML = getAccessKey(aItemData);
+        });
+
+    </script>
+    <title>${self.title()}</title>
+</head>
+
+<%
+topPrimaryMenuItems = app_globals.getTopPrimaryMenuItems()
+topSecondaryMenuItems = app_globals.getTopSecondaryMenuItems(url.current())
+sideMenuItems = app_globals.sideMenuItems
+activeMenuItems = app_globals.getActiveMenuItems(url.current())
+%>
+
+
+<body class="yui-skin-sam">
+<a name="top"></a>
+<div id="doc">
+    <div id="hd">${self.header()}</div>
+    <div id="topmenubar"></div>
+    <div id="keyboardshortcuts"></div>
+    <div id="bd">
+        ${self.heading()}
+        ${self.flash()}
+        ${next.body()}
+    </div>
+    <div id="ft">
+        ${self.footer()}
+    </div>
+    ${showQuicksearchDivScript()}
+</div>
+
+</body>
+</html>
+
+
+<%def name="getMenuClass(item, activeMenuItems)">
+    % if item['id'] in activeMenuItems:
+        class = 'selected'
+    % endif
+</%def>
+
+<%def name="getMenuItemLink(item, activeMenuItems)">
+    <li><a ${self.getMenuClass(item, activeMenuItems)}\
+        href="${url(item['url'])}"\
+    % if 'accesskey' in item:
+        accesskey="${item['accesskey']}"\
+    % endif
+    % if 'title' in item:
+        <% title = item['title'] %>
+        % if 'accesskey' in item:
+            <% title += ' <' + item['accesskey'] + '>' %>
+        % endif
+        title="${title}" 
+    % endif
+    >${item['name']}</a></li>
+</%def>
+
+<%def name="title()">
+ ${app_globals.objectLanguageId.upper()} OLD
+</%def>
+
+<%def name="writeJavascriptToHead()"></%def>
+
+<%def name="head()"></%def>
+
+<%def name="header()">
+ <%
+  objectLanguageName = app_globals.objectLanguageName
+  temp = str(2000 / (len(app_globals.objectLanguageName) + 1))
+  titleWordsStyle = h.literal('style=\"font-size: %s%s;\"' % (temp, '%'))
+  headerImageName = app_globals.headerImageName
+  if headerImageName:
+    style = h.literal(
+        """style="background: url('/file/retrieve/%s') no-repeat bottom
+        left;" """ % headerImageName
+    )
+  else:
+    style = ''
+ %>
+ <div id="header" ${style}>
+  <div id="titleWords"><a href='${url(controller='home', action='index')}'>${objectLanguageName}</a></div>
+  <div id="onlinelinguisticdatabase">Online Linguistic Database</div>
+ </div>
+</%def>
+
+<%def name="topPrimaryMenu(topPrimaryMenuItems, activeMenuItems)">
+    <div id="topTopMenu">
+        <ul>
+            % for item in topPrimaryMenuItems:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+    </div>
+</%def>
+
+<%def name="topSecondaryMenu(topSecondaryMenuItems, activeMenuItems)">
+    % if topSecondaryMenuItems:
+    <div id="topMenu">
+        <ul>
+            % for item in topSecondaryMenuItems:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+    </div>
+    % endif
+</%def>
+
+<%def name="sideMenu(sideMenuItems, activeMenuItems)">
+        <p class="sideMenuLabel"><a href="${url('/form/browse')}"
+        title="browse all Forms <f>" accesskey="f"
+            % if '/form/browse' in url.current():
+                class = 'selected'
+            % endif
+        >FORMS</a></p>
+        <ul>
+            % for item in sideMenuItems['form']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+        <p class="sideMenuLabel"><a href="${url('/file/browse')}"
+        title="browse all Files <r>" accesskey="r"
+            % if '/file/browse' in url.current():
+                class = 'selected'
+            % endif
+        >FILES</a></p>
+        <ul>
+            % for item in sideMenuItems['file']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+        <p class="sideMenuLabel"><a href="${url('/collection/browse')}"
+        title="browse all Collections <c>" accesskey="c"
+            % if '/collection/browse' in url.current():
+                class = 'selected'
+            % endif
+        >COLLECTIONS</a></p>
+        <ul>
+            % for item in sideMenuItems['collection']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+</%def>
+
+<%def name="heading()">
+    <h1 class="heading" style="display: none; visibility: hidden;"></h1>
+</%def>
+
+<%def name="footer()">
+    <%namespace file="/base/javascriptDefs.html" name="javascriptDefs"
+    import="closeHelpDivScript, fillHelpDivScript"/>
+    ${closeHelpDivScript()}
+    ${fillHelpDivScript()}
+    <p><a href="#top">Top ^</a></p>
+    <div id="helpDiv">
+        <a href='#' title="Close the help window" id="closeButton"
+         onclick="closeHelpDiv();return false;">x</a>
+        <div id="helpDivInner">
+        </div>
+    </div>
+    <div id="promptDiv">
+        <a href="#" title="Close this window" id="closePromptDivButton">x</a>
+        <div id="promptDivInner">
+        </div>
+    </div>
+</%def>
+
+<%def name="flash()">
+    % if session.has_key('flash'):
+    <div id="flash"><p>${session.get('flash')}</p></div>
+    <%
+        del session['flash']
+        session.save()
+    %>
+    % endif
+</%def>
+
+<%def name="login()">
+<div id="loginInfo">
+ % if session.has_key('user_username'):
+  <a href="${url(controller='researcher', action='view', id=session['user_id'])}"
+     title="Visit your personal page">${session['user_username']}</a>
+  <a href="${url(controller='login', action='logout')}" accesskey="l"
+     title="click here to log out of the system <l>"> | logout</a>
+ % else:
+  <a href="${url(controller='login', action='login')}" accesskey="l"
+     title="click here to log in to the system <l>">login</a>
+ % endif  
+</div>
+</%def>
+
+
+<%def name="colorsCSS()">
+    ${h.stylesheet_link(url('/css/colors/%s' % app_globals.colorsCSS))}
+</%def>
+
+
+<%def name="showQuicksearchDivScript()">
+<script type="text/javascript">
+
+    // Use YUI's KeyListener object to bind CTRL + K to showQuicksearchDiv
+    var qsks = new YAHOO.util.KeyListener(
+                    document,
+                    {ctrl: true, keys: 75},
+                    {fn: showQuicksearchDiv, correctScope: true});
+    qsks.enable();
+
+    // Use YUI's KeyListener object to bind CTRL + SHIFT + DOWN ARROW to
+    //  reveal the additional search filters on the form/search page
+    function callAddRemoveElement(){
+        addRemoveElement('additionalSearchFilters', 'addRemoveASF');}
+    var showMore = new YAHOO.util.KeyListener(
+                    document,
+                    {ctrl: true, keys: 40, shift: true},
+                    {fn: callAddRemoveElement, correctScope: true});
+    showMore.enable();
+
+    // Is this an object language or a metalanguage search?
+    function getQsDirection()
+    {
+        var len = document.getElementsByName('qsDirection').length;
+        for (var i = 0; i < len; i++)
+        {
+            if (document.getElementsByName('qsDirection')[i].checked)
+            {
+                return document.getElementsByName('qsDirection')[i].value;
+            }
+        }
+    }
+
+    function showQuicksearchDiv(content)
+    {
+        // Show or hide the quicksearch div depending on its current visibility
+        qsDiv = document.getElementById('helpDiv');
+        if (qsDiv.style.visibility != "visible")
+        {
+            qsDiv.style.display="block";
+            qsDiv.style.visibility="visible";
+        }
+        else
+        {
+            qsDiv.style.display="none";
+            qsDiv.style.visibility="hidden";
+        }
+
+        // Create the search text input field and put it in the quicksearch div
+        var qsInput =
+            "<input type='text' id='qsInput' name='qsInput' style='width:100%;' />" +
+            "<input type='radio' name='qsDirection' value='ol' checked /> OL  " +
+            "<input type='radio' name='qsDirection' value='ml' /> ML" + 
+            "<div id='qsResults'></div>";
+        qsDivInner = document.getElementById('helpDivInner');
+        qsDivInner.innerHTML = qsInput;
+
+        // Make the quicksearch input focussed and bind the enter key to
+        //  quicksearch()
+        qsInput = document.getElementById('qsInput');
+        qsInput.select()
+        var qs= new YAHOO.util.KeyListener(
+                            qsInput,
+                            {keys: 13},
+                            {fn: quicksearch, correctScope: true});
+        qs.enable();
+    }
+
+    // Execute the server-side query and fill the quicksearch results div with
+    //  the Ajax response
+    function quicksearch()
+    {
+        var qsrDiv = document.getElementById('qsResults');
+        var qsInput = document.getElementById('qsInput');
+        var qsTerm = qsInput.value;
+        var qsDir = getQsDirection();
+        if (qsTerm) {
+            qsrDiv.innerHTML = "<progress value='50%' max='200'>50%</progress>\
+                searching for " + qsTerm;}
+
+        var responseSuccess = function(o) {
+            var response = o.responseText;
+            qsrDiv.innerHTML = response;
+        };
+
+        var responseFailure = function(o) {};
+
+        var callback = {
+            success:responseSuccess,
+            failure:responseFailure
+        };
+
+        if (qsTerm) {
+            var sUrl = '/form/quicksearch/' + qsDir + '|' + qsTerm;
+            var transaction =
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+        }
+    }
+</script>
+</%def>

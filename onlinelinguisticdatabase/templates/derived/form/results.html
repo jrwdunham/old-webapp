@@ -1,0 +1,87 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/formViews.html" name="formViews" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%def name="heading()">
+    % if hasattr(c, 'browsing'):
+    <h1 class="heading">Forms (${c.paginator.item_count})</h1>       
+    % elif c.paginator.item_count == 1:
+    <h1 class="heading">Form Results: ${c.paginator.item_count} match</h1>
+    % else:
+    <h1 class="heading">Form Results: ${c.paginator.item_count} matches</h1>
+    % endif
+</%def>
+
+% if len(c.paginator):
+
+<div class="allFormButtonsDiv">
+ <a href="${url(controller='form', action='remember', id=None)}" class="buttonLink" title="store references to all search result Forms in Memory">remember all</a>
+ <a href="${url(controller='export', action='options', id='lastsearch')}" class="buttonLink" title="export all search result Forms; you will be asked to choose a format">export all</a>
+</div>
+
+<p id="paginatorPager">${ c.paginator.pager('$link_first $link_previous $first_item to $last_item of $item_count $link_next $link_last') }</p>
+
+## NO LONGER NEED THE TOGGLE LABELS BUTTON BECAUSE FORMS ARE DISPLAYED
+##  DIFFERENTLY NOW.
+##${javascriptDefs.toggleLabelsJavaScript()}
+##<a class="buttonLink" id="toggleRowLabelsButton" title="hide labels">-</a>
+##<div class="tableSpacerDivHalf"></div>
+
+% if session.get('defaultFormView') == 'tabular':
+
+<% counter=0 %>
+<div class="tableContainer">
+ <table>
+  <thead class="fixedHeader">
+   <tr>
+    <th>id</th>
+    <th>gr</th>
+    <th>orthographic transcription</th>
+    <th>narrow phonetic transcription</th>
+    <th>broad phonetic transcription</th>
+    <th>gloss(es)</th>
+    <th>morpheme break</th>
+    <th>morpheme gloss</th>
+    <th>comments</th>
+    <th>speaker comments</th>
+    <th>syntactic category</th>
+    <th>syntactic category string</th>
+    <th>speaker</th>
+    <th>source</th>
+    <th>elicitor</th>
+    <th>enterer</th>
+    <th>verifier</th>
+    <th>elicitation method</th>
+    <th>keywords</th>
+    <th>associated files</th>
+    <th>collections referencing this form</th>
+    <th>date elicited</th>
+    <th>date & time entered</th>
+    <th>date & time last modified</th>
+   </tr>
+  </thead>
+  <tbody class="scrollContent">
+% for form in c.paginator:
+    ${h.literal(form.getHTMLRowRepresentation())}
+    <% counter += 1 %>
+% endfor
+  </tbody>
+ </table>
+</div>
+
+% else:
+
+<% counter=0 %>
+% for form in c.paginator:
+    ${h.literal(form.getHTMLRepresentation(forCollection=False))}
+    <br /><br />
+    <% counter += 1 %>
+% endfor
+</table>
+
+% endif
+
+<p>${ c.paginator.pager('~2~') }</p>
+
+% endif

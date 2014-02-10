@@ -1,0 +1,80 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+<h1 class="heading">Keywords</h1>
+</%def>
+
+${self.displayTags(
+    'Keywords',
+    'keywords',
+    c.keywords,
+    "Keywords can be associated to a Form.  Add, modify or delete keywords " + \
+    "here.  Just be careful when renaming or deleting a keyword: this " + \
+    "could have unwanted effects on associated Forms.",
+    'key',
+    None
+)}
+
+${self.displayTags(
+    'Syntactic Categories',
+    'categories',
+    c.syncats,
+    "A (morpho-)syntactic category can be associated to a Form.  Add, " + \
+    "modify or delete syntactic categories here.  Again, consider " + \
+    "carefully before renaming or deleting a keyword as this could have " + \
+    "unwanted effects on any associated Forms.",
+    'category'
+)}
+
+${self.displayTags(
+    'Elicitation Methods',
+    'methods',
+    c.elicitationMethods,
+    "An elicitation method can be associated to a Form.  Add, modify or " + \
+    "delete elicitation methods here.  The same warnings apply as above.",
+    'method'
+)}
+
+
+<%def name="displayTags(tagName, anchor, tags, descriptorParagraph, \
+controllerName, header=1)">
+
+    % if header:
+        <a name='${anchor}'</a>
+        <div class="tableSpacerDivHalf"></div>
+        <h1 class="heading">${tagName}</h1>
+    % endif
+    
+    <p class="descriptiveP">${descriptorParagraph}</p>
+    
+    <% title="Add new %s" % tagName %>
+    
+    <a href="${url(controller=controllerName, action='add')}" \
+       class="buttonLink" title="${title}">Add</a>
+    
+    <div class="containerDiv">
+    % if tags:
+        <table class="clearTable">
+            <thead>
+                <tr>
+                    <td class="tagNameCell">Name</td>
+                    <td class="tagDescriptionCell">Description</td>
+                    <td class="tagIDCell">ID</td>
+                </tr>
+            </thead>
+    
+    % for tag in tags:
+            <tr>
+                <td><a href="${url(controller=controllerName, action='view', \
+                            id=tag.id)}" class="link">${tag.name}</a></td>
+                <td>${tag.description}</td>
+                <td class="clearTable">${tag.id}</td>
+            </tr>
+    % endfor
+    
+        </table>
+    % endif
+    
+    </div>
+
+</%def>

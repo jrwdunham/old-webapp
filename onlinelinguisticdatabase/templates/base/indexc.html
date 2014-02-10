@@ -1,0 +1,214 @@
+## -*- coding: utf-8 -*-
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+${h.stylesheet_link(url('/yui/2.8.0/reset-fonts-grids/reset-fonts-grids.css'))}
+<!--${h.stylesheet_link(url('/yui/2.8.0/reset-fonts-grids/base-min.css'))}-->
+${h.stylesheet_link(url('/css/main.css'))}
+${self.colorsCSS()}
+${h.javascript_link(url('/yui/2.8.0/yahoo-dom-event/yahoo-dom-event.js'))}
+${h.javascript_link(url('/yui/2.8.0/connection/connection_core-min.js'))}
+${h.javascript_link(url('/javascript/functions.js'))}
+${self.writeJavascriptToHead()}
+<title>${self.title()}</title>
+</head>
+
+<%
+topPrimaryMenuItems = app_globals.getTopPrimaryMenuItems()
+topSecondaryMenuItems = app_globals.getTopSecondaryMenuItems(url.current())
+sideMenuItems = app_globals.sideMenuItems
+activeMenuItems = app_globals.getActiveMenuItems(url.current())
+%>
+
+
+<body>
+<!-- #doc2 = 950px width, centered -->
+<!-- #doc = 750px width, centered-->
+<!-- .yui-t4 = 180px on right -->
+<div id="doc2" class="yui-t4">
+    <!-- header -->
+    <div id="hd">
+        ${self.header()}
+    </div>
+    <!-- body -->
+    <div id="bd">
+        <!-- main content -->    
+        <div id="yui-main">
+            <div id="mainContent" class="yui-b">
+                ${self.topPrimaryMenu(topPrimaryMenuItems, activeMenuItems)}
+                ${self.topSecondaryMenu(topSecondaryMenuItems, activeMenuItems)}
+                ${self.heading()}
+                ${self.flash()}
+                ${next.body()}
+            </div>
+        </div>
+        <!-- side menu -->
+        <div id="sideMenu" class="yui-b">
+                ${self.sideMenu(sideMenuItems, activeMenuItems)}
+        </div>
+    </div>
+    <!-- footer -->
+    <div id="ft">
+        ${self.footer()}
+    </div>
+</div>
+</body>
+</html>
+
+
+<%def name="getMenuClass(item, activeMenuItems)">
+    % if item['id'] in activeMenuItems:
+        class = 'selected'
+    % endif
+</%def>
+
+<%def name="getMenuItemLink(item, activeMenuItems)">
+    <li><a ${self.getMenuClass(item, activeMenuItems)}\
+        href="${url(item['url'])}"\
+    % if 'accesskey' in item:
+        accesskey="${item['accesskey']}"\
+    % endif
+    % if 'title' in item:
+        <% title = item['title'] %>
+        % if 'accesskey' in item:
+            <% title += ' <' + item['accesskey'] + '>' %>
+        % endif
+        title="${title}" 
+    % endif
+    >${item['name']}</a></li>
+</%def>
+
+<%def name="title()">OLD</%def>
+
+<%def name="writeJavascriptToHead()"></%def>
+
+<%def name="head()"></%def>
+
+<%def name="header()">
+ <%
+  objectLanguageName = app_globals.objectLanguageName
+  temp = str(2000 / (len(app_globals.objectLanguageName) + 1))
+  titleWordsStyle = h.literal('style=\"font-size: %s%s;\"' % (temp, '%'))
+  headerImageName = app_globals.headerImageName
+  if headerImageName:
+    style = h.literal(
+        """style="background: #fff url('/file/retrieve/%s') no-repeat bottom
+        left;" """ % headerImageName
+    )
+  else:
+    style = ''
+ %>
+ <a name="top"></a>
+ <div id="header" ${style}>
+  <div id="acronym">old</div>
+  <div id="titleWords" ${titleWordsStyle}>${objectLanguageName}</div>
+  <div id="app">online linguistic database</div>
+  ${self.login()}
+ </div>
+</%def>
+
+<%def name="topPrimaryMenu(topPrimaryMenuItems, activeMenuItems)">
+    <div id="topTopMenu">
+        <ul>
+            % for item in topPrimaryMenuItems:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+    </div>
+</%def>
+
+<%def name="topSecondaryMenu(topSecondaryMenuItems, activeMenuItems)">
+    % if topSecondaryMenuItems:
+    <div id="topMenu">
+        <ul>
+            % for item in topSecondaryMenuItems:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+    </div>
+    % endif
+</%def>
+
+<%def name="sideMenu(sideMenuItems, activeMenuItems)">
+        <p class="sideMenuLabel"><a href="${url('/form/browse')}"
+        title="browse all Forms <f>" accesskey="f"
+            % if '/form/browse' in url.current():
+                class = 'selected'
+            % endif
+        >FORMS</a></p>
+        <ul>
+            % for item in sideMenuItems['form']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+        <p class="sideMenuLabel"><a href="${url('/file/browse')}"
+        title="browse all Files <r>" accesskey="r"
+            % if '/file/browse' in url.current():
+                class = 'selected'
+            % endif
+        >FILES</a></p>
+        <ul>
+            % for item in sideMenuItems['file']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+        <p class="sideMenuLabel"><a href="${url('/collection/browse')}"
+        title="browse all Collections <c>" accesskey="c"
+            % if '/collection/browse' in url.current():
+                class = 'selected'
+            % endif
+        >COLLECTIONS</a></p>
+        <ul>
+            % for item in sideMenuItems['collection']:
+                ${self.getMenuItemLink(item, activeMenuItems)}\
+            % endfor
+        </ul>
+</%def>
+
+<%def name="heading()"><h1 class="heading"></h1></%def>
+
+<%def name="footer()">
+    <%namespace file="/base/javascriptDefs.html" name="javascriptDefs"
+    import="closeHelpDivScript, fillHelpDivScript"/>
+    ${closeHelpDivScript()}
+    ${fillHelpDivScript()}
+    <p><a href="#top">Top ^</a></p>
+    <div id="helpDiv">
+      <a href='#' title="Close the help window" id="closeButton"
+         onclick="closeHelpDiv();return false;">x</a>
+      <div id="helpDivInner">
+        Help me
+      </div>
+    </div>
+</%def>
+
+<%def name="flash()">
+    % if session.has_key('flash'):
+    <div id="flash"><p>${session.get('flash')}</p></div>
+    <%
+        del session['flash']
+        session.save()
+    %>
+    % endif
+</%def>
+
+<%def name="login()">
+<div id="loginInfo">
+ % if session.has_key('user_username'):
+  <a href="${url(controller='researcher', action='view', id=session['user_id'])}"
+     title="Visit your personal page">${session['user_username']}</a>
+  <a href="${url(controller='login', action='logout')}" accesskey="l"
+     title="click here to log out of the system <l>"> | logout</a>
+ % else:
+  <a href="${url(controller='login', action='login')}" accesskey="l"
+     title="click here to log in to the system <l>">login</a>
+ % endif  
+</div>
+</%def>
+
+
+<%def name="colorsCSS()">
+    ${h.stylesheet_link(url('/css/colors/%s' % app_globals.colorsCSS))}
+</%def>

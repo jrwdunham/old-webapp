@@ -1,0 +1,209 @@
+<%inherit file="/base/index.html" />
+
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" \
+import="getCharCodeScript, translateOrthographyScript"/>
+
+<%def name="writeJavascriptToHead()">
+    ${getCharCodeScript()}
+    ${translateOrthographyScript()}
+</%def>
+
+<%def name="heading()">
+    <h1 class="heading">Orthographies & Inventories</h1>
+</%def>
+
+<p>This page facilitates interaction with the orthographies and inventories
+specified in the system.</p>
+
+
+
+
+<h1 class="heading margintop">Interactive Orthography Conversion</h1>
+
+<table class="infoTable margintop">
+    <tr>
+        <td>
+            Input Orthography
+        </td>
+        <td>
+            ${h.select(name='inputOrthography', id='inputOrthography', \
+                selected_values="", options=c.orthOptions, tabindex=1)}
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            Output Orthography
+        </td>
+        <td>
+            ${h.select(name='outputOrthography', id='outputOrthography', \
+                selected_values="", options=c.orthOptions[::-1], tabindex=2)}
+        </td>
+    </tr>
+</table>
+
+<p>Enter some text and press CTRL + ENTER to translate it from the input to the
+output orthography.</p>
+
+<textarea class='inputOrthography' id='input' name='input' rows='6'
+          tabindex='3'></textarea>
+
+<div id='outputorthographydiv'>
+</div>
+
+<script type="text/javascript">
+    $(document).bind('keydown', function (event) {
+        if (event.ctrlKey) {
+            if (event.which === 13) {
+                event.preventDefault();
+                translateOrthography();
+            }
+        }
+    });
+</script>
+
+
+
+% for id in c.orthographiesAsInventories:
+    <%
+        orth = c.orthographiesAsInventories[id]
+        name = orth[0]
+        inv = orth[1]
+    %>
+    ${inventoryTester(name, inv)}
+% endfor
+
+${inventoryTester('Narrow Phonetic Inventory', c.narrPhonInventory)}
+${inventoryTester('Broad Phonetic Inventory', c.broadPhonInventory)}
+${inventoryTester('Morphophonemic Inventory', c.morphPhonInventory)}
+${inventoryTester('Punctuation', c.punctuation)}
+
+<%def name="inventoryTester(name, inv)">
+
+    <h1 class="heading margintop inventoryName" title="Click to expand">
+        ${name}
+    </h1>
+
+    <div class="charCodeTester">
+
+    <p>Try typing the graphemes/polygraphs of this orthography.  Press enter and
+    the system will indicate whether you are typing the correct characters.
+    Click on the code points to view their names.</p>
+    
+    <p style="font-size: x-small;">Note that the OLD performs canonical
+    decompositional unicode normalization (NFD) on all input.  This means, for
+    example, that the precomposed character LATIN SMALL LETTER A WITH ACUTE
+    (U+00E1) will be converted (decomposed) into two characters, viz. base
+    character LATIN SMALL LETTER A (U+0061) followed by combining character
+    COMBINING ACCUTE ACCENT (U+0301).</p>
+    
+    <table class='infoTable quarter'>
+        <tr>
+            <th>Grapheme/ Polygraph</th>
+            <th>Code Point(s)</th>
+            <th>Input</th>
+            <th>Input Code Point(s)</th>
+        </tr>
+    
+        % for index in range(len(inv.inventoryWithUnicodeMetadata)):
+        <%
+            grapheme = inv.inventoryWithUnicodeMetadata[index][0]
+            graphemeName = inv.inventoryWithUnicodeMetadata[index][1]
+            graphemeCode = inv.inventoryWithUnicodeMetadata[index][2]
+        %>
+        <tr>
+            <td>
+                ${grapheme}
+            </td>
+            <td>
+                <div class="graphemeCode">
+                    ${graphemeCode}
+                </div>
+                <div class="graphemeName">
+                    ${graphemeName}
+                </div>
+            </td>
+            <td>
+                <input maxlength="255" type="text"
+                       class="shortinput graphemeInput" tabindex="4" />
+            </td>
+            <td>
+                <div class="inputCode">
+                </div>
+                <div class="inputName">
+                </div>
+            </td>
+        </tr>
+        % endfor
+    </table>
+    
+    </div>
+
+</%def>
+
+
+
+<script type="text/javascript">
+$(function () {
+
+    // Hide all charCodeTester divs
+    $('.charCodeTester').hide()
+
+    // Reveal charCodeTester divs when the inventoryName header is clicked
+    $('.inventoryName').click(function () {
+        $(this).next('.charCodeTester').toggle('slow');
+    }).css('cursor', 'pointer');
+
+    // Hide all the graphemeName and inputName divs
+    $('.graphemeName, .inputName').hide()
+
+    // Reveal graphemeName divs when the graphemeCode div is clicked
+    $('.graphemeCode').click(function () {
+        $($(this).next()).toggle('fast');
+    }).css('cursor', 'pointer');
+
+    // Reveal inputName divs when the inputCode div is clicked
+    $('.inputCode').click(function () {
+        $($(this).next()).toggle('fast');
+    }).css('cursor', 'pointer');
+
+
+    // Asynchronously retrieve the code points (and character names) of the
+    //  characters entered in inputWS and display them in the Input Code
+    //  Point(s) column of the inventory test table.
+    var getCodePoints = function (inputWS) {
+        var inputValue = inputWS.val();
+        var codeNameTD = $($(inputWS.parent()).next('td'));
+        var inputCode = $(codeNameTD.children('.inputCode'));
+        var inputName = $(codeNameTD.children('.inputName'));
+        var graphemeCode = $($($(inputWS.parent()).prev('td'))
+                         .children('.graphemeCode')).text().trim();
+        $.get('/settings/getCharacterCodesAndNames', {input: inputValue},
+            function (responseBody) {
+                var color = "red";
+                if (responseBody[0] === graphemeCode) {
+                    color = "green";
+                }
+                inputCode.html($('<span>').css('color', color)
+                               .text(responseBody[0]));
+                inputName.html($('<span>').css('color', color)
+                               .text(responseBody[1]));
+        }, 'json');
+    }
+
+    // Bind RETURN click to getCodePoints function with focused text input as
+    //  parameter.
+    $('.graphemeInput')
+        .bind('keydown', function (event) {
+            if (event.which === 13) {
+                getCodePoints($(this));
+            }
+        })
+
+    // Bind text input blur event to getCodePoints function with blurred text
+    //  input as parameter.
+        .bind('blur', function () {
+            getCodePoints($(this));
+        });
+});
+</script>

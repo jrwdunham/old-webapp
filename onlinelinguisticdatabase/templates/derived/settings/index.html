@@ -1,0 +1,669 @@
+<%inherit file="/base/index.html" />
+
+<%def name="heading()">
+    <h1 class="heading">Application Settings</h1>
+</%def>
+
+<p>This page lists the system-wide settings of the application.  Only \
+administrators should be permitted to alter these settings.</p>
+
+% if 'user_role' in session and session['user_role'] == 'administrator':
+<a href="${url(controller='settings', action='edit')}" class="buttonLink" \
+   title="Edit the application-wide settings">edit</a>
+% endif
+
+<h1 class="heading margintop">Object Language</h1>
+
+
+<table class="infoTable">
+    <tr>
+     <td>
+      <a class="term">Name</a>
+      <p class="explanation">The name of the language under study.</p>
+     </td>
+     <td>
+      ${getattr(c.applicationSettings, 'objectLanguageName', 'unspecified')}
+     </td>
+    </tr>
+
+% if hasattr(c.applicationSettings, 'objectLanguageId') and \
+c.applicationSettings.objectLanguageId:
+    <tr>
+     <td>
+      <a class="term">ISO 639-3 Id:</a>
+      <p class="explanation">The unique 3-character identifier for the object
+      language as specified in the ISO 639-3 standard.  Cf. the
+      <a href="http://en.wikipedia.org/wiki/ISO_639-3">Wikipedia</a> and
+      <a href="http://www.ethnologue.com/codes/">Ethnologue</a> pages.</p>
+     </td>
+     <td>
+      ${c.applicationSettings.objectLanguageId}
+     </td>
+    </tr>
+% endif
+
+</table>
+
+<h1 class="heading margintop">Orthographies</h1>
+
+<table class="infoTable margintop">
+    <tr>
+     <td>
+      <a class="term">Storage Orthography</a>
+      <p class="explanation">The set of graphemes used to store orthographically \
+      transcribed object language strings.</p>
+      <p class="explanation">All orthographic object language input will be
+      converted from the input orthography to the storage orthography for
+      storage in the database.  Similarly, all orthographic object language
+      output will have been converted from the storage orthography to the output
+      orthography.</p>
+      <p class="explanation">The storage orthography should be specified when
+      the OLD application is first set up and not changed thereafter.</p>
+     </td>
+     <td>
+        ${c.orthographiesAsInventories[c.applicationSettings.storageOrthography][0]}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Input Orthography (default)</a>
+      <p class="explanation">The orthography that this OLD application expects \
+      orthographic object language data to be entered in.  This is the \
+      system-wide default, but each user has the option of choosing an \
+      alternate input orthography for themselves.</p>
+     </td>
+     <td>
+        ${c.orthographiesAsInventories[
+            c.applicationSettings.defaultInputOrthography][0]}
+     </td>
+    </tr>
+    
+    <tr>
+     <td>
+      <a class="term">Output Orthography (default)</a>
+      <p class="explanation">The orthography that this OLD application uses to \
+      display orthographic object language strings.  This is the system-wide \
+      default, but each user has the option of choosing an alternate output \
+      orthography for themselves.</p>
+     </td>
+     <td>
+        ${c.orthographiesAsInventories[
+            c.applicationSettings.defaultOutputOrthography][0]}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Morpheme Break is Orthographic</a>
+      <p class="explanation">If set to 'yes', the system assumes that the
+      morpheme break field contains morphophonemic strings of the object
+      language written in the same orthography as the orthographic transcription.
+      Depending on system-wide and user-specific settings, the system will
+      attempt to convert morpheme break input from an input orthography to the
+      system-wide storage orthography.  Set this to 'no' if you plan to specify
+      a phonemic inventory in the Morphophonemic Segmentation section below.</p>
+     </td>
+     <td>
+        ${c.applicationSettings.morphemeBreakIsObjectLanguageString}
+     </td>
+    </tr>
+
+
+    <tr>
+     <td>
+      <a class="term">Validation</a>
+      <p class="explanation">This setting determines how, or whether, to
+      validate data entered into orthographic fields, i.e., the orthographic
+      transcription field and possibly also the morpheme break field.  After
+      converting user input to the storage orthography (if applicable), the
+      system will test whether the input string is constructable using only the
+      graphemes of the storage orthography (possibly including capitalized graphemes
+      if Only Lowercase is unchecked) and punctuation characters. If the string
+      is not so constructable, the system can do nothing (option: None), warn
+      the user but nevertheless allow the data to be entered (option: Warning)
+      or generate a validation error and prevent the data from being entered
+      (option: Error).</p>
+     </td>
+     <td>
+        ${c.applicationSettings.orthographicValidation}
+     </td>
+    </tr>
+
+
+    <tr>
+     <td>
+      <a class="term">Test Orthographic Transcription Validation</a>
+      <p class="explanation">Clicking the "Test" button compares the content of
+      the orthographic transcription field against the storage orthography.  The
+      orthographic transcription field should only contain graphemes/polygraphs
+      from the storage orthography and characters from the punctuation
+      inventory.  The OLD (version 0.2.7 and onwards) performs canonical
+      decompositional unicode normalization (NFD) on all input strings.  However,
+      data entered using earlier versions may contain precomposed characters.
+      Thus the system displays both "as is" and "post NFD normalization"
+      validity metrics.  Administrators can NFD-normalize the database at the
+      <a href="/administer/index">Administrator Page</a>.</p>
+     </td>
+     <td>
+% if c.orthographiesAsInventories[c.applicationSettings.storageOrthography][1].getInputList():
+        <button id="testOrthographicValidation" class="testValidation">
+            Test
+        </button>
+        <div class="testResults"
+             style="max-height: 400px; overflow-y: auto; max-width: 263px;
+             overflow-x: hidden;"></div>
+     </td>
+% endif
+    </tr>
+
+
+% if c.applicationSettings.morphemeBreakIsObjectLanguageString == u"yes":
+    <tr>
+     <td>
+      <a class="term">Test Orthographic Morpheme Break Validation</a>
+      <p class="explanation">Clicking the "Test" button compares the content of
+      the morpheme field against the storage orthography.  The morpheme break
+      field should only contain graphemes/polygraphs
+      from the storage orthography and characters from the morpheme delimiters
+      inventory.  The OLD (version 0.2.7 and onwards) performs canonical
+      decompositional unicode normalization (NFD) on all input strings.  However,
+      data entered using earlier versions may contain precomposed characters.
+      Thus the system displays both "as is" and "post NFD normalization"
+      validity metrics.  Administrators can NFD-normalize the database at the
+      <a href="/administer/index">Administrator Page</a>.</p>
+     </td>
+     <td>
+% if c.orthographiesAsInventories[c.applicationSettings.storageOrthography][1].getInputList():
+        <button id="testOrthographicMBValidation" class="testValidation">
+            Test
+        </button>
+        <div class="testResults"
+             style="max-height: 400px; overflow-y: auto; max-width: 263px;
+             overflow-x: hidden;"></div>
+     </td>
+% endif
+    </tr>
+% endif
+
+
+    % for key in c.orthographiesAsInventories:
+    <tr>
+     <td>
+      <a class="term">${c.orthographiesAsInventories[key][0]}</a>
+      <p class="explanation">
+        A set of graphemes for entering orthographic object language strings.
+      </p>
+     </td>
+     <td>
+      ${h.literal(
+      c.orthographiesAsInventories[key][1].getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+    % endfor
+
+    <tr>
+     <td>
+      <a href="${url(controller='settings', action='orthography')}"
+         target="_blank">Interactive orthography page</a>
+     </td>
+     <td>
+     </td>
+    </tr>
+
+</table>
+
+
+
+<h1 class="heading margintop">Narrow Phonetic Transcription</h1>
+
+<table class="infoTable">
+
+    <tr>
+     <td>
+      <a class="term">Inventory</a>
+      <p class="explanation">The narrow phonetic transcription inventory is the
+      set of characters (or multi-character strings) that users are expected to
+      limit themselves to when entering narrow phonetic transcriptions.
+      The validation setting below determines whether strict adherence to this
+      character set is enforced.</p>
+     </td>
+     <td>
+      ${h.literal(c.narrPhonInventory.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Validation</a>
+      <p class="explanation">This specifies the system response to data entered
+      into the narrow phonetic transcription field that are not constructable using
+      the inventory specified above.  The system can do nothing (option: None),
+      warn the user but still allow the data to be entered (option: Warning),
+      or prevent data entry and respond to the user with an informative error
+      message (option: Error).</p>
+     </td>
+     <td>
+      ${getattr(c.applicationSettings, 'narrPhonValidation', 'unspecified')}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Test Narrow Phonetic Validation</a>
+      <p class="explanation">Clicking the "Test" button compares the content of
+      the narrow phonetic transcription field against the narrow phonetic
+      inventory  The narrow phonetic transcription field should only contain
+      graphemes/polygraphs from the narrow phonetic inventory.
+      The OLD (version 0.2.7 and onwards) performs canonical
+      decompositional unicode normalization (NFD) on all input strings.  However,
+      data entered using earlier versions may contain precomposed characters.
+      Thus the system displays both "as is" and "post NFD normalization"
+      validity metrics.  Administrators can NFD-normalize the database at the
+      <a href="/administer/index">Administrator Page</a>.</p>
+     </td>
+     <td>
+% if c.narrPhonInventory.getInputList() and c.narrPhonInventory.getInputList() != [u'']:
+        <button id="testNarrPhonValidation" class="testValidation">
+            Test
+        </button>
+        <div class="testResults"
+             style="max-height: 400px; overflow-y: auto; max-width: 263px;
+             overflow-x: hidden;"></div>
+% endif
+     </td>
+    </tr>
+
+</table>
+
+
+
+
+<h1 class="heading margintop">Broad Phonetic Transcription</h1>
+
+<table class="infoTable">
+
+    <tr>
+     <td>
+      <a class="term">Inventory</a>
+      <p class="explanation">The broad phonetic transcription inventory is the
+      set of characters (or multi-character strings) that users are expected to
+      limit themselves to when entering broad phonetic transcriptions.
+      The validation setting below determines whether strict adherence to this
+      character set is enforced.</p>
+     </td>
+     <td>
+      ${h.literal(c.broadPhonInventory.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Validation</a>
+      <p class="explanation">This specifies the system response to data entered
+      into the broad phonetic transcription field that are not constructable using
+      the inventory specified above.  The system can do nothing (option: None),
+      warn the user but still allow the data to be entered (option: Warning),
+      or prevent data entry and respond to the user with an informative error
+      message (option: Error).</p>
+     </td>
+     <td>
+      ${getattr(c.applicationSettings, 'broadPhonValidation', 'unspecified')}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Test Broad Phonetic Validation</a>
+      <p class="explanation">Clicking the "Test" button compares the content of
+      the broad phonetic transcription field against the broad phonetic
+      inventory  The broad phonetic transcription field should only contain
+      graphemes/polygraphs from the broad phonetic inventory.
+      The OLD (version 0.2.7 and onwards) performs canonical
+      decompositional unicode normalization (NFD) on all input strings.  However,
+      data entered using earlier versions may contain precomposed characters.
+      Thus the system displays both "as is" and "post NFD normalization"
+      validity metrics.  Administrators can NFD-normalize the database at the
+      <a href="/administer/index">Administrator Page</a>.</p>
+     </td>
+     <td>
+% if c.broadPhonInventory.getInputList() and c.broadPhonInventory.getInputList() != [u'']:
+        <button id="testBroadPhonValidation" class="testValidation">
+            Test
+        </button>
+        <div class="testResults"
+             style="max-height: 400px; overflow-y: auto; max-width: 263px;
+             overflow-x: hidden;"></div>
+% endif
+     </td>
+    </tr>
+
+</table>
+
+
+
+<h1 class="heading margintop">Morphophonemic Segmentation</h1>
+
+<table class="infoTable">
+
+    <tr>
+     <td>
+      <a class="term">Inventory</a>
+      <p class="explanation">The morphophonemic segmentation inventory (i.e.,
+      the phonemic inventory) is the set of characters (or multi-character
+      strings) that users are expected to limit themselves to when entering
+      data into the morpheme break field.  The validation setting below
+      determines whether strict adherence to this character set is enforced.
+      The characters in the morpheme delimiters inventory (below) are also
+      licit morpheme break field input.</p>
+     </td>
+     <td>
+        ${h.literal(c.morphPhonInventory.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Morpheme Delimiters</a>
+      <p class="explanation">Morpheme delimiters are the characters used to
+      separate morphemes in the morpheme break field.</p>
+     </td>
+     <td>
+       ${h.literal(c.morphDelimiters.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">Validation</a>
+      <p class="explanation">This specifies the system response to data entered
+      into the morpheme break field that are not constructable using
+      the phonemic inventory and morpheme delimiters specified above.  The
+      system can do nothing (option: None), warn the user but still allow the
+      data to be entered (option: Warning), or prevent data entry and respond to
+      the user with an informative error message (option: Error).  Note that
+      if the Morpheme Break is Orthographic option is set to 'yes', this
+      Validation specification will be ignored and morpheme break input will be
+      validated according to the orthographic validation specification, the
+      storage orthography and the morpheme delimiters.</p>
+     </td>
+     <td>
+      ${getattr(c.applicationSettings, 'morphPhonValidation', 'unspecified')}
+     </td>
+    </tr>
+
+% if c.applicationSettings.morphemeBreakIsObjectLanguageString == u"no":
+
+    <tr>
+     <td>
+      <a class="term">Test Morphophonemic Validation</a>
+      <p class="explanation">Clicking the "Test" button compares the content of
+      the morpheme field against the morphophonemic orthography.  The morpheme
+      break field should only contain graphemes/polygraphs from the
+      morphophonemic orthography and characters from the morpheme delimiters
+      inventory.  The OLD (version 0.2.7 and onwards) performs canonical
+      decompositional unicode normalization (NFD) on all input strings.  However,
+      data entered using earlier versions may contain precomposed characters.
+      Thus the system displays both "as is" and "post NFD normalization"
+      validity metrics.  Administrators can NFD-normalize the database at the
+      <a href="/administer/index">Administrator Page</a>.</p>
+     </td>
+     <td>
+% if c.morphPhonInventory.getInputList() and c.morphPhonInventory.getInputList() != [u'']:
+        <button id="testMorphophonValidation" class="testValidation">
+            Test
+        </button>
+        <div class="testResults"
+             style="max-height: 400px; overflow-y: auto; max-width: 263px;
+             overflow-x: hidden;"></div>
+% endif
+     </td>
+    </tr>
+
+% endif
+
+</table>
+
+
+
+<h1 class="heading margintop">Punctuation</h1>
+
+<table class="infoTable">
+
+    <tr>
+     <td>
+      <a class="term">Characters</a>
+      <p class="explanation">These are the punctuation characters that users
+      are expected to use in the orthographic transcription field.  Depending on
+      the validation settings, the system may use these characters to validate
+      orthographic object language input.</p>
+     </td>
+     <td>
+      ${h.literal(c.punctuation.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+</table>
+
+
+<h1 class="heading margintop">Grammaticality</h1>
+
+<table class="infoTable">
+
+    <tr>
+     <td>
+      <a class="term">Values</a>
+      <p class="explanation">These are the grammaticality options that will be
+      presented to users on the add form and update form pages.
+      </p>
+     </td>
+     <td>
+      ${h.literal(c.grammaticalities.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+
+</table>
+
+
+
+<h1 class="heading margintop">Metalanguage</h1>
+
+<table class="infoTable">
+    <tr>
+     <td>
+      <a class="term">Metalanguage</a>
+      <p class="explanation">The metalanguage is that used in the glossing and \
+      analysis of the object language.</p>
+     </td>
+     <td>
+      ${getattr(c.applicationSettings, 'metaLanguageName', 'unspecified')}
+     </td>
+    </tr>
+
+% if hasattr(c.applicationSettings, 'metaLanguageId'):
+    <tr>
+     <td>
+      <a class="term">ISO 639-3 Id:</a>
+      <p class="explanation">The unique 3-character identifier for the object
+      language as specified in the ISO 639-3 standard.  Cf. the
+      <a href="http://en.wikipedia.org/wiki/ISO_639-3">Wikipedia</a> and
+      <a href="http://www.ethnologue.com/codes/">Ethnologue</a> pages.</p>
+     </td>
+     <td>
+      ${c.applicationSettings.metaLanguageId}
+     </td>
+    </tr>
+% endif
+
+    <tr>
+     <td>
+      <a class="term">Metalanguage Orthography</a>
+      <p class="explanation">The graphemes of the metalanguage.</p>
+     </td>
+     <td>
+        ${h.literal(c.metaLanguageOrthography.getHTMLTable('inventoryDisplay'))}
+     </td>
+    </tr>
+</table>
+
+
+<h1 class="heading margintop">Restricted Access</h1>
+
+<table class="infoTable">
+    <tr>
+     <td>
+      <a class="term">Unrestricted Users</a>
+      <p class="explanation">List of all users of this application with
+      unrestricted access to all data, i.e., access even to Forms tagged with
+      the keyword 'restricted'.  Users with the role of 'administrator' always
+      have unrestricted access.</p>
+     </td>
+     <td>
+        ${', '.join(['%s %s' % (x.firstName, x.lastName)
+                    for x in app_globals.unrestrictedUsers])}
+     </td>
+    </tr>
+</table>
+
+
+
+<h1 class="heading margintop">Appearance</h1>
+
+<table class="infoTable">
+    <tr>
+     <td>
+      <a class="term">Header Image</a>
+      <p class="explanation">The name of an image file (stored as an OLD file) \
+      to use in the header/banner of the application.</p>
+     </td>
+     <td>
+        % if c.applicationSettings.headerImageName:
+            ${c.applicationSettings.headerImageName}
+        % else:
+            unspecified
+        % endif
+     </td>
+    </tr>
+
+    <tr>
+     <td>
+      <a class="term">CSS Colors</a>
+      <p class="explanation">The (CSS) stylesheet file name that determines the \
+      color scheme of the application.</p>
+     </td>
+     <td>
+        % if c.applicationSettings.colorsCSS:
+            ${c.applicationSettings.colorsCSS}
+        % else:
+            unspecified
+        % endif
+     </td>
+    </tr>
+</table>
+
+
+<h1 class="heading margintop">Database</h1>
+
+<table class="infoTable">
+    <tr>
+     <td>
+      <a class="term">RDBMS</a>
+      <p class="explanation">The type of RDBMS (relational database management \
+      system) being used.
+      </p>
+     </td>
+     <td>${c.rdbms}</td>
+    </tr>
+    
+    <tr>
+     <td>
+      <a class="term">Database Name</a>
+      <p class="explanation">The name of RDBMS database being used.</p>
+     </td>
+     <td>${c.databaseName}</td>
+    </tr>
+</table>
+
+% if 'user_role' in session and session['user_role'] == 'administrator':
+<a href="${url(controller='settings', action='edit')}" class="buttonLink" \
+   title="Edit the application-wide settings">edit</a>
+% endif
+
+
+<!-- jQuery to toggle the character information -->
+<script type="text/javascript">
+
+var highlightNonMatchingSubstrings = function (string, invList) {
+    var longest = invList.sort(function (a, b) {
+        return b.length - a.length; })[0];
+    result = "";
+    for (var l = 0; l < string.length; l ++) {
+        var temp = "";
+        for (var r = l + longest.length; r > l; r --) {
+            var ss = string.substring(l, r);
+            if (invList.indexOf(ss) !== -1) {
+                temp = ss;
+                l = r - 1;
+                continue;
+            }
+        }
+        if (temp === "") {
+            result += '<span style="color: red;">' + string[l] + '</span>';
+        } else {
+            result += temp;
+        }
+    } 
+    return result;
+}
+
+$(function () {
+
+    // Hide all explanation <p>s and bind term click events to explanation toggles
+    $(".term").css('cursor', 'pointer');
+    hideAllExplanations();
+    bindTermClickToExplanationToggle();
+
+    $(".inventoryDisplay .graph").each(function () {
+        $(this).click(function () {
+            $('div.graphInfo', $(this).closest('td').siblings()).hide('slow');
+            $($(this).next('div.graphInfo')).toggle('slow');
+        });
+    }).css('cursor', 'pointer');
+
+    // Bind each .testValidation button to a function that generates a report
+    //  on the validity of the field(s) according to the relevant inventories.
+    $(".testValidation").each(function () {
+        $(this).click(function () {
+            var id = $(this).attr('id');
+            var params = {validationId: id};
+            var url = "/settings/testvalidation";
+            var respDiv = $($(this).next('.testResults'));
+            respDiv.append($('<img>')
+                .attr({'src': '/images/ajax-loader.gif', 'id': 'spinner'}));
+            $.get(url, params, function (r) {
+                respDiv
+                    .empty()
+                    .append($('<h3>')
+                    .text('Invalid: ' +
+                          (r.invalidCount / r.formCount * 100).toFixed(2)
+                          + '% (' + r.invalidCount + ' tokens)'))
+                    .append($('<h3>')
+                    .text('Invalid After NFD Normalization: ' +
+                          (r.invalid.length / r.formCount * 100).toFixed(2)
+                          + '% (' + r.invalid.length + ' tokens)'));
+                $.each(r.invalid, function (n, e) {
+                    var field = e[1];
+                    var codePoints = e[2];
+                    var highlightedField = highlightNonMatchingSubstrings(
+                                                field, r.validationInventory);
+                    respDiv.append($('<p>')
+                            .append($('<a>')
+                                .attr('href', '/form/view/' + e[0])
+                                .attr('target', 'blank_')
+                            .append(highlightedField)));
+                });
+            }, 'json');
+        });
+    });
+});
+</script>

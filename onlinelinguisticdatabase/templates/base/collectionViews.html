@@ -1,0 +1,318 @@
+<%namespace file="/base/fileViews.html" name="fileViews" import="displayFile, displayAudio"/>
+<%namespace file="/base/formViews.html" name="formViews" import="formViewLong, formViewForAssociation, displayAssociatedFiles, formViewForMemory"/>
+<%namespace file="/base/markup.html" name="markup" import="*"/>
+<%namespace file="/base/javascriptDefs.html" name="javascriptDefs" import="*"/>
+
+<%! import re %>
+
+<%def name="collectionViewPaper(collection)">
+    <%
+        if collection.elicitor:
+            author = collection.elicitor
+        else:
+            author = collection.enterer
+    %>
+
+    <h1 class="centered">${collection.title}</h1>
+    <p class="centered">${author.firstName} ${author.lastName}</p>
+    <p class="centered italic">entered: ${h.pretty_date(collection.datetimeEntered)}</p>
+    <p class="centered italic">last modified: ${h.pretty_date(collection.datetimeModified)}</p>
+
+    <a id="collectiondatabuttonstoggle" class="buttonLink" title="show details about this collection"
+       onclick="addRemoveElement('collectiondatabuttons', 'collectiondatabuttonstoggle', 'details about this Collection');">+</a>
+    <br /><br />
+    <div id="collectiondatabuttons" style="display:none;">
+      ${displayCollectionDataAndButtons(collection, True)}
+    </div><br /><br />
+    
+    % if collection.contents:
+      ${self.displayContentMin()}
+    % else:
+      <p>This Collection has no content</p>
+    % endif
+</%def>
+
+<%def name="displayContentMin()">
+  ${h.literal(c.contents)}
+</%def>
+
+
+<%def name="displayCollectionDataAndButtons(collection, displayTitle)">
+    ${displayCollectionData(collection, displayTitle)}
+    ${displayCollectionButtons(collection)}
+    % for file in collection.files:
+      <div class="associatedEntitiesDiv">
+      Associated File ${file.id}: <span class="emphasize">${file.name}</span> (${h.pretty_filesize(file.size)})
+      ${file.getHTMLRepresentation(collectionID=collection.id)}
+      </div>
+    % endfor 
+</%def>
+
+<%def name="displayCollectionData(collection, displayTitle)">
+  <table class="fileTable">
+    <tr>
+      <td class="fileTableRowLabel">ID</td><td class="dataCell">
+      ${collection.id}</td>
+    </tr>
+    
+    % if displayTitle:
+    <tr>
+      <td class="fileTableRowLabel">title</td><td class="dataCell">
+      ${collection.title}</td>
+    </tr>
+    % endif
+    
+    <tr>
+      <td class="fileTableRowLabel">type</td><td class="dataCell">
+      ${collection.type}</td>
+    </tr>
+    
+    % if collection.url:
+    <tr>
+      <td class="fileTableRowLabel">url</td><td class="dataCell">
+      ${collection.url}</td>
+    </tr>
+    % endif
+    
+    % if collection.description:
+    <tr>
+      <td class="fileTableRowLabel">description</td><td class="dataCell">
+      ${collection.description}</td>
+    </tr>
+    % endif
+    
+    % if collection.speaker:
+    <tr>
+      <td class="fileTableRowLabel">speaker</td><td class="dataCell">
+      ${collection.speaker.firstName} ${collection.speaker.lastName}</td>
+    </tr>
+    % endif
+    
+    % if collection.source:
+    <tr>
+      <td class="fileTableRowLabel">source</td><td class="dataCell">
+      ${collection.source.authorFirstName} ${collection.source.authorLastName} \
+      (${collection.source.year})</td>
+    </tr>
+    % endif
+    
+    % if collection.elicitor:
+    <tr>
+      <td class="fileTableRowLabel">elicitor</td><td class="dataCell">
+      ${collection.elicitor.firstName} ${collection.elicitor.lastName}</td>
+    </tr>
+    % endif
+    
+    <tr>
+      <td class="fileTableRowLabel">enterer</td><td class="dataCell">
+      ${collection.enterer.firstName} ${collection.enterer.lastName}</td>
+    </tr>
+    
+    % if collection.dateElicited:
+    <tr>
+      <td class="fileTableRowLabel">date elicited</td><td class="dataCell">
+      ${h.pretty_date(collection.dateElicited)}</td>
+    </tr>
+    % endif
+    
+    <tr>
+      <td class="fileTableRowLabel">time entered</td><td class="dataCell">
+      ${h.pretty_date(collection.datetimeEntered)}</td>
+    </tr>
+    
+    <tr>
+      <td class="fileTableRowLabel">last updated</td><td class="dataCell">
+      ${h.pretty_date(collection.datetimeModified)}</td>
+    </tr>
+    
+  </table>
+</%def>
+
+
+<%def name="displayCollectionButtons(collection, viewLongButton=False)">
+  <div class="fileButtonsDiv">
+    % if viewLongButton:
+    <a href="${url(controller='collection', action='view', id=collection.id)}" class="buttonLink" title="View this Collection in greater detail">view</a>
+    % endif
+    <a href="${url(controller='collection', action='update', id=collection.id)}" class="buttonLink" title="Modify this Collection">update</a>
+    <a href="${url(controller='collection', action='delete', id=collection.id)}" class="buttonLink" onclick="return confirmDelete('Collection', ${collection.id})" title="Delete this Collection; confirmation will be required">delete</a>
+    <a href="${url(controller='collection', action='associate', id=collection.id)}" class="buttonLink" title="Associate this Collection to one or more Files">associate</a>
+    <a href="${url(controller='export', action='options', id='collectionforms%s' % collection.id)}" class="buttonLink" title="Export just the Forms referenced in the content of this Collection">export forms</a>
+    <a href="${url(controller='export', action='options', id='collectioncontent%s' % collection.id)}" class="buttonLink" title="Export the content of this Collection; referenced Forms will be embedded in the exported file">export content</a>
+  </div>
+</%def>
+
+
+
+
+
+
+
+<%def name="collectionViewLong(collection, displayTitle=True)">
+    ${self.displayCollectionData(collection, displayTitle)}
+    ${self.displayCollectionButtons(collection)}
+    <div class="tableSpacerDiv"></div>
+    % if collection.files:
+      <h1 class="heading">Associated Files</h1><br />
+      ${displayAssociatedFiles(collection, 'collection')}
+      <div class="tableSpacerDiv"></div>
+    % endif  
+    <h1 class="heading">Content</h1><br />
+    % if collection.contents:
+      ${self.displayContent(collection)}
+    % else:
+      This Collection has no content
+    % endif
+    <div class="tableSpacerDiv"></div>
+</%def>
+
+
+<%def name="collectionViewShort(collection, displayTitle=True)">
+    ${self.displayCollectionData(collection, displayTitle)}
+    ${self.displayCollectionButtons(collection, True)}
+    <div class="tableSpacerDiv"></div>
+</%def>
+
+
+<%def name="collectionViewReallyShort(collection, displayTitle=True)">
+  <%
+    URL = url(controller='collection', action='view', id=collection.id)
+    cTitle = collection.title
+    if len(cTitle) > 20:
+        cTitle = u'%s...' % cTitle[:20]
+  %>
+  <tr>
+   <td class="onethirdcell">
+    <a href="${URL}" title="View this Collection in greater detail">
+    ${cTitle}</a>
+   </td>
+   <td class="onethirdcell">
+    <a href="${URL}" title="View this Collection in greater detail">
+    ${h.pretty_date(collection.datetimeModified)}</a>
+   </td>
+   <td class="onethirdcell">
+    <a href="${URL}" title="View this Collection in greater detail">
+    ${collection.type}</a>
+   </td>
+  </tr>
+</%def>
+
+
+<%def name="displayContent(collection)">
+  <%
+    formsDict = dict([(form.id, form) for form in collection.forms])
+    # Apply Markdown conversion
+    #  contents = h.literal(h.markdown(collection.contents, safe_mode="escape"))
+    contents = h.literal(h.rst2html(collection.contents))
+    # Replace "form[X]" with a representation of Form X
+    patt = re.compile('(form\[([0-9]+)\])')
+    matches = patt.findall(contents)
+    if c.collectionViewType == 'columns':
+        contents = capture(displayFormsAsColumns, matches, formsDict)
+    else:
+        contents = capture(displayContentEmbedded, contents, matches, formsDict, c.collectionViewType)
+    cClass = sClass = lClass = 'buttonLink'
+    if c.collectionViewType == 'long':
+        lClass += ' selected'
+    elif c.collectionViewType == 'short':
+        sClass += ' selected'
+    else:
+        cClass += ' selected'
+  %>
+  ${javascriptDefs.toggleLabelsJavaScript()}
+  ${javascriptDefs.labelsHidden()}
+  <a class="buttonLink" id="toggleRowLabelsButton" title="hide labels">+</a>
+  <a class="${lClass}" name="long" href="${url(controller='collection', action='view', id=collection.id, option='long', anchor='long')}" title="View Forms embedded in content; show transcription, morpheme break, morpheme gloss and glosses data">long</a>
+  <a class="${sClass}" name="short" href="${url(controller='collection', action='view', id=collection.id, option='short', anchor='short')}" title="View Forms embedded in content; show only transcription and glosses data">short</a>
+  <a class="${cClass}" name="columns" href="${url(controller='collection', action='view', id=collection.id, option='columns', anchor='columns')}" title="View Forms and no other content; show transcriptions in left column and glosses in right">columns</a>
+  ${h.literal(contents)}
+</%def>
+
+
+
+  
+<%def name="displayFormsAsColumns(matches, formsDict)">
+  <%
+    contents = []
+    for match in matches:
+        try:
+            form = formsDict[int(match[1])]
+            glosses = []
+            for gloss in form.glosses:
+                glossLine = gloss.glossGrammaticality + gloss.gloss
+                glosses.append(glossLine)
+            glosses = '; '.join(glosses)
+            line = '<tr><td>%s%s</td><td>%s</td></tr>' % (form.grammaticality, h.storageToOutputTranslate(form.transcription), glosses)
+            contents.append(line)        
+        except KeyError:
+            pass
+    contents = h.literal('<table class="collectionColumns">' + '\n'.join(contents) + '</table>')
+  %>
+  ${contents}
+</%def>
+
+
+<%def name="displayContentEmbedded(contents, matches, formsDict, displayType)">
+  <%
+    for match in matches:
+        contents = contents.replace(match[0], capture(displayForm, formsDict, match[1], displayType))
+
+    # Replace "FORMID:X" with an enumeration signifier, e.g., "(1)"
+    patt = re.compile('FORMID:([0-9]+);')
+    lines = []
+    number = 1
+    formIDToNum = {}
+    for line in contents.split('\n'):
+        if patt.match(line.strip()):
+            formID = int(patt.findall(line)[0])
+            Url = url(controller='form', action='view', id=formID)
+            title = 'Click to view Form %s' % formID
+            anchorStart = '<a href="%s" title="%s">' % (Url, title)
+            line = '<p>(%s%s</a>)</p>' % (anchorStart, number)
+            try:
+                formIDToNum[formID].append(number)
+            except KeyError:
+                formIDToNum[formID] = [number]
+            number += 1
+        lines.append(line)
+    contents = '\n'.join(lines)
+    patt = re.compile('(ref\[([0-9]+)\])')
+    matches = patt.findall(contents)
+    for match in matches:
+        replacement = ', '.join([str(formID) for formID in formIDToNum[int(match[1])]])
+        contents = contents.replace(match[0], replacement)
+    contents = capture(markup.linkToOLDEntitites, contents)
+    contents = h.literal(contents)
+  %>
+  ${contents}
+</%def>
+
+
+<%def name="displayForm(formsDict, formID, displayType='long')">
+  <%
+    try:
+        form = formsDict[int(formID)]
+    except KeyError:
+        form = None
+  %>
+  FORMID:${formID};
+  <div class="indentedDiv shiftUp">
+  % if form:
+     % if displayType == 'long':
+         ${formViewLong(form)}
+     % else:
+         <span class="emphasize">${form.grammaticality}${h.storageToOutputTranslate(form.transcription)}</span><br />
+         % for gloss in form.glosses:
+            &lsquo;${gloss.glossGrammaticality}${gloss.gloss}&rsquo;<br />
+         % endfor
+         <% OLUFiles = [file for file in form.files if file.utteranceType=='Object Language Utterance'] %>
+         % for file in OLUFiles:
+            <% fileReference = url('retrieve', path=file.name) %>
+            <% displayAudio(file, fileReference) %>
+         % endfor
+     % endif
+  % else:
+     There is no Form with ID ${formID}
+  % endif
+  </div>
+</%def>
