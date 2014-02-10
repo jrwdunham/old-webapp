@@ -10,6 +10,8 @@
 *.swp
 *.DS_Store
 
+TODO.txt
+
 # Some Pylons-generated directories that should be ignored
 /dist/
 /data/

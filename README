@@ -9,16 +9,12 @@ version that works like the deployed version, which is ridiculous.  So, making
 the changes listed below should remedy that.
 
 
-Todo
+TODOs
 ================================================================================
 
-1. Check that deployed functionality is all there in this dev eniro.
-   Seems to be good.  ExPex export works, as does display of phonetic
-   transcription lines.
+1. Create a git repo in this directory.
 
-2. Create a git repo in this directory.
-
-3. Watch out for hairy dependency issues; i.e., the deployment env might be very
+2. Watch out for hairy dependency issues; i.e., the deployment env might be very
    hacked together compared to the Python 2.5 env on this dev machine (ugh ...)
 
 
@@ -33,7 +29,7 @@ Issues Observed
    server-side.
 
 
-Changes made
+TODOs Done
 ================================================================================
 
 1. copied production's controllers/file.py to controllers/PROD_file.py
@@ -61,10 +57,11 @@ Changes made
 
     1. took PROD_file.py and deleted file.py --- cosmetic changes only.
 
-    2. took PROD_settings.py and copied settings.py to settings.py_bk --- changes
-       to a try/except block and the PROD version used a custom error (whose name
-       was changed from the incorrect OrthographyIncompatibilityError to the 
-       correct OrthographyCompatibilityError).
+    2. took PROD_settings.py and copied settings.py to settings.py_bk ---
+       changes to a try/except block and the PROD version used a custom error
+       (whose name was changed from the incorrect
+       OrthographyIncompatibilityError to the correct
+       OrthographyCompatibilityError).
 
     3. took PROD_orthography.py and deleted orthography.py --- cosmetic changes
        only.
@@ -79,4 +76,7 @@ Changes made
     6. took /file/PROD_addUpdateFields.html: some improved select options for
        app_globals.
 
+10. Check that deployed functionality is all there in this dev eniro.
+    Seems to be good.  ExPex export works, as does display of phonetic
+    transcription lines.
 
