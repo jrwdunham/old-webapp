@@ -58,18 +58,36 @@ MySQL database.
 Get & Install
 --------------------------------------------------------------------------------
 
-The OLD 0.2.X requires Python 2.5 and Pylons 0.9.7. A local install for
-development purposes should probably be created in an isolated Python environment
-using `virtualenv <http://www.virtualenv.org/en/latest/virtualenv.html>`_.
-Creating an isolated install of Python 2.5 may also require
-`pyenv <https://github.com/yyuu/pyenv>`_ or
-`pythonbrew <https://github.com/utahta/pythonbrew>`_.
+To install the OLD 0.2.X locally for or testing purposes, it is recommended that
+you use an isolated Python environment, which can be created using
+`virtualenv <http://www.virtualenv.org/en/latest/virtualenv.html>`_.
+(Note that the OLD 0.2.X has been tested with Python 2.5 and 2.6, but not 2.7.
+Depending on your system Python version, it may be necessary to install Python
+2.5 or 2.6 using `pyenv <https://github.com/yyuu/pyenv>`_ or
+`pythonbrew <https://github.com/utahta/pythonbrew>`_.)
 
-Run the following commands to get, install, and configure the OLD v. 0.2.X (using
-an isolated Python environment, if desired)::
+Run the following commands to get, install, and configure the OLD v. 0.2.X. 
+(Note that the first two lines are relevant only if you are using a virtual
+environment.)::
 
+    virtualenv --no-site-packages env
+    source env/bin/activate
     git clone https://github.com/jrwdunham/old-webapp.git
     cd old-webapp
     python setup.py develop
+    paster setup-app development.ini
+    paster serve --reload development.ini
 
+The default configuration file (``development.ini``) uses a local SQLite
+database named ``development.db``, which is probably fine for exploring the
+system. A deployed OLD 0.2.X application should use MySQL. After creating a
+MySQL database and a user with sufficient privileges, comment out the SQLite
+option in the OLD 0.2.X configuration file and uncomment the two MySQL
+lines.::
+
+    sqlalchemy.url = mysql://username:password@localhost:3306/dbname
+    sqlalchemy.pool_recycle = 3600
+
+See `The Pylons Book <http://pylonsbook.com/>`_ for further details on serving
+and configuring Pylons-based web applications.
 
