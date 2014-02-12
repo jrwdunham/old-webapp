@@ -83,14 +83,14 @@ run:
 ## From PyPI
 
 To install a stable release of the OLD 0.2.X from the
-[Python Package Index](https://pypi.python.org/pypi/onlinelinguisticdatabase/0.2.8),
+[Python Package Index](https://pypi.python.org/pypi/onlinelinguisticdatabase/0.2.9),
 use `easy_install` and run:
 
-    easy_install "OnlineLinguisticDatabase==0.2.8"
+    easy_install "OnlineLinguisticDatabase==0.2.9"
 
 or use `Pip` and run:
 
-    pip install "OnlineLinguisticDatabase==0.2.8"
+    pip install "OnlineLinguisticDatabase==0.2.9"
 
 To create the config file, generate the default values, and serve
 the application:

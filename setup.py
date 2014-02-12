@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='onlinelinguisticdatabase',
-    version='0.2.8',
+    version='0.2.9',
     description='''Software for creating web applications for collaborative
     linguistic fieldwork.''',
     author='Joel Dunham',
@@ -83,11 +83,11 @@ to make sure you are using its Python::
 
 To install with ``easy_install``::
 
-    easy_install "OnlineLinguisticDatabase==0.2.8"
+    easy_install "OnlineLinguisticDatabase==0.2.9"
 
 With ``Pip``::
 
-    pip install "OnlineLinguisticDatabase==0.2.8"
+    pip install "OnlineLinguisticDatabase==0.2.9"
 
 To create the config file, generate the default values, and serve the application::
 
