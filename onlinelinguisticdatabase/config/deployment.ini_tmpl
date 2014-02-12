@@ -33,11 +33,11 @@ app_instance_uuid = ${app_instance_uuid}
 # SQLAlchemy database URL
 
 # MySQL OPTION
-sqlalchemy.url = mysql://old:old@localhost:3306/old
-sqlalchemy.pool_recycle = 3600
+#sqlalchemy.url = mysql://username:password@localhost:3306/dbname
+#sqlalchemy.pool_recycle = 3600
 
 # SQLite OPTION
-#sqlalchemy.url = sqlite:///%(here)s/old.db
+sqlalchemy.url = sqlite:///%(here)s/old.db
 
 # Empty Database
 #  if value is 1, no database defaults will be inserted

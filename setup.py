@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='onlinelinguisticdatabase',
-    version='0.2.7',
+    version='0.2.8',
     description='''A web application for structuring, processing and sharing
     linguistic fieldwork data.''',
     author='Joel Dunham',
@@ -37,7 +37,7 @@ installing it like this::
 Now install OnlineLinguisticDatabase like this::
 
     easy_install OnlineLinguisticDatabase
-    paster make-config "OnlineLinguisticDatabase==0.2.4" production.ini
+    paster make-config "OnlineLinguisticDatabase==0.2.8" production.ini
 
 Configure the application by editing the ``production.ini`` config file just
 created.
