@@ -162,5 +162,10 @@ Note that if you are running Debian or Ubuntu and get an error like
 
     sudo apt-get install libmysqlclient-dev
 
+If you get an error page when using the browser-based interface,
+re-saving the system settings should solve it. I.e., go to Settings
+\> System Settings \> Edit System Settings and click the "Save
+Changes" button.
+
 
 

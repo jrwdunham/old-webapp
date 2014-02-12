@@ -27,7 +27,8 @@ examples (words, morphemes, and sentences with analyses and annotations),
 associated and embedded media files, and exportable representations of texts
 (e.g., research papers, narratives, etc.)
 
-See a demo OLD application at www.onlinelinguisticdatabase.org.
+See a demo OLD application at
+`www.onlinelinguisticdatabase.org <http://www.onlinelinguisticdatabase.org>`_.
 
 
 Features
@@ -50,12 +51,15 @@ Versions
 --------------------------------------------------------------------------------
 
 Note that there are currently two distinct versions of the OLD: 0.2.X and 1.0.
-Version 0.2.X is a standard Pylons web application; its source can be found on
-GitHub at https://github.com/jrwdunham/old-webapp. Version 1.0. includes
-functionality for creating morphological parsers, provides improved search
-functionality, and implements a shift to a more modular and reusable
-architecture (i.e., a RESTful HTTP/JSON web service with a SPA GUI); its source
-can be found on GitHub at https://github.com/jrwdunham/old.
+
+Version 0.2.X is a standard Pylons web application. Its source can be found on
+GitHub at https://github.com/jrwdunham/old-webapp.
+
+Version 1.0. includes functionality for creating morphological parsers,
+provides improved search functionality, and implements a shift to a more
+modular and reusable architecture (i.e., a RESTful HTTP/JSON web service with a
+SPA GUI). However, there is currently no GUI for the OLD 1.0. Its source can be
+found on GitHub at https://github.com/jrwdunham/old.
 
 While version 0.2.X is still being maintained, primary development has moved to
 version 1.0.
@@ -149,6 +153,11 @@ Note that if you are running Debian or Ubuntu and get an error like
 ``libmysqlclient-dev``::
 
     sudo apt-get install libmysqlclient-dev
+
+If you get an error page when using the browser-based interface, re-saving the
+system settings should solve it. I.e., go to Settings > System Settings > Edit
+System Settings and click the "Save Changes" button.
+
 
 Files
 --------""",
