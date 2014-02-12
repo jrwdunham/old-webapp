@@ -8,70 +8,150 @@ except ImportError:
 setup(
     name='onlinelinguisticdatabase',
     version='0.2.8',
-    description='''A web application for structuring, processing and sharing
-    linguistic fieldwork data.''',
+    description='''Software for creating web applications for collaborative
+    linguistic fieldwork.''',
     author='Joel Dunham',
     author_email='jrwdunham@gmail.com',
     url='http://www.onlinelinguisticdatabase.org',
     long_description="""
-++++++++++++++++++++++++
+================================================================================
 OnlineLinguisticDatabase
-++++++++++++++++++++++++
+================================================================================
 
-A web application for structuring, processing and sharing linguistic fieldwork
-data.  The app is multi-user with authorization and authentication
-functionality.  The intent is that groups of researchers studying a common
-language will download the Online Linguistic Database (OLD), install it on their
-own server and use it to create an online repository of linguistic data for
-their language of study.  
+The Online Linguistic Database (OLD) is software for creating web applications
+dedicated to multi-user, collaborative documention of natural (and usually
+endangered or understudied) languages. An OLD web application helps contributors
+to create a consistent, structured, and highly searchable web-based repository
+of language data. These data consist of textual representations of linguistic
+examples (words, morphemes, and sentences with analyses and annotations),
+associated and embedded media files, and exportable representations of texts
+(e.g., research papers, narratives, etc.)
 
-Installation
-============
+See a demo OLD application at www.onlinelinguisticdatabase.org.
 
-First install Easy Install if you don't have it already by downloading
-``ez_setup.py`` from http://peak.telecommunity.com/dist/ez_setup.py and
-installing it like this::
 
-    python ez_setup.py
+Features
+--------------------------------------------------------------------------------
 
-Now install OnlineLinguisticDatabase like this::
+#. Multi-user, concurrent read/write access to a server-side language database.
+#. Interlinear glossed text (IGT) representations of data with integrated
+   feedback on lexical consistency or morphological analyses.
+#. Powerful searches over the data set.
+#. Authentication and authorization to control access to data.
+#. Export to LaTeX, CSV, and plain text.
+#. Media file support: many-to-many associations of audio, video, and/or image
+   with content embedded in data representations.
+#. IGT text creation.
+#. Automatic orthography conversion.
+#. Inventory-based transcription input validation.
 
-    easy_install OnlineLinguisticDatabase
-    paster make-config "OnlineLinguisticDatabase==0.2.8" production.ini
 
-Configure the application by editing the ``production.ini`` config file just
-created.
+Versions
+--------------------------------------------------------------------------------
 
-Alter database defaults using the format described at
-http://www.sqlalchemy.org/docs/05/dbengine.html#dbengine_supported.
+Note that there are currently two distinct versions of the OLD: 0.2.X and 1.0.
+Version 0.2.X is a standard Pylons web application; its source can be found on
+GitHub at https://github.com/jrwdunham/old-webapp. Version 1.0. includes
+functionality for creating morphological parsers, provides improved search
+functionality, and implements a shift to a more modular and reusable
+architecture (i.e., a RESTful HTTP/JSON web service with a SPA GUI); its source
+can be found on GitHub at https://github.com/jrwdunham/old.
 
-The default RDBMS is MySQL.  With no alterations to production.ini, the system
-will expect a MySQL database named 'old' and a user (username: 'old', password:
-'old') who has full permissions on the 'old' database.  If this database and
-user do not exist, the default OLD set up will fail.  Best bet is to change the
-production.ini file to suite your own (secure) MySQL configuration.
+While version 0.2.X is still being maintained, primary development has moved to
+version 1.0.
 
-To use a SQLite database, comment out the MySQL option and uncomment the SQLite
-option::
 
-    # MySQL OPTION
-    #sqlalchemy.url = mysql://old:old@localhost:3306/old
-    #sqlalchemy.pool_recycle = 3600
-    # SQLite OPTION
-    sqlalchemy.url = sqlite:///%(here)s/old.db
+Get, Install & Serve
+--------------------------------------------------------------------------------
 
-This will create a SQLite database file called 'old.db' in the same directory as
-your production.ini file.
+When installing the OLD 0.2.X, it is recommended that you use an isolated Python
+environment using
+`virtualenv <http://www.virtualenv.org/en/latest/virtualenv.html>`_.
+(Note that the OLD 0.2.X has been tested with Python 2.5 and 2.6, but not 2.7.
+Depending on your system Python version, it may be necessary to install Python
+2.5 or 2.6 using `pyenv <https://github.com/yyuu/pyenv>`_ or
+`pythonbrew <https://github.com/utahta/pythonbrew>`_.) Once ``virtualenv`` is
+installed, issue the following commands to create the isolated environment and
+to make sure you are using its Python::
 
-Set up the OLD application and serve it::
+    virtualenv env
+    source env/bin/activate
 
+To install with ``easy_install``::
+
+    easy_install "OnlineLinguisticDatabase==0.2.8"
+
+With ``Pip``::
+
+    pip install "OnlineLinguisticDatabase==0.2.8"
+
+To create the config file, generate the default values, and serve the application::
+
+    mkdir my_old_webapp
+    cd my_old_webapp
+    paster make-config onlinelinguisticdatabase production.ini
     paster setup-app production.ini
     paster serve production.ini
 
-The running application will now be available at http://localhost/
+
+Using MySQL
+--------------------------------------------------------------------------------
+
+The default configuration (``.ini``) file  uses a local SQLite database, which
+is probably fine for exploring the system initially. However, a deployed OLD
+0.2.X application should use MySQL.
+
+First login to MySQL using your root account and create a MySQL database and a
+user with sufficient privileges.  Something like this (replacing ``dbname``,
+``username``, and ``password`` with sensible values)::
+
+    mysql> create database dbname default character set utf8;
+    mysql> create user 'username'@'localhost' identified by 'password';
+    mysql> grant select, insert, update, delete, create, drop on dbname.* to 'username'@'localhost';
+    mysql> quit;
+
+Then comment out the SQLite option in the OLD 0.2.X configuration file (e.g.,
+``production.ini``) and uncomment the two MySQL lines, changing values as
+appropriate::
+
+    sqlalchemy.url = mysql://username:password@localhost:3306/dbname
+    sqlalchemy.pool_recycle = 3600
+
+Now the system is set up to use MySQL. Run the ``setup-app`` command again to
+generate the default values in the MySQL db::
+
+    paster setup-app production.ini
+
+See `The Pylons Book <http://pylonsbook.com/>`_ for further details on serving
+and configuring Pylons-based web applications.
+
+
+Default Users
+--------------------------------------------------------------------------------
+
+Running ``paster setup-app`` creates three users with the following usernames
+and passwords.
+
+- username: ``admin``, password: ``admin``
+- username: ``contributor``, password: ``contributor``
+- username: ``viewer``, password: ``viewer``
+
+Use the admin account to create a new administrator-level user and delete all
+of the default users before deploying an OLD application.
+
+
+Common Issues
+--------------------------------------------------------------------------------
+
+Note that if you are running Debian or Ubuntu and get an error like
+``EnvironmentError: mysql_config not found`` after running
+``python setup.py develop``, then you probably need to install
+``libmysqlclient-dev``::
+
+    sudo apt-get install libmysqlclient-dev
 
 Files
-=====""",
+--------""",
     install_requires=[
 	"Beaker==1.5.3",
 	"docutils==0.7",

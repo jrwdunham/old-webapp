@@ -43,7 +43,7 @@ License
 The OLD 0.2.X is open source and is licensed under the
 `GNU GENERAL PUBLIC LICENSE Version 3<https://gnu.org/licenses/gpl.html>`_.
 (Note that the OLD 1.0 is also open source but is licensed under
-`Apache 2.0 <http://www.apache.org/licenses/LICENSE-2.0.txt>`_.
+`Apache 2.0 <http://www.apache.org/licenses/LICENSE-2.0.txt>`_.)
 
 
 Technologies
@@ -136,7 +136,7 @@ generate the default values in the MySQL db::
 
 or::
 
-    paster setup-app production.ini
+    paster setup-app development.ini
 
 (You can ignore the ``data truncated`` warnings. This is a known issue.)
 
@@ -154,8 +154,8 @@ and passwords.
 - username: ``contributor``, password: ``contributor``
 - username: ``viewer``, password: ``viewer``
 
-Use the admin account to create a new administrator-level user and delete then 
-delete all of the default users before deploying an OLD application.
+Use the admin account to create a new administrator-level user and delete all
+of the default users before deploying an OLD application.
 
 
 Common Issues
