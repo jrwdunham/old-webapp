@@ -66,6 +66,7 @@ class Globals(object):
                 ('morphemeGloss', 'morpheme gloss'),
                 ('comments', 'general comments'),
                 ('speakerComments', 'speaker comments'),
+                ('context', 'context'),
                 ('syntacticCategoryString', 'syntactic category string'),
                 ('id', 'ID')
             ],

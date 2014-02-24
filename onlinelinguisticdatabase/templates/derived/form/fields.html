@@ -149,6 +149,11 @@ import="checkForDuplicateTranscriptionScript, guessMorphologyScript"/>
  </li>
 
  <li>
+  <label for="context">Context</label><br />
+  <textarea id="context" name="context" rows="2" cols="10" tabindex="6"></textarea>
+ </li>
+
+ <li>
   <label for="elicitationMethod">Elicitation Method</label>
   <% elicitationMethods = [('', '')] + [(elicitationMethod.id, elicitationMethod.name)
                            for elicitationMethod in app_globals.elicitationMethods]

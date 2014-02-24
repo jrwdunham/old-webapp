@@ -488,6 +488,8 @@ class Form(object):
         if self.speakerComments:
             result += u'<tr><td class="label">speaker comments</td><td>%s</td>\
                 </tr>' % h.storageToOutputTranslateOLOnly(self.speakerComments)
+        if self.context:
+            result += u'<tr><td class="label">context</td><td>%s</td></tr>' % self.context
         if self.elicitationMethod:
             url_ = url(controller='method', action='view',
                        id=self.elicitationMethod.id)
@@ -824,6 +826,7 @@ class Form(object):
         row += u'<td>%s</td>' % self.morphemeGloss
         row += u'<td>%s</td>' % self.comments
         row += u'<td>%s</td>' % self.speakerComments
+        row += u'<td>%s</td>' % self.context
         row += u'<td>%s</td>' % syntacticCategory
         row += u'<td>%s</td>' % self.syntacticCategoryString
         row += u'<td>%s</td>' % speaker
@@ -877,6 +880,7 @@ class FormBackup(Form):
         self.grammaticality = form.grammaticality
         self.comments = form.comments
         self.speakerComments = form.speakerComments
+        self.context = form.context
         self.dateElicited = form.dateElicited
         self.datetimeEntered = form.datetimeEntered
         self.datetimeModified = datetime.datetime.utcnow()

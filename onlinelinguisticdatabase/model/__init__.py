@@ -63,7 +63,8 @@ form_table = schema.Table('form', meta.metadata,
     schema.Column('morphemeBreak', types.Unicode(255)),
     schema.Column('morphemeGloss', types.Unicode(255)),
     schema.Column('comments', types.UnicodeText()),
-    schema.Column('speakerComments', types.UnicodeText()), 
+    schema.Column('speakerComments', types.UnicodeText()),
+    schema.Column('context', types.UnicodeText()), # describing context of utterance
 
     # Forced choice textual values
     schema.Column('grammaticality', types.Unicode(255)),
@@ -441,7 +442,8 @@ formbackup_table = schema.Table('formbackup', meta.metadata,
     schema.Column('morphemeBreak', types.Unicode(255)),
     schema.Column('morphemeGloss', types.Unicode(255)),
     schema.Column('comments', types.UnicodeText()),
-    schema.Column('speakerComments', types.UnicodeText()), 
+    schema.Column('speakerComments', types.UnicodeText()),
+    schema.Column('context', types.UnicodeText()), # describing context of utterance
 
     # Forced choice textual values
     schema.Column('grammaticality', types.Unicode(255)),

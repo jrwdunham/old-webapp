@@ -239,6 +239,7 @@ class Exporter(object):
             form.comments and self.no_tabs(h.storageToOutputTranslateOLOnly(form.comments)) or u'',
             form.speakerComments and self.no_tabs(h.storageToOutputTranslateOLOnly(
                 form.speakerComments)) or u'',
+            form.context and self.no_tabs(form.context) or u'',
             form.dateElicited and self.no_tabs(form.dateElicited.strftime('%b %d, %Y')) or u'',
             form.datetimeEntered and self.no_tabs(form.datetimeEntered.strftime(
                 '%b %d, %Y at %I:%M %p')) or u'',
@@ -300,6 +301,8 @@ class Exporter(object):
         if form.speakerComments:
             result.append(u'\n\t\t\\item %s' % self.esc_latex(h.storageToOutputTranslateOLOnly(
                 form.speakerComments)))
+        if form.context:
+            result.append(u'\n\t\t\\item %s' % self.esc_latex(form.context))
         if reference:
             if form.speaker:
                 speaker = u'%s%s ' % (self.esc_latex(form.speaker.firstName[0].upper()),
