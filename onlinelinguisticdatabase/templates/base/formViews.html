@@ -174,6 +174,9 @@ session['user_id'] in [x.id for x in app_globals.unrestrictedUsers]:
     % if form.speakerComments:
     <tr><td class="formTableRowLabel">speaker comments</td><td class="dataCell">${h.storageToOutputTranslateOLOnly(h.literal(form.speakerComments))}</td></tr>
     % endif
+    % if form.context:
+    <tr><td class="formTableRowLabel">context</td><td class="dataCell">${h.literal(form.context)}</td></tr>
+    % endif
     % if form.speaker:    
     <tr><td class="formTableRowLabel">speaker</td><td class="dataCell"><a href="${url(controller='speaker', action='view', id=form.speaker.id)}" title="View more info about this speaker">${form.speaker.firstName} ${form.speaker.lastName} (${form.speaker.dialect})</a></td></tr>
     % endif

@@ -279,6 +279,7 @@ class NewFormForm(Schema):
     glosses = FirstGlossNotEmpty()
     comments = UnicodeString()
     speakerComments = UnicodeString()
+    context = UnicodeString()
     elicitationMethod = UnicodeString()
     keywords = ForEach(Keyword())
     syntacticCategory = UnicodeString()
@@ -412,6 +413,7 @@ def getFormAttributes(form, result, createOrSave):
     form.comments = h.inputToStorageTranslateOLOnly(h.NFD(result['comments']))
     form.speakerComments = h.inputToStorageTranslateOLOnly(
         h.NFD(result['speakerComments']))
+    form.context = h.NFD(result['context'])
     form.grammaticality = result['grammaticality']
     form.dateElicited = result['dateElicited']
 
@@ -1113,6 +1115,7 @@ class FormController(BaseController):
             'morphemeGloss': form.morphemeGloss,
             'comments': h.storageToInputTranslateOLOnly(form.comments),
             'speakerComments': h.storageToInputTranslateOLOnly(form.speakerComments),
+            'context': form.context,
             'elicitationMethod': form.elicitationmethod_id,
             'syntacticCategory': form.syntacticcategory_id,
             'speaker': form.speaker_id,
@@ -1286,6 +1289,7 @@ class FormController(BaseController):
             'morphemeGloss': form.morphemeGloss,
             'comments': h.storageToInputTranslateOLOnly(form.comments),
             'speakerComments': h.storageToInputTranslateOLOnly(form.speakerComments),
+            'context': form.context,
             'elicitationMethod': form.elicitationmethod_id,
             'syntacticCategory': form.syntacticcategory_id,
             'speaker': form.speaker_id,
@@ -1763,3 +1767,4 @@ class FormController(BaseController):
         path = os.path.join(treesPath, id, 'tree.png')
         app = FileApp(path)
         return forward(app)
+

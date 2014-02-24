@@ -1,0 +1,5 @@
+ALTER TABLE form ADD COLUMN context TEXT;
+UPDATE form SET context="" WHERE context IS NULL;
+ALTER TABLE formbackup ADD COLUMN context TEXT;
+UPDATE formbackup SET context="" WHERE context IS NULL;
+
