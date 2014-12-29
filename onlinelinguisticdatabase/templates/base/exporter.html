@@ -63,6 +63,9 @@ comments: ${form.comments.replace('\n', '')}
 % if form.speakerComments:
 speaker comments: ${form.speakerComments.replace('\n', '')}
 % endif
+% if form.context:
+context: ${form.context.replace('\n', '')}
+% endif
 % if form.speaker:
 speaker: ${form.speaker.firstName} ${form.speaker.lastName}
 % endif

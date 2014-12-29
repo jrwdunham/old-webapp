@@ -1,5 +1,4 @@
 languages = (
-	(u'\ufeffId', u'Part2B', u'Part2T', u'Part1', u'Scope', u'Language_Type', u'Ref_Name', u'Comment\r\n'),
 	(u'aaa', u'', u'', u'', u'I', u'L', u'Ghotuo', u'\r\n'),
 	(u'aab', u'', u'', u'', u'I', u'L', u'Alumu-Tesu', u'\r\n'),
 	(u'aac', u'', u'', u'', u'I', u'L', u'Ari', u'\r\n'),

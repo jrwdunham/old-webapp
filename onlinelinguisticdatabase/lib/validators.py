@@ -62,6 +62,7 @@ class NewFormForm(Schema):
     glosses = FirstGlossNotEmpty()
     comments = UnicodeString()
     speakerComments = UnicodeString()
+    context = UnicodeString()
     elicitationMethod = UnicodeString()
     keywords = ForEach(Keyword())
     syntacticCategory = UnicodeString()

@@ -190,6 +190,7 @@ class AdministerController(BaseController):
             form.morphemeGloss = h.NFD(form.morphemeGloss)
             form.comments = h.NFD(form.comments)
             form.speakerComments = h.NFD(form.speakerComments)
+            form.context = h.NFD(form.context)
             try:
                 form.syntacticCategoryString = h.NFD(form.syntacticCategoryString)
             except TypeError:

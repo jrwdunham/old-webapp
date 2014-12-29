@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='onlinelinguisticdatabase',
-    version='0.2.9',
+    version='0.2.10',
     description='''Software for creating web applications for collaborative
     linguistic fieldwork.''',
     author='Joel Dunham',
