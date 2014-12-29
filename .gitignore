@@ -16,6 +16,7 @@ TODO.txt
 /dist/
 /data/
 /build/
+.eggs/
 
 # Some OLD-specific directories that should be ignored
 /parser/
